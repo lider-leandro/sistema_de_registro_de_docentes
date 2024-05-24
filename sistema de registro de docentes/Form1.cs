@@ -62,7 +62,7 @@ namespace sistema_de_registro_de_docentes
 
         private void ingresar_Click(object sender, EventArgs e)
         {
-            string rutaExcel = @"E:\sportsc.xlsx";
+            string rutaExcel = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "sportsc.xlsx");
 
             using (var stream = File.Open(rutaExcel, FileMode.Open, FileAccess.Read))
             {

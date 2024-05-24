@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ClosedXML.Excel;
 
 namespace sistema_de_registro_de_docentes
 {
@@ -122,7 +123,7 @@ namespace sistema_de_registro_de_docentes
         private static int ObtenerMinutosDesdeHora(string hora)
         {
             string[] partes = hora.Split(':');
-            
+
 
             int horas = Convert.ToInt32(partes[0]);
             int minutos = Convert.ToInt32(partes[1]);
@@ -146,11 +147,17 @@ namespace sistema_de_registro_de_docentes
                 return "0";
             }
         }
-        public void LlenarDataGridView(DataGridView dgv, string[,] matriz)
+        public void LlenarDataGridView(DataGridView dgv, string[,] matriz, string[] encabezados)
         {
             dgv.ColumnCount = matriz.GetLength(1);
             dgv.RowCount = matriz.GetLength(0);
+            // Configurar los encabezados de las columnas
+            for (int j = 0; j < encabezados.Length; j++)
+            {
+                dgv.Columns[j].HeaderText = encabezados[j];
+            }
 
+            // Llenar el DataGridView con los datos de la matriz
             for (int i = 0; i < matriz.GetLength(0); i++)
             {
                 for (int j = 0; j < matriz.GetLength(1); j++)
@@ -160,45 +167,78 @@ namespace sistema_de_registro_de_docentes
             }
         }
         private void ExportToExcel(DataGridView dataGridView, string nombreArchivo)
-
         {
             try
             {
                 // Verificar que el DataGridView y sus propiedades no sean null
                 if (dataGridView != null && dataGridView.Rows.Count > 0)
                 {
-                    // Crear un StringBuilder para construir el contenido CSV
-                    StringBuilder sb = new StringBuilder();
-
-                    // Agregar encabezados de columnas al archivo CSV
-                    foreach (DataGridViewColumn column in dataGridView.Columns)
+                    // Asegurarse de que el nombre del archivo tenga la extensión correcta
+                    if (!nombreArchivo.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase))
                     {
-                        sb.Append(column.HeaderText + ",");
+                        nombreArchivo += ".xlsx";
                     }
-                    sb.AppendLine(); // Nueva línea después de los encabezados
 
-                    // Agregar filas de datos al archivo CSV
-                    foreach (DataGridViewRow row in dataGridView.Rows)
+                    // Crear un nuevo libro de Excel
+                    using (var workbook = new XLWorkbook())
                     {
-                        foreach (DataGridViewCell cell in row.Cells)
+                        // Crear una nueva hoja de trabajo
+                        var worksheet = workbook.Worksheets.Add("Atrasos");
+
+                        // Agregar encabezados de columnas al archivo XLSX
+                        for (int col = 0; col < dataGridView.Columns.Count; col++)
                         {
-                            sb.Append(cell.Value?.ToString() + ","); // Usar null conditional operator para evitar NullReferenceException
+                            var cell = worksheet.Cell(1, col + 1);
+                            cell.Value = dataGridView.Columns[col].HeaderText;
+
+                            // Aplicar formato a los encabezados
+                            cell.Style.Font.Bold = true;
+                            cell.Style.Fill.BackgroundColor = XLColor.BlueGray;
+                            cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                            cell.Style.Border.OutsideBorder = XLBorderStyleValues.Thick;
+                            cell.Style.Border.OutsideBorderColor = XLColor.Black;
+                            cell.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                            cell.Style.Border.InsideBorderColor = XLColor.Black;
+
+                            // Ajustar el ancho de las columnas del encabezado
+                            worksheet.Column(col + 1).Width = 20; // Ajusta este valor según tus necesidades
                         }
-                        sb.AppendLine(); // Nueva línea después de cada fila
-                    }
 
-                    // Escribir el contenido del StringBuilder en un archivo CSV
-                    File.WriteAllText(nombreArchivo, sb.ToString());
+                        // Agregar filas de datos al archivo XLSX
+                        for (int row = 0; row < dataGridView.Rows.Count; row++)
+                        {
+                            for (int col = 0; col < dataGridView.Columns.Count; col++)
+                            {
+                                var cell = worksheet.Cell(row + 2, col + 1);
+                                cell.Value = dataGridView.Rows[row].Cells[col].Value?.ToString();
 
-                    // Abrir un cuadro de diálogo para guardar el archivo (opcional)
-                    SaveFileDialog saveFileDialog = new SaveFileDialog();
-                    saveFileDialog.Filter = "Archivos CSV (*.xlsx)|*.xlsx";
-                    saveFileDialog.FileName = nombreArchivo;
 
-                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        // Copiar el archivo CSV generado a la ubicación seleccionada por el usuario
-                        File.Copy(nombreArchivo, saveFileDialog.FileName, true);
+                                // Aplicar bordes a las celdas de datos
+                                cell.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                                cell.Style.Border.OutsideBorderColor = XLColor.Black;
+                                cell.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                                cell.Style.Border.InsideBorderColor = XLColor.Black;
+                            }
+                        }
+
+                        // Ajustar el ancho de las columnas al contenido
+                        worksheet.Columns().AdjustToContents();
+
+                        // Guardar el archivo en la ubicación especificada
+                        workbook.SaveAs(nombreArchivo);
+
+                        // Abrir un cuadro de diálogo para guardar el archivo (opcional)
+                        SaveFileDialog saveFileDialog = new SaveFileDialog
+                        {
+                            Filter = "Archivos Excel (*.xlsx)|*.xlsx",
+                            FileName = Path.GetFileName(nombreArchivo)
+                        };
+
+                        if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                        {
+                            // Copiar el archivo XLSX generado a la ubicación seleccionada por el usuario
+                            File.Copy(nombreArchivo, saveFileDialog.FileName, true);
+                        }
                     }
                 }
                 else
@@ -208,12 +248,13 @@ namespace sistema_de_registro_de_docentes
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al exportar a CSV: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error al exportar a Excel: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void B_calcular_Click(object sender, EventArgs e)
         {
-            DataSet dataset = LeerArchivoExcel(@"E:\PROYECTO\proyecto registro de asistencia profesores\sistema de registro de docentes\sistema de registro de docentes\bin\Debug\net8.0-windows\data\lista_doc.xlsx");
+            string[] encabezados = { "Nro", "Grado", "Apellido Paterno", "Apellido Materno", "Nombres", "CI", "Asignatura", "Semestre Academico", "Paralelo", "Atrasos(Minutos)" };
+            DataSet dataset = LeerArchivoExcel(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "lista_doc.xlsx"));
             string[,] materiasHorarios = ConvertirDataSetEnMatriz(dataset);
 
             using (OpenFileDialog ofd = new OpenFileDialog() { Filter = "Archivos de Excel|*.xlsx|Archivos de Excel 97-2003|*.xls" })
@@ -226,73 +267,93 @@ namespace sistema_de_registro_de_docentes
 
             string[,] registrosEntrada = ConvertirDataSetEnMatriz(dataset);
 
-            Dictionary<string, int> atrasosPorMateria = new Dictionary<string, int>();
+            // recorre toda la lista de materias con docentes
             for (int i = 0; i < materiasHorarios.GetLength(0); i++)
             {
                 string docente = $"{materiasHorarios[i, 2]} {materiasHorarios[i, 3]} {materiasHorarios[i, 4]}";
                 string materia = materiasHorarios[i, 8];
-                string ci = materiasHorarios[i, 5];
-                string[] horario = new string[4];
-                horario[0] = materiasHorarios[i, 12];
-                horario[1] = materiasHorarios[i, 13];
-                horario[2] = materiasHorarios[i, 14];
-                horario[3] = materiasHorarios[i, 15];
+                string ci = materiasHorarios[i, 5].Split(' ')[0];//Nro carnet sin extension
 
-                string[] horario2 = horario[1]?.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) ?? new string[0];
-                if (horario2.Length > 1)
+                string[] dias = new string[3];
+                dias[0] = materiasHorarios[i, 10];// dia 1
+                dias[1] = materiasHorarios[i, 12];// dia 2(si no hay es 0)
+
+                string[] horario = new string[5];
+                horario[0] = materiasHorarios[i, 11].Split('-')[0];//horario 1 hora de entrada
+                horario[1] = materiasHorarios[i, 11].Split('-')[1];//horario 1 hora de finalizacion
+                if (materiasHorarios[i, 13] != "0")
                 {
-                    horario[1] = horario2[1].Substring(0, horario2[1].Length - 3);
+                    horario[2] = materiasHorarios[i, 13].Split('-')[0];//horario 2 hora de entrada
+                    horario[3] = materiasHorarios[i, 13].Split('-')[1];//horario 2 hora de finalizacion
                 }
 
-                horario2 = horario[3]?.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) ?? new string[0];
-                if (horario2.Length > 1)
-                {
-                    horario[3] = horario2[1].Substring(0, horario2[1].Length - 3);
-                }
-                int x = 0;
+                int tiempo_atrasado = 0;
+                //recorre toda la lista de reportes
                 for (int j = 0; j < registrosEntrada.GetLength(0); j++)
                 {
-                    string[] fecha = registrosEntrada[j, 2]?.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) ?? new string[0];
-                    if (fecha.Length > 0)
+                    // verifica si la entrada pertenece a algun docente
+                    if (registrosEntrada[j, 0] == ci)
                     {
-                        string[] f = fecha[0].Split('/');
-                        if (f.Length == 3)
-                        {
-                            DateTime date = new DateTime(int.Parse(f[2]), int.Parse(f[1]), int.Parse(f[0]));
-                            string dia = ObtenerNombreDiaEnEspanol(date.DayOfWeek);
+                        //se separa la fecha y la hora del reporte
+                        string fecha = registrosEntrada[j, 2].Split(' ')[0];
+                        string hora_llegada = registrosEntrada[j, 2].Split(' ')[1];
 
-                            if (registrosEntrada[j, 0] == ci)
+                        //se determina el dia que representa la fecha
+                        string[] f = fecha.Split('/');
+                        DateTime date = new DateTime(int.Parse(f[2]), int.Parse(f[1]), int.Parse(f[0]));
+                        string dia = ObtenerNombreDiaEnEspanol(date.DayOfWeek);
+
+                        //verifica el dia del reporte cuadra con el dia 1 del horario del docente
+                        if (dias[0] == dia)
+                        {
+                            //calcula el tiempo de atraso y el tiempo maximo a atrasarse
+                            tiempo_atrasado = int.Parse(CalcularAtraso(hora_llegada, horario[0]));
+                            int tiempo_atrasado_limite = int.Parse(CalcularAtraso(horario[1], horario[0]));
+                            //verifica si el tiempo atrasado pertenece al horario adecuado
+                            if (tiempo_atrasado < tiempo_atrasado_limite)
                             {
-                                if (horario[0] == dia)
-                                {
-                                    x = int.Parse(CalcularAtraso( fecha[1], horario[1]));
-                                    if (x < 70)
-                                    {
-                                        materiasHorarios[i, 16] = (x + int.Parse(materiasHorarios[i, 16])).ToString();
-                                        
-                                    }
-                                }
-                                if (horario[2] == dia)
-                                {
-                                    x = int.Parse(CalcularAtraso(fecha[1], horario[1]));
-                                    if (x < 70)
-                                    {
-                                        materiasHorarios[i, 16] = (x + int.Parse(materiasHorarios[i, 16])).ToString();
-                                        
-                                    }
-                                }
+                                materiasHorarios[i, 14] = (tiempo_atrasado + int.Parse(materiasHorarios[i, 14])).ToString();
+
+                            }
+                        }
+                        //verifica el dia del reporte cuadra con el dia 2 del horario del docente
+                        if (dias[1] == dia && dias[1] != "0")
+                        {
+                            tiempo_atrasado = int.Parse(CalcularAtraso(hora_llegada, horario[2]));
+                            int tiempo_atrasado_limite = int.Parse(CalcularAtraso(horario[3], horario[2]));
+                            if (tiempo_atrasado < tiempo_atrasado_limite)
+                            {
+                                materiasHorarios[i, 14] = (tiempo_atrasado + int.Parse(materiasHorarios[i, 14])).ToString();
+
                             }
                         }
                     }
+
+
                 }
 
-                LlenarDataGridView(dataGridView1, materiasHorarios);
+
             }
+            string[,] matrizNueva = new string[materiasHorarios.GetLength(0) + 2, 10];
+
+            // Imprimir la matriz nueva para verificar
+            for (int i = 0; i < materiasHorarios.GetLength(0); i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    matrizNueva[i, j] = materiasHorarios[i, j];
+                }
+                matrizNueva[i, 9] = materiasHorarios[i, 14];
+
+            }
+            LlenarDataGridView(dataGridView1, matrizNueva, encabezados);
         }
 
         private void B_exportar_Click(object sender, EventArgs e)
         {
             ExportToExcel(dataGridView1, "Informe Atrasos");
         }
+
+
     }
 }
