@@ -254,7 +254,10 @@ namespace sistema_de_registro_de_docentes
         private void B_calcular_Click(object sender, EventArgs e)
         {
             string[] encabezados = { "Nro", "Grado", "Apellido Paterno", "Apellido Materno", "Nombres", "CI", "Asignatura", "Semestre Academico", "Paralelo", "Atrasos(Minutos)" };
-            DataSet dataset = LeerArchivoExcel(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "lista_doc.xlsx"));
+            string rutaexcel = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\Resources\\lista_doc.xlsx");
+            // Combina con la ruta adicional hasta llegar a la carpeta "sistema de registro de docentes"
+            rutaexcel = Path.GetFullPath(rutaexcel);
+            DataSet dataset = LeerArchivoExcel(rutaexcel);
             string[,] materiasHorarios = ConvertirDataSetEnMatriz(dataset);
 
             using (OpenFileDialog ofd = new OpenFileDialog() { Filter = "Archivos de Excel|*.xlsx|Archivos de Excel 97-2003|*.xls" })
@@ -279,12 +282,34 @@ namespace sistema_de_registro_de_docentes
                 dias[1] = materiasHorarios[i, 12];// dia 2(si no hay es 0)
 
                 string[] horario = new string[5];
-                horario[0] = materiasHorarios[i, 11].Split('-')[0];//horario 1 hora de entrada
-                horario[1] = materiasHorarios[i, 11].Split('-')[1];//horario 1 hora de finalizacion
+                string[] horarioSplit = materiasHorarios[i, 11].Split('-');
+
+                if (horarioSplit.Length > 1) // Verificar que haya al menos dos elementos después de dividir
+                {
+                    horario[0] = horarioSplit[0];//horario 1 hora de entrada
+                    horario[1] = horarioSplit[1];//horario 1 hora de finalizacion
+                }
+                else
+                {
+                    // Manejo de error o valor predeterminado
+                    horario[0] = "00:00"; // Asignar un valor predeterminado si el formato no es el esperado
+                    horario[1] = "00:00";
+                }
+
                 if (materiasHorarios[i, 13] != "0")
                 {
-                    horario[2] = materiasHorarios[i, 13].Split('-')[0];//horario 2 hora de entrada
-                    horario[3] = materiasHorarios[i, 13].Split('-')[1];//horario 2 hora de finalizacion
+                    horarioSplit = materiasHorarios[i, 13].Split('-');
+                    if (horarioSplit.Length > 1) // Verificar que haya al menos dos elementos después de dividir
+                    {
+                        horario[2] = horarioSplit[0];//horario 2 hora de entrada
+                        horario[3] = horarioSplit[1];//horario 2 hora de finalizacion
+                    }
+                    else
+                    {
+                        // Manejo de error o valor predeterminado
+                        horario[2] = "00:00"; // Asignar un valor predeterminado si el formato no es el esperado
+                        horario[3] = "00:00";
+                    }
                 }
 
                 int tiempo_atrasado = 0;
@@ -313,7 +338,6 @@ namespace sistema_de_registro_de_docentes
                             if (tiempo_atrasado < tiempo_atrasado_limite)
                             {
                                 materiasHorarios[i, 14] = (tiempo_atrasado + int.Parse(materiasHorarios[i, 14])).ToString();
-
                             }
                         }
                         //verifica el dia del reporte cuadra con el dia 2 del horario del docente
@@ -324,16 +348,12 @@ namespace sistema_de_registro_de_docentes
                             if (tiempo_atrasado < tiempo_atrasado_limite)
                             {
                                 materiasHorarios[i, 14] = (tiempo_atrasado + int.Parse(materiasHorarios[i, 14])).ToString();
-
                             }
                         }
                     }
-
-
                 }
-
-
             }
+
             string[,] matrizNueva = new string[materiasHorarios.GetLength(0) + 2, 10];
 
             // Imprimir la matriz nueva para verificar
@@ -344,16 +364,19 @@ namespace sistema_de_registro_de_docentes
                     matrizNueva[i, j] = materiasHorarios[i, j];
                 }
                 matrizNueva[i, 9] = materiasHorarios[i, 14];
-
             }
             LlenarDataGridView(dataGridView1, matrizNueva, encabezados);
         }
+
 
         private void B_exportar_Click(object sender, EventArgs e)
         {
             ExportToExcel(dataGridView1, "Informe Atrasos");
         }
 
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
 
+        }
     }
 }
