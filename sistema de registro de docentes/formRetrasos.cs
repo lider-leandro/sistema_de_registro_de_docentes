@@ -260,7 +260,7 @@ namespace sistema_de_registro_de_docentes
             DataSet dataset = LeerArchivoExcel(rutaexcel);
             string[,] materiasHorarios = ConvertirDataSetEnMatriz(dataset);
 
-            using (OpenFileDialog ofd = new OpenFileDialog() { Filter = "Archivos de Excel|*.xlsx|Archivos de Excel 97-2003|*.xls" })
+            using (OpenFileDialog ofd = new OpenFileDialog() { Filter = "Archivos de Excel|*.xlsx|Archivos de Excel|*.xls" })
             {
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
@@ -273,6 +273,8 @@ namespace sistema_de_registro_de_docentes
             // recorre toda la lista de materias con docentes
             for (int i = 0; i < materiasHorarios.GetLength(0); i++)
             {
+                
+                materiasHorarios[i, 14] = "0";
                 string docente = $"{materiasHorarios[i, 2]} {materiasHorarios[i, 3]} {materiasHorarios[i, 4]}";
                 string materia = materiasHorarios[i, 8];
                 string ci = materiasHorarios[i, 5].Split(' ')[0];//Nro carnet sin extension
@@ -317,7 +319,7 @@ namespace sistema_de_registro_de_docentes
                 for (int j = 0; j < registrosEntrada.GetLength(0); j++)
                 {
                     // verifica si la entrada pertenece a algun docente
-                    if (registrosEntrada[j, 0] == ci)
+                    if (registrosEntrada[j, 0] == ci && registrosEntrada[j,3]== "M/Ent") //cambio aumente una restriccion mas
                     {
                         //se separa la fecha y la hora del reporte
                         string fecha = registrosEntrada[j, 2].Split(' ')[0];
@@ -329,7 +331,7 @@ namespace sistema_de_registro_de_docentes
                         string dia = ObtenerNombreDiaEnEspanol(date.DayOfWeek);
 
                         //verifica el dia del reporte cuadra con el dia 1 del horario del docente
-                        if (dias[0] == dia)
+                        if (dias[0] == dia && dias[1] != "0" && dias[1] != "" && dias[1] != " ")//cambio aumente mas restricciones al if
                         {
                             //calcula el tiempo de atraso y el tiempo maximo a atrasarse
                             tiempo_atrasado = int.Parse(CalcularAtraso(hora_llegada, horario[0]));
@@ -341,7 +343,7 @@ namespace sistema_de_registro_de_docentes
                             }
                         }
                         //verifica el dia del reporte cuadra con el dia 2 del horario del docente
-                        if (dias[1] == dia && dias[1] != "0")
+                        if (dias[1] == dia && dias[1] != "0" && dias[1] != "" && dias[1] != " ")//cambio aumente mas restricciones al if
                         {
                             tiempo_atrasado = int.Parse(CalcularAtraso(hora_llegada, horario[2]));
                             int tiempo_atrasado_limite = int.Parse(CalcularAtraso(horario[3], horario[2]));
@@ -351,6 +353,10 @@ namespace sistema_de_registro_de_docentes
                             }
                         }
                     }
+                }
+                if(materiasHorarios[i, 14]=="" || materiasHorarios[i, 14]==" ")//cambio añadi el if
+                {
+                        materiasHorarios[i, 14] = "0";                   
                 }
             }
 
@@ -370,13 +376,19 @@ namespace sistema_de_registro_de_docentes
 
 
         private void B_exportar_Click(object sender, EventArgs e)
-        {
+        {      
             ExportToExcel(dataGridView1, "Informe Atrasos");
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
         {
 
+        }
+
+        private void B_exportar_Click_1(object sender, EventArgs e)
+        {
+            //cambio Actualice System.IO.Packaging de 6.0.0 a 8.0.0 y Sixlabors.Fonts de 1.0.0 a 1.0.1 
+            ExportToExcel(dataGridView1, "Informe Atrasos");
         }
     }
 }
