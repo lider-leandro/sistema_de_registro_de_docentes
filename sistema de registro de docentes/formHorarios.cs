@@ -46,26 +46,14 @@ namespace sistema_de_registro_de_docentes
 
         private void CargarDatosDesdeExcel(string filePath)
         {
-            if (!File.Exists(filePath))
-            {
-                MessageBox.Show("El archivo especificado no existe: " + filePath);
-                return;
-            }
-
             originalDataTable = LeerArchivoExcel(filePath);
 
-            if (originalDataTable != null && originalDataTable.Rows.Count > 0)
+            if (originalDataTable != null)
             {
-                MessageBox.Show("Datos cargados correctamente desde el archivo Excel.");
                 ConvertirDataTableAMatriz();
-            }
-            else
-            {
-                MessageBox.Show("No se pudieron cargar los datos desde el archivo Excel o el DataTable está vacío.");
+
             }
         }
-
-
 
         private void ConvertirDataTableAMatriz()
         {
@@ -89,14 +77,7 @@ namespace sistema_de_registro_de_docentes
         private void LlenarHorarioDesdeExcel()
         {
             // Limpiar horarios antes de llenar
-            LimpiarHorarios();
-
-            // Verificar si originalDataTable es null o está vacío
-            if (originalDataTable == null || originalDataTable.Rows.Count == 0)
-            {
-                MessageBox.Show("El DataTable originalDataTable no ha sido inicializado o está vacío.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            //LimpiarHorarios();
 
             // Recorrer cada fila del DataTable
             foreach (DataRow row in originalDataTable.Rows)
@@ -131,7 +112,6 @@ namespace sistema_de_registro_de_docentes
                 }
             }
         }
-
         private void AgregarAsignacionHorario(string semestre, string docente, string materia, string dia, string horaEntrada, string horaSalida)
         {
             // Encontrar el TabPage correspondiente al semestre
@@ -366,7 +346,7 @@ namespace sistema_de_registro_de_docentes
             }
 
             // Filtrar las filas por el semestre, docente y materia seleccionados
-            var filasFiltradas = FiltrarFilasPorSemestreDocente(semestreSeleccionado, docenteSeleccionado, materiaSeleccionada);
+            var filasFiltradas = FiltrarFilasPorSemestreDocente(semestreSeleccionado, docenteSeleccionado,materiaSeleccionada);
 
             // Verificar si hay resultados después de aplicar el filtro
             if (filasFiltradas.Any())
@@ -399,7 +379,7 @@ namespace sistema_de_registro_de_docentes
                 comboBoxMateria.DataSource = materiasFiltradas;
             }
         }
-        private IEnumerable<DataRow> FiltrarFilasPorSemestreDocente(string semestreSeleccionado, string docenteSeleccionado, string materiaSeleccionada)
+        private IEnumerable<DataRow> FiltrarFilasPorSemestreDocente(string semestreSeleccionado, string docenteSeleccionado,string materiaSeleccionada)
         {
             // Filtrar las filas por el semestre y docente seleccionados
             var filasFiltradas = new List<DataRow>();
@@ -411,7 +391,7 @@ namespace sistema_de_registro_de_docentes
                     string semestre = excelData[i, GetColumnIndex("Semestre Académico")];
                     string nombres = excelData[i, GetColumnIndex("Apellido Paterno")] + " " + excelData[i, GetColumnIndex("Apellido Materno")] + " " + excelData[i, GetColumnIndex("Nombres")];
                     string asingatura = excelData[i, GetColumnIndex("Asignatura")];
-                    if (semestre == semestreSeleccionado && nombres == docenteSeleccionado && asingatura == materiaSeleccionada)
+                    if (semestre == semestreSeleccionado && nombres == docenteSeleccionado && asingatura==materiaSeleccionada)
                     {
                         // Convertir la fila a DataRow
                         DataRow row = originalDataTable.Rows[i];
@@ -525,7 +505,7 @@ namespace sistema_de_registro_de_docentes
                     TextAlign = System.Drawing.ContentAlignment.MiddleCenter,
                     Dock = DockStyle.Fill,
                     AutoSize = false,
-                    MaximumSize = new System.Drawing.Size(0, 40), // Ajustar el máximo tamaño en altura
+                     // Ajustar el máximo tamaño en altura
                     Padding = new Padding(2),
                     Font = new System.Drawing.Font("Arial", 8) // Tamaño de letra reducido
                 }, i, 0);
@@ -543,7 +523,7 @@ namespace sistema_de_registro_de_docentes
                     TextAlign = System.Drawing.ContentAlignment.MiddleCenter,
                     Dock = DockStyle.Fill,
                     AutoSize = true,
-                    MaximumSize = new System.Drawing.Size(0, 30), // Ajustar el máximo tamaño en altura
+                    // Ajustar el máximo tamaño en altura
                     Padding = new Padding(2),
                     Font = new System.Drawing.Font("Arial", 8) // Tamaño de letra reducido
                 }, 0, row);
@@ -554,7 +534,7 @@ namespace sistema_de_registro_de_docentes
                         Dock = DockStyle.Fill,
                         TextAlign = System.Drawing.ContentAlignment.MiddleCenter, // Centrar el texto
                         AutoSize = true,
-                        MaximumSize = new System.Drawing.Size(0, 30), // Ajustar el máximo tamaño en altura
+                        // Ajustar el máximo tamaño en altura
                         Padding = new Padding(2), // Ajustar padding
                         Font = new System.Drawing.Font("Arial", 7), // Tamaño de letra reducido
                         Text = "Materia\n" // Texto de ejemplo con salto de línea
@@ -618,27 +598,13 @@ namespace sistema_de_registro_de_docentes
             try
             {
                 // Establecer la licencia de EPPlus (gratuita para uso no comercial)
-                //ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-
-                // Verificar que el archivo existe
-                if (!File.Exists(rutaExcel))
-                {
-                    MessageBox.Show($"El archivo {rutaExcel} no existe.");
-                    return;
-                }
+                ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
 
                 // Actualizar el archivo Excel con los datos modificados
                 using (ExcelPackage excelPackage = new ExcelPackage(new FileInfo(rutaExcel)))
                 {
-                    // Verificar que el archivo tenga al menos una hoja de cálculo
-                    if (excelPackage.Workbook.Worksheets.Count == 0)
-                    {
-                        MessageBox.Show("El archivo Excel no contiene ninguna hoja de cálculo.");
-                        return;
-                    }
-
                     ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets[0];
-                    EscribirDatosEnExcel(worksheet, originalDataTable);
+                    EscribirDatosEnExcel(worksheet,originalDataTable);
 
                     // Guardar los cambios en el archivo Excel
                     excelPackage.Save();
@@ -652,8 +618,6 @@ namespace sistema_de_registro_de_docentes
         }
 
 
-
-
         private void EscribirDatosEnExcel(ExcelWorksheet worksheet, System.Data.DataTable originalDataTable)
         {
             try
@@ -664,7 +628,7 @@ namespace sistema_de_registro_de_docentes
 
                 if (semestreColumnIndex == -1 || asignaturaColumnIndex == -1)
                 {
-                    MessageBox.Show("No se encontraron las columnas Semestre Académico o Asignatura en el archivo Excel.");
+                    Console.WriteLine("No se encontraron las columnas Semestre Académico o Asignatura en el archivo Excel.");
                     return;
                 }
 
@@ -711,7 +675,6 @@ namespace sistema_de_registro_de_docentes
             }
         }
 
-
         private int GetColumnIndex2(ExcelWorksheet worksheet, string columnName)
         {
             // Buscar la columna por su nombre en la primera fila
@@ -745,19 +708,6 @@ namespace sistema_de_registro_de_docentes
                 });
 
                 dataTable = dataSet.Tables[0];
-                if (dataTable != null)
-                {
-                    MessageBox.Show($"Archivo Excel leído correctamente. Número de filas: {dataTable.Rows.Count}");
-                    Console.WriteLine($"Archivo Excel leído correctamente. Número de filas: {dataTable.Rows.Count}");
-                }
-                else
-                {
-                    MessageBox.Show("El DataTable es null después de leer el archivo Excel.");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al leer el archivo Excel: {ex.Message}");
             }
             finally
             {
@@ -768,7 +718,6 @@ namespace sistema_de_registro_de_docentes
 
             return dataTable;
         }
-
 
         private void agregarButton_Click_1(object sender, EventArgs e)
         {
@@ -795,20 +744,17 @@ namespace sistema_de_registro_de_docentes
 
             // Guardar los cambios en el archivo Excel
             GuardarCambiosEnExcel();
-
+            
 
         }
 
-        private void cancelarButton_Click(object sender, EventArgs e)
+        private void cancelarButton_Click_1(object sender, EventArgs e)
         {
-
             LimpiarHorarios();
             LlenarHorarioDesdeExcel();
             /*LlenarComboBoxSemestre();
             LlenarComboBoxDocentes();
             LlenarComboBoxMaterias();*/
         }
-
-
     }
 }
