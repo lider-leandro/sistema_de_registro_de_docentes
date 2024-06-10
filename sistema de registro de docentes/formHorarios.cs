@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -757,4 +757,4 @@ namespace sistema_de_registro_de_docentes
             LlenarComboBoxMaterias();*/
         }
     }
-}
+} 
