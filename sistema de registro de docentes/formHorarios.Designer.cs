@@ -214,7 +214,7 @@
             this.actualizarButton.TabIndex = 17;
             this.actualizarButton.Text = "Actualizar";
             this.actualizarButton.UseVisualStyleBackColor = false;
-            this.actualizarButton.ClientSizeChanged += new System.EventHandler(this.cancelarButton_Click);
+            
             // 
             // formHorarios
             // 
