@@ -26,6 +26,7 @@ namespace sistema_de_registro_de_docentes
         public formHorarios()
         {
             InitializeComponent();
+            carreraBox.SelectedIndexChanged += carreraBox_SelectedIndexChanged_1;
             semestreBox.SelectedIndexChanged += semestreBox_SelectedIndexChanged;
             comboBoxDocente.SelectedIndexChanged += docenteBox_SelectedIndexChanged;
             comboBoxMateria.SelectedIndexChanged += MateriaBox_SelectedIndexChanged;
@@ -276,6 +277,30 @@ namespace sistema_de_registro_de_docentes
             comboBoxDocente.DataSource = nombresDocentes;
         }
 
+        private void carreraBox_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            string carreraSeleccionada = carreraBox.SelectedItem?.ToString();
+
+            if (!string.IsNullOrEmpty(carreraSeleccionada))
+            {
+                // Filtrar semestres por carrera
+                var semestres = originalDataTable.AsEnumerable()
+                                                 .Where(row => row.Field<string>("Carrera") == carreraSeleccionada)
+                                                 .Select(row => row.Field<object>("Semestre Académico")?.ToString())
+                                                 .Distinct()
+                                                 .ToList();
+                semestreBox.DataSource = semestres;
+
+                // Filtrar docentes por carrera
+                var docentes = originalDataTable.AsEnumerable()
+                                                .Where(row => row.Field<string>("Carrera") == carreraSeleccionada)
+                                                .Select(row => string.Join(" ", row.Field<string>("Apellido Paterno"), row.Field<string>("Apellido Materno"), row.Field<string>("Nombres")))
+                                                .Distinct()
+                                                .ToList();
+                comboBoxDocente.DataSource = docentes;
+            }
+        }
+        
         private void LlenarComboBoxMaterias()
         {
             // Obtener materias únicas del DataTable
@@ -537,7 +562,7 @@ namespace sistema_de_registro_de_docentes
                         // Ajustar el máximo tamaño en altura
                         Padding = new Padding(2), // Ajustar padding
                         Font = new System.Drawing.Font("Arial", 7), // Tamaño de letra reducido
-                        Text = "Materia\n" // Texto de ejemplo con salto de línea
+                        Text = "\n" // Texto de ejemplo con salto de línea
                     };
                     tableLayoutPanel.Controls.Add(materiaLabel, col, row);
                 }
