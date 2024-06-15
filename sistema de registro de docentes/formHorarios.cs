@@ -217,7 +217,7 @@ namespace sistema_de_registro_de_docentes
             LlenarComboBoxMaterias();
 
             // Llenar el ComboBox de carreras
-            carreraBox.Items.AddRange(new object[] { "Sistemas", "Telecomunicaciones", "Sistemas Electronicos", "Mecatronica" });
+            carreraBox.Items.AddRange(new object[] { "TEL", "SIS", "MEC" });
 
             // Añadir evento al ComboBox de Semestre para seleccionar pestañas
             semestreBox.SelectedIndexChanged += semestreBox_SelectedIndexChanged;
