@@ -19,7 +19,7 @@ namespace sistema_de_registro_de_docentes
         {
             InitializeComponent();
         }
-        private DataSet LeerArchivoExcel(string direccion)
+         DataSet LeerArchivoExcel(string direccion)
         {
             // Verificar que el archivo exista en la ruta especificada
             if (File.Exists(direccion))
@@ -78,6 +78,27 @@ namespace sistema_de_registro_de_docentes
             {
                 MessageBox.Show("El archivo especificado no existe.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
+            }
+        }
+
+        public void SeleccionarYLeerArchivoExcel()
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Todos los archivos (*.*)|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = openFileDialog.FileName;
+                    DataSet dataSet = LeerArchivoExcel(filePath);
+
+                    if (dataSet != null)
+                    {
+                        // Procesar el DataSet según tus necesidades
+                    }
+                }
             }
         }
         public static string[,] ConvertirDataSetEnMatriz(DataSet dataSet)
@@ -243,7 +264,7 @@ namespace sistema_de_registro_de_docentes
                 }
                 else
                 {
-                    MessageBox.Show("No hay datos para exportar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    //MessageBox.Show("No hay datos para exportar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
@@ -253,14 +274,14 @@ namespace sistema_de_registro_de_docentes
         }
         private void B_calcular_Click(object sender, EventArgs e)
         {
-            string[] encabezados = { "Nro", "Grado", "Apellido Paterno", "Apellido Materno", "Nombres", "CI", "Asignatura", "Semestre Academico", "Paralelo", "Atrasos(Minutos)" };
+            string[] encabezados = { "Nro", "Grado", "Apellido Paterno", "Apellido Materno", "Nombres", "CI", "Carrera", "Asignatura", "Semestre Academico", "Paralelo", "Atrasos(Minutos)" };
             string rutaexcel = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\Resources\\lista_doc.xlsx");
             // Combina con la ruta adicional hasta llegar a la carpeta "sistema de registro de docentes"
             rutaexcel = Path.GetFullPath(rutaexcel);
             DataSet dataset = LeerArchivoExcel(rutaexcel);
             string[,] materiasHorarios = ConvertirDataSetEnMatriz(dataset);
 
-            using (OpenFileDialog ofd = new OpenFileDialog() { Filter = "Archivos de Excel|*.xlsx|Archivos de Excel 97-2003|*.xls" })
+            using (OpenFileDialog ofd = new OpenFileDialog() { Filter = "Todos los archivos (*.*)|*.*" })
             {
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
@@ -273,16 +294,26 @@ namespace sistema_de_registro_de_docentes
             // recorre toda la lista de materias con docentes
             for (int i = 0; i < materiasHorarios.GetLength(0); i++)
             {
+
+                materiasHorarios[i, 17] = "0";
                 string docente = $"{materiasHorarios[i, 2]} {materiasHorarios[i, 3]} {materiasHorarios[i, 4]}";
                 string materia = materiasHorarios[i, 8];
-                string ci = materiasHorarios[i, 5].Split(' ')[0];//Nro carnet sin extension
+                string ci = "0";
+                if (materiasHorarios[i, 5].Split(' ').Length > 1)
+                {
+                    ci = materiasHorarios[i, 5].Split(' ')[0];//Nro carnet sin extension
+                }
+                else
+                {
+                    ci = materiasHorarios[i, 5];
+                }
+                string[] dias = new string[4];
+                dias[0] = materiasHorarios[i, 11];// dia 1
+                dias[1] = materiasHorarios[i, 13];// dia 2(si no hay es 0)
+                dias[2] = materiasHorarios[i, 15];
 
-                string[] dias = new string[3];
-                dias[0] = materiasHorarios[i, 10];// dia 1
-                dias[1] = materiasHorarios[i, 12];// dia 2(si no hay es 0)
-
-                string[] horario = new string[5];
-                string[] horarioSplit = materiasHorarios[i, 11].Split('-');
+                string[] horario = new string[7];
+                string[] horarioSplit = materiasHorarios[i, 12].Split('-');
 
                 if (horarioSplit.Length > 1) // Verificar que haya al menos dos elementos después de dividir
                 {
@@ -296,9 +327,9 @@ namespace sistema_de_registro_de_docentes
                     horario[1] = "00:00";
                 }
 
-                if (materiasHorarios[i, 13] != "0")
+                if (materiasHorarios[i, 14] != "0" && materiasHorarios[i, 14] != " " && materiasHorarios[i, 14] != "")
                 {
-                    horarioSplit = materiasHorarios[i, 13].Split('-');
+                    horarioSplit = materiasHorarios[i, 14].Split('-');
                     if (horarioSplit.Length > 1) // Verificar que haya al menos dos elementos después de dividir
                     {
                         horario[2] = horarioSplit[0];//horario 2 hora de entrada
@@ -311,13 +342,28 @@ namespace sistema_de_registro_de_docentes
                         horario[3] = "00:00";
                     }
                 }
+                if (materiasHorarios[i, 16] != "0" && materiasHorarios[i, 16] != " " && materiasHorarios[i, 16] != "")
+                {
+                    horarioSplit = materiasHorarios[i, 16].Split('-');
+                    if (horarioSplit.Length > 1) // Verificar que haya al menos dos elementos después de dividir
+                    {
+                        horario[4] = horarioSplit[0];//horario 3 hora de entrada
+                        horario[5] = horarioSplit[1];//horario 3 hora de finalizacion
+                    }
+                    else
+                    {
+                        // Manejo de error o valor predeterminado
+                        horario[4] = "00:00"; // Asignar un valor predeterminado si el formato no es el esperado
+                        horario[5] = "00:00";
+                    }
+                }
 
                 int tiempo_atrasado = 0;
                 //recorre toda la lista de reportes
                 for (int j = 0; j < registrosEntrada.GetLength(0); j++)
                 {
                     // verifica si la entrada pertenece a algun docente
-                    if (registrosEntrada[j, 0] == ci)
+                    if (registrosEntrada[j, 0] == ci && registrosEntrada[j, 3] == "M/Ent") //cambio aumente una restriccion mas
                     {
                         //se separa la fecha y la hora del reporte
                         string fecha = registrosEntrada[j, 2].Split(' ')[0];
@@ -329,7 +375,7 @@ namespace sistema_de_registro_de_docentes
                         string dia = ObtenerNombreDiaEnEspanol(date.DayOfWeek);
 
                         //verifica el dia del reporte cuadra con el dia 1 del horario del docente
-                        if (dias[0] == dia)
+                        if (dias[0] == dia && dias[0] != "0" && dias[0] != "" && dias[0] != " ")//cambio aumente mas restricciones al if
                         {
                             //calcula el tiempo de atraso y el tiempo maximo a atrasarse
                             tiempo_atrasado = int.Parse(CalcularAtraso(hora_llegada, horario[0]));
@@ -337,33 +383,46 @@ namespace sistema_de_registro_de_docentes
                             //verifica si el tiempo atrasado pertenece al horario adecuado
                             if (tiempo_atrasado < tiempo_atrasado_limite)
                             {
-                                materiasHorarios[i, 14] = (tiempo_atrasado + int.Parse(materiasHorarios[i, 14])).ToString();
+                                materiasHorarios[i, 17] = (tiempo_atrasado + int.Parse(materiasHorarios[i, 17])).ToString();
                             }
                         }
                         //verifica el dia del reporte cuadra con el dia 2 del horario del docente
-                        if (dias[1] == dia && dias[1] != "0")
+                        if (dias[1] == dia && dias[1] != "0" && dias[1] != "" && dias[1] != " ")//cambio aumente mas restricciones al if
                         {
                             tiempo_atrasado = int.Parse(CalcularAtraso(hora_llegada, horario[2]));
                             int tiempo_atrasado_limite = int.Parse(CalcularAtraso(horario[3], horario[2]));
                             if (tiempo_atrasado < tiempo_atrasado_limite)
                             {
-                                materiasHorarios[i, 14] = (tiempo_atrasado + int.Parse(materiasHorarios[i, 14])).ToString();
+                                materiasHorarios[i, 17] = (tiempo_atrasado + int.Parse(materiasHorarios[i, 17])).ToString();
+                            }
+                        }
+                        if (dias[2] == dia && dias[2] != "0" && dias[2] != "" && dias[2] != " ")//cambio aumente mas restricciones al if
+                        {
+                            tiempo_atrasado = int.Parse(CalcularAtraso(hora_llegada, horario[4]));
+                            int tiempo_atrasado_limite = int.Parse(CalcularAtraso(horario[5], horario[4]));
+                            if (tiempo_atrasado < tiempo_atrasado_limite)
+                            {
+                                materiasHorarios[i, 17] = (tiempo_atrasado + int.Parse(materiasHorarios[i, 17])).ToString();
                             }
                         }
                     }
                 }
+                if (materiasHorarios[i, 17] == "" || materiasHorarios[i, 17] == " ")//cambio añadi el if
+                {
+                    materiasHorarios[i, 17] = "0";
+                }
             }
 
-            string[,] matrizNueva = new string[materiasHorarios.GetLength(0) + 2, 10];
+            string[,] matrizNueva = new string[materiasHorarios.GetLength(0) + 2, 11];
 
             // Imprimir la matriz nueva para verificar
             for (int i = 0; i < materiasHorarios.GetLength(0); i++)
             {
-                for (int j = 0; j < 9; j++)
+                for (int j = 0; j < 10; j++)
                 {
                     matrizNueva[i, j] = materiasHorarios[i, j];
                 }
-                matrizNueva[i, 9] = materiasHorarios[i, 14];
+                matrizNueva[i, 10] = materiasHorarios[i, 17];
             }
             LlenarDataGridView(dataGridView1, matrizNueva, encabezados);
         }
@@ -371,12 +430,13 @@ namespace sistema_de_registro_de_docentes
 
         private void B_exportar_Click(object sender, EventArgs e)
         {
-            ExportToExcel(dataGridView1, "Informe Atrasos");
+            ExportToExcel(dataGridView1, "Informe Atrasos");//cambio Actualice System.IO.Packaging de 6.0.0 a 8.0.0 y Sixlabors.Fonts de 1.0.0 a 1.0.1 
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
         {
 
         }
+
     }
 }

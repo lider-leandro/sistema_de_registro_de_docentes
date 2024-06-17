@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using ClosedXML.Excel;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
+//using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 
 namespace sistema_de_registro_de_docentes
 {

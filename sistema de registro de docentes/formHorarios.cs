@@ -46,26 +46,14 @@ namespace sistema_de_registro_de_docentes
 
         private void CargarDatosDesdeExcel(string filePath)
         {
-            if (!File.Exists(filePath))
-            {
-                MessageBox.Show("El archivo especificado no existe: " + filePath);
-                return;
-            }
-
             originalDataTable = LeerArchivoExcel(filePath);
 
-            if (originalDataTable != null && originalDataTable.Rows.Count > 0)
+            if (originalDataTable != null)
             {
-                MessageBox.Show("Datos cargados correctamente desde el archivo Excel.");
                 ConvertirDataTableAMatriz();
-            }
-            else
-            {
-                MessageBox.Show("No se pudieron cargar los datos desde el archivo Excel o el DataTable está vacío.");
+
             }
         }
-
-
 
         private void ConvertirDataTableAMatriz()
         {
@@ -89,14 +77,7 @@ namespace sistema_de_registro_de_docentes
         private void LlenarHorarioDesdeExcel()
         {
             // Limpiar horarios antes de llenar
-            LimpiarHorarios();
-
-            // Verificar si originalDataTable es null o está vacío
-            if (originalDataTable == null || originalDataTable.Rows.Count == 0)
-            {
-                MessageBox.Show("El DataTable originalDataTable no ha sido inicializado o está vacío.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            //LimpiarHorarios();
 
             // Recorrer cada fila del DataTable
             foreach (DataRow row in originalDataTable.Rows)
@@ -131,7 +112,6 @@ namespace sistema_de_registro_de_docentes
                 }
             }
         }
-
         private void AgregarAsignacionHorario(string semestre, string docente, string materia, string dia, string horaEntrada, string horaSalida)
         {
             // Encontrar el TabPage correspondiente al semestre
@@ -237,7 +217,7 @@ namespace sistema_de_registro_de_docentes
             LlenarComboBoxMaterias();
 
             // Llenar el ComboBox de carreras
-            carreraBox.Items.AddRange(new object[] { "Sistemas", "Telecomunicaciones", "Sistemas Electronicos", "Mecatronica" });
+            carreraBox.Items.AddRange(new object[] { "ING. DE SISTEMAS", "ING. DE TELECOMUNICACIONES", "ING. DE SISTEMAS ELECTRONICOS", "ING. MECATRONICA" });
 
             // Añadir evento al ComboBox de Semestre para seleccionar pestañas
             semestreBox.SelectedIndexChanged += semestreBox_SelectedIndexChanged;
@@ -525,7 +505,7 @@ namespace sistema_de_registro_de_docentes
                     TextAlign = System.Drawing.ContentAlignment.MiddleCenter,
                     Dock = DockStyle.Fill,
                     AutoSize = false,
-                    MaximumSize = new System.Drawing.Size(0, 40), // Ajustar el máximo tamaño en altura
+                    // Ajustar el máximo tamaño en altura
                     Padding = new Padding(2),
                     Font = new System.Drawing.Font("Arial", 8) // Tamaño de letra reducido
                 }, i, 0);
@@ -543,7 +523,7 @@ namespace sistema_de_registro_de_docentes
                     TextAlign = System.Drawing.ContentAlignment.MiddleCenter,
                     Dock = DockStyle.Fill,
                     AutoSize = true,
-                    MaximumSize = new System.Drawing.Size(0, 30), // Ajustar el máximo tamaño en altura
+                    // Ajustar el máximo tamaño en altura
                     Padding = new Padding(2),
                     Font = new System.Drawing.Font("Arial", 8) // Tamaño de letra reducido
                 }, 0, row);
@@ -554,10 +534,10 @@ namespace sistema_de_registro_de_docentes
                         Dock = DockStyle.Fill,
                         TextAlign = System.Drawing.ContentAlignment.MiddleCenter, // Centrar el texto
                         AutoSize = true,
-                        MaximumSize = new System.Drawing.Size(0, 30), // Ajustar el máximo tamaño en altura
+                        // Ajustar el máximo tamaño en altura
                         Padding = new Padding(2), // Ajustar padding
                         Font = new System.Drawing.Font("Arial", 7), // Tamaño de letra reducido
-                        Text = "Materia\n" // Texto de ejemplo con salto de línea
+                        Text = "\n" // Texto de ejemplo con salto de línea
                     };
                     tableLayoutPanel.Controls.Add(materiaLabel, col, row);
                 }
@@ -613,117 +593,8 @@ namespace sistema_de_registro_de_docentes
             return cargaHoraria;
         }
 
-        private void GuardarCambiosEnExcel()
-        {
-            try
-            {
-                // Establecer la licencia de EPPlus (gratuita para uso no comercial)
-                //ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-                // Verificar que el archivo existe
-                if (!File.Exists(rutaExcel))
-                {
-                    MessageBox.Show($"El archivo {rutaExcel} no existe.");
-                    return;
-                }
-
-                // Actualizar el archivo Excel con los datos modificados
-                using (ExcelPackage excelPackage = new ExcelPackage(new FileInfo(rutaExcel)))
-                {
-                    // Verificar que el archivo tenga al menos una hoja de cálculo
-                    if (excelPackage.Workbook.Worksheets.Count == 0)
-                    {
-                        MessageBox.Show("El archivo Excel no contiene ninguna hoja de cálculo.");
-                        return;
-                    }
-
-                    ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets[0];
-                    EscribirDatosEnExcel(worksheet, originalDataTable);
-
-                    // Guardar los cambios en el archivo Excel
-                    excelPackage.Save();
-                    MessageBox.Show("Cambios guardados exitosamente en el archivo Excel.");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al guardar los cambios en el archivo Excel: {ex.Message}");
-            }
-        }
-
-
-
-
-        private void EscribirDatosEnExcel(ExcelWorksheet worksheet, System.Data.DataTable originalDataTable)
-        {
-            try
-            {
-                // Buscar las columnas por sus nombres
-                int semestreColumnIndex = GetColumnIndex2(worksheet, "Semestre Académico");
-                int asignaturaColumnIndex = GetColumnIndex2(worksheet, "Asignatura");
-
-                if (semestreColumnIndex == -1 || asignaturaColumnIndex == -1)
-                {
-                    MessageBox.Show("No se encontraron las columnas Semestre Académico o Asignatura en el archivo Excel.");
-                    return;
-                }
-
-                // Recorrer el DataTable y actualizar las celdas correspondientes en el archivo Excel
-                for (int i = 0; i < originalDataTable.Rows.Count; i++)
-                {
-                    DataRow row = originalDataTable.Rows[i];
-                    string semestreAcademico = row.Field<string>("Semestre Académico");
-                    string asignatura = row.Field<string>("Asignatura");
-
-                    // Buscar la fila correspondiente en el archivo Excel por semestre académico y asignatura
-                    for (int j = 1; j <= worksheet.Dimension.End.Row; j++)
-                    {
-                        string semestreExcel = worksheet.Cells[j, semestreColumnIndex].Value?.ToString();
-                        string asignaturaExcel = worksheet.Cells[j, asignaturaColumnIndex].Value?.ToString();
-
-                        // Verificar si coincide el semestre académico y la asignatura
-                        if (semestreExcel == semestreAcademico && asignaturaExcel == asignatura)
-                        {
-                            try
-                            {
-                                // Actualizar las columnas necesarias
-                                worksheet.Cells[j, GetColumnIndex2(worksheet, "Dia")].Value = row.Field<string>("Dia");
-                                worksheet.Cells[j, GetColumnIndex2(worksheet, "Hora entrada")].Value = row.Field<string>("Hora entrada");
-                                worksheet.Cells[j, GetColumnIndex2(worksheet, "Dia 2")].Value = row.Field<string>("Dia 2");
-                                worksheet.Cells[j, GetColumnIndex2(worksheet, "Hora entrada 2")].Value = row.Field<string>("Hora entrada 2");
-                                worksheet.Cells[j, GetColumnIndex2(worksheet, "Carga horaria")].Value = row.Field<int>("Carga horaria");
-
-                                // Agregar un mensaje de depuración para verificar que se actualicen los datos correctamente
-                                Console.WriteLine($"Actualizando fila {j} para Semestre: {semestreAcademico}, Asignatura: {asignatura}");
-                                break;
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine($"Error al actualizar fila {j}: {ex.Message}");
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error general: {ex.Message}");
-            }
-        }
-
-
-        private int GetColumnIndex2(ExcelWorksheet worksheet, string columnName)
-        {
-            // Buscar la columna por su nombre en la primera fila
-            for (int i = 1; i <= worksheet.Dimension.End.Column; i++)
-            {
-                if (worksheet.Cells[1, i].Value?.ToString().Trim() == columnName)
-                {
-                    return i;
-                }
-            }
-            return -1; // Retornar -1 si la columna no se encuentra
-        }
+       
 
 
         private System.Data.DataTable LeerArchivoExcel(string filePath)
@@ -745,19 +616,6 @@ namespace sistema_de_registro_de_docentes
                 });
 
                 dataTable = dataSet.Tables[0];
-                if (dataTable != null)
-                {
-                    MessageBox.Show($"Archivo Excel leído correctamente. Número de filas: {dataTable.Rows.Count}");
-                    Console.WriteLine($"Archivo Excel leído correctamente. Número de filas: {dataTable.Rows.Count}");
-                }
-                else
-                {
-                    MessageBox.Show("El DataTable es null después de leer el archivo Excel.");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al leer el archivo Excel: {ex.Message}");
             }
             finally
             {
@@ -768,7 +626,6 @@ namespace sistema_de_registro_de_docentes
 
             return dataTable;
         }
-
 
         private void agregarButton_Click_1(object sender, EventArgs e)
         {
@@ -794,21 +651,109 @@ namespace sistema_de_registro_de_docentes
             ActualizarHorarioEnDataTable(semestreSeleccionado, materiaSeleccionada, diaSeleccionado, horaEntrada, horaSalida);
 
             // Guardar los cambios en el archivo Excel
-            GuardarCambiosEnExcel();
-
-
+            GuardarDatosActualizado();
         }
 
-        private void cancelarButton_Click(object sender, EventArgs e)
+        private void cancelarButton_Click_1(object sender, EventArgs e)
         {
-
             LimpiarHorarios();
             LlenarHorarioDesdeExcel();
             /*LlenarComboBoxSemestre();
             LlenarComboBoxDocentes();
             LlenarComboBoxMaterias();*/
         }
+        private void GuardarDatosActualizado()
+        {
+            string semestreSeleccionado = semestreBox.SelectedItem?.ToString();
+            string docenteSeleccionado = comboBoxDocente.SelectedItem?.ToString();
+            string materiaSeleccionada = comboBoxMateria.SelectedItem?.ToString();
+            string carreraSeleccionada = carreraBox.Text.ToString();
+            string diaSeleccionado = comboBoxDia.SelectedItem?.ToString();
+            string horaEntrada = comBoxEntrada.SelectedItem?.ToString();
+            string horaSalida = comBoxSalida.SelectedItem?.ToString();
 
+            if (string.IsNullOrEmpty(semestreSeleccionado) || string.IsNullOrEmpty(docenteSeleccionado) ||
+                string.IsNullOrEmpty(materiaSeleccionada) || string.IsNullOrEmpty(carreraSeleccionada) ||
+                string.IsNullOrEmpty(diaSeleccionado) || string.IsNullOrEmpty(horaEntrada) || string.IsNullOrEmpty(horaSalida))
+            {
+                MessageBox.Show("Por favor, complete todos los campos para agregar una asignación de horario.");
+                return;
+            }
 
+            // Comparar y actualizar el DataTable
+            foreach (DataRow row in originalDataTable.Rows)
+            {
+                string semestre = row["Semestre Académico"]?.ToString();
+                string docente = string.Join(" ", row["Apellido Paterno"], row["Apellido Materno"], row["Nombres"]);
+                string materia = row["Asignatura"]?.ToString();
+                string carrera = row["Carrera"]?.ToString();
+
+                if (semestre == semestreSeleccionado && docente == docenteSeleccionado &&
+                    materia == materiaSeleccionada && carrera == carreraSeleccionada)
+                {
+                    if (string.IsNullOrEmpty(row["Dia"]?.ToString()))
+                    {
+                        row["Dia"] = diaSeleccionado;
+                        row["Hora entrada"] = $"{horaEntrada}-{horaSalida}";
+                    }
+                    else
+                    {
+                        row["Dia 2"] = diaSeleccionado;
+                        row["Hora entrada 2"] = $"{horaEntrada}-{horaSalida}";
+                    }
+                    break;
+                }
+            }
+
+            // Guardar cambios en el archivo Excel
+            GuardarCambiosEnExcelActualizado();
+        }
+        private void GuardarCambiosEnExcelActualizado()
+        {
+            try
+            {
+                ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+
+                using (ExcelPackage excelPackage = new ExcelPackage(new FileInfo(rutaExcel)))
+                {
+                    ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets[0];
+
+                    for (int i = 0; i < originalDataTable.Rows.Count; i++)
+                    {
+                        DataRow row = originalDataTable.Rows[i];
+                        for (int j = 1; j <= worksheet.Dimension.End.Row; j++)
+                        {
+                            if (worksheet.Cells[j, 1].Text == row["Nº"].ToString()) // Asumiendo que la primera columna es un ID único
+                            {
+                                worksheet.Cells[j, GetColumnIndex(worksheet, "Dia")].Value = row["Dia"];
+                                worksheet.Cells[j, GetColumnIndex(worksheet, "Hora entrada")].Value = row["Hora entrada"];
+                                worksheet.Cells[j, GetColumnIndex(worksheet, "Dia 2")].Value = row["Dia 2"];
+                                worksheet.Cells[j, GetColumnIndex(worksheet, "Hora entrada 2")].Value = row["Hora entrada 2"];
+                                worksheet.Cells[j, GetColumnIndex(worksheet, "Carga horaria")].Value = row["Carga horaria"];
+                                break;
+                            }
+                        }
+                    }
+
+                    excelPackage.Save();
+                    MessageBox.Show("Cambios guardados exitosamente en el archivo Excel.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al guardar los cambios en el archivo Excel: {ex.Message}");
+            }
+        }
+        private int GetColumnIndex(ExcelWorksheet worksheet, string columnName)
+        {
+            for (int i = 1; i <= worksheet.Dimension.End.Column; i++)
+            {
+                if (worksheet.Cells[1, i].Text == columnName)
+                {
+                    return i;
+                }
+            }
+            return -1; // Retornar -1 si la columna no se encuentra
+        }
     }
 }
