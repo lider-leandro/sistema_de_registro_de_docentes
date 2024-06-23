@@ -22,10 +22,12 @@ namespace sistema_de_registro_de_docentes
         private string[,] excelData; // Matriz para almacenar los datos del Excel
         private System.Data.DataTable originalDataTable;
         public string rutaExcel = "";
+        private Dictionary<string, Dictionary<string, TableLayoutPanel>> horariosPorCarrera = new Dictionary<string, Dictionary<string, TableLayoutPanel>>();
 
         public formHorarios()
         {
             InitializeComponent();
+            carreraBox.SelectedIndexChanged += carreraBox_SelectedIndexChanged;
             semestreBox.SelectedIndexChanged += semestreBox_SelectedIndexChanged;
             comboBoxDocente.SelectedIndexChanged += docenteBox_SelectedIndexChanged;
             comboBoxMateria.SelectedIndexChanged += MateriaBox_SelectedIndexChanged;
@@ -41,7 +43,7 @@ namespace sistema_de_registro_de_docentes
 
             CargarDatosDesdeExcel(rutaExcel);
             CargarComponentes();
-            LlenarHorarioDesdeExcel();
+            
         }
 
         private void CargarDatosDesdeExcel(string filePath)
@@ -74,60 +76,9 @@ namespace sistema_de_registro_de_docentes
             }
         }
 
-        private void LlenarHorarioDesdeExcel()
+
+        private void AgregarAsignacionHorario(TableLayoutPanel horarioTableLayoutPanel, string docente, string materia, string dia, string horaEntrada, string horaSalida)
         {
-            // Limpiar horarios antes de llenar
-            //LimpiarHorarios();
-
-            // Recorrer cada fila del DataTable
-            foreach (DataRow row in originalDataTable.Rows)
-            {
-                // Obtener los valores de las columnas necesarias
-                string semestre = row["Semestre Académico"]?.ToString();
-                string docente = string.Join(" ", row["Apellido Paterno"], row["Apellido Materno"], row["Nombres"]);
-                string materia = row["Asignatura"]?.ToString();
-                string dia1 = row["Dia"]?.ToString();
-                string horasEntrada1 = row["Hora entrada"]?.ToString();
-                string dia2 = row["Dia 2"]?.ToString();
-                string horasEntrada2 = row["Hora entrada 2"]?.ToString();
-
-                // Agregar asignaciones de horario si existen para el día 1
-                if (!string.IsNullOrEmpty(horasEntrada1))
-                {
-                    var horas1 = horasEntrada1.Split('-');
-                    if (horas1.Length == 2)
-                    {
-                        AgregarAsignacionHorario(semestre, docente, materia, dia1, horas1[0], horas1[1]);
-                    }
-                }
-
-                // Agregar asignaciones de horario si existen para el día 2
-                if (!string.IsNullOrEmpty(horasEntrada2))
-                {
-                    var horas2 = horasEntrada2.Split('-');
-                    if (horas2.Length == 2)
-                    {
-                        AgregarAsignacionHorario(semestre, docente, materia, dia2, horas2[0], horas2[1]);
-                    }
-                }
-            }
-        }
-        private void AgregarAsignacionHorario(string semestre, string docente, string materia, string dia, string horaEntrada, string horaSalida)
-        {
-            // Encontrar el TabPage correspondiente al semestre
-            TabPage tabPage = semPanel.TabPages.Cast<TabPage>().FirstOrDefault(t => t.Text == semestre);
-            if (tabPage == null)
-            {
-                return; // Si no se encuentra el semestre, salir
-            }
-
-            // Obtener el TableLayoutPanel del semestre
-            TableLayoutPanel horarioTableLayoutPanel = tabPage.Controls.OfType<TableLayoutPanel>().FirstOrDefault();
-            if (horarioTableLayoutPanel == null)
-            {
-                return; // Si no se encuentra el TableLayoutPanel, salir
-            }
-
             // Mapear el día seleccionado al índice de la columna correspondiente
             int diaColumna = -1;
             switch (dia)
@@ -203,52 +154,70 @@ namespace sistema_de_registro_de_docentes
                 }
             }
         }
-
-
         private void CargarComponentes()
         {
-            // Llenar ComboBox de Semestre
+            LlenarComboBoxCarreras();
             LlenarComboBoxSemestre();
-
-            // Llenar ComboBox de Docentes
             LlenarComboBoxDocentes();
-
-            // Llenar ComboBox de Materias
             LlenarComboBoxMaterias();
 
-            // Llenar el ComboBox de carreras
-            carreraBox.Items.AddRange(new object[] { "Sistemas", "Telecomunicaciones", "Sistemas Electronicos", "Mecatronica" });
+            // Crear horarios para todas las carreras
+            foreach (var carrera in carreraBox.Items)
+            {
+                CrearHorariosPorCarrera(carrera.ToString());
+            }
 
-            // Añadir evento al ComboBox de Semestre para seleccionar pestañas
+            // Añadir eventos
+            carreraBox.SelectedIndexChanged += carreraBox_SelectedIndexChanged;
             semestreBox.SelectedIndexChanged += semestreBox_SelectedIndexChanged;
-
-            // Definir las horas de entrada y salida
-            string[] horasEntrada = { "7:45", "9:15", "10:15", "11:00", "12:00", "12:45", "14:15" };
-            string[] horasSalida = { "9:15", "10:00", "11:00", "11:45", "12:45", "13:30", "14:15", "15:45" };
+            comboBoxDocente.SelectedIndexChanged += docenteBox_SelectedIndexChanged;
+            comboBoxMateria.SelectedIndexChanged += MateriaBox_SelectedIndexChanged;
 
             // Llenar ComboBox de Entrada y Salida
+            string[] horasEntrada = { "7:45", "9:15", "10:15", "11:00", "12:00", "12:45", "14:15" };
+            string[] horasSalida = { "9:15", "10:00", "11:00", "11:45", "12:45", "13:30", "14:15", "15:45" };
             comBoxEntrada.Items.AddRange(horasEntrada);
             comBoxSalida.Items.AddRange(horasSalida);
 
             // Llenar ComboBox de días
             string[] dias = { "Lunes", "Martes", "Miercoles", "Jueves", "Viernes" };
             comboBoxDia.Items.AddRange(dias);
-
-            // Crear pestañas para cada semestre
-            foreach (string semestre in semestreBox.Items)
+        }
+        private void CrearHorariosPorCarrera(string carrera)
+        {
+            if (!horariosPorCarrera.ContainsKey(carrera))
             {
-                TabPage tabPage = new TabPage(semestre);
-                tabPage.Name = ObtenerNombreSemestre(semestre);
+                horariosPorCarrera[carrera] = new Dictionary<string, TableLayoutPanel>();
+            }
 
-                TableLayoutPanel horarioTableLayoutPanel = CrearHorarioTableLayoutPanel();
-                horarioTableLayoutPanel.Name = $"Horario_{ObtenerNombreSemestre(semestre)}";
+            var semestres = originalDataTable.AsEnumerable()
+                .Where(row => row.Field<string>("Carrera") == carrera)
+                .Select(row => row.Field<object>("Semestre Académico")?.ToString())
+                .Distinct()
+                .OrderBy(s => s)
+                .ToList();
 
-                tabPage.Controls.Add(horarioTableLayoutPanel);
-                semPanel.TabPages.Add(tabPage);
+            foreach (var semestre in semestres)
+            {
+                if (!horariosPorCarrera[carrera].ContainsKey(semestre))
+                {
+                    TableLayoutPanel horarioTableLayoutPanel = CrearHorarioTableLayoutPanel();
+                    horarioTableLayoutPanel.Name = $"Horario_{ObtenerNombreSemestre(semestre)}";
+                    LlenarHorarioSemestre(carrera, semestre, horarioTableLayoutPanel);
+                    horariosPorCarrera[carrera][semestre] = horarioTableLayoutPanel;
+                }
             }
         }
 
+        private void LlenarComboBoxCarreras()
+        {
+            var carreras = originalDataTable.AsEnumerable()
+                                            .Select(row => row.Field<string>("Carrera"))
+                                            .Distinct()
+                                            .ToList();
 
+            carreraBox.DataSource = carreras;
+        }
         private void LlenarComboBoxSemestre()
         {
             // Obtener semestres únicos del DataTable
@@ -290,39 +259,36 @@ namespace sistema_de_registro_de_docentes
 
         private void semestreBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Obtener el semestre seleccionado en el ComboBox de Semestre
+            string carreraSeleccionada = carreraBox.SelectedItem?.ToString();
             string semestreSeleccionado = semestreBox.SelectedItem?.ToString();
 
-            if (semestreSeleccionado != null)
+            if (string.IsNullOrEmpty(carreraSeleccionada) || string.IsNullOrEmpty(semestreSeleccionado)) return;
+
+            var docentesFiltrados = originalDataTable.AsEnumerable()
+                .Where(row => row.Field<string>("Carrera") == carreraSeleccionada &&
+                              row.Field<object>("Semestre Académico")?.ToString() == semestreSeleccionado)
+                .Select(row => string.Join(" ", row.Field<string>("Apellido Paterno"), row.Field<string>("Apellido Materno"), row.Field<string>("Nombres")))
+                .Distinct()
+                .ToList();
+
+            comboBoxDocente.DataSource = docentesFiltrados;
+
+            var materiasFiltradas = originalDataTable.AsEnumerable()
+                .Where(row => row.Field<string>("Carrera") == carreraSeleccionada &&
+                              row.Field<object>("Semestre Académico")?.ToString() == semestreSeleccionado)
+                .Select(row => row.Field<string>("Asignatura"))
+                .Distinct()
+                .ToList();
+
+            comboBoxMateria.DataSource = materiasFiltradas;
+
+            // Seleccionar la pestaña del TabControl correspondiente al semestre seleccionado
+            foreach (TabPage tabPage in semPanel.TabPages)
             {
-                // Filtrar los docentes que tienen materias asignadas para el semestre seleccionado
-                var docentesFiltrados = originalDataTable.AsEnumerable()
-                                                         .Where(row => row.Field<object>("Semestre Académico")?.ToString() == semestreSeleccionado)
-                                                         .Select(row => string.Join(" ", row.Field<string>("Apellido Paterno"), row.Field<string>("Apellido Materno"), row.Field<string>("Nombres")))
-                                                         .Distinct()
-                                                         .ToList();
-
-                // Actualizar el ComboBox de Docentes con los docentes filtrados
-                comboBoxDocente.DataSource = docentesFiltrados;
-
-                // Filtrar las materias para el semestre seleccionado
-                var materiasFiltradas = originalDataTable.AsEnumerable()
-                                                         .Where(row => row.Field<object>("Semestre Académico")?.ToString() == semestreSeleccionado)
-                                                         .Select(row => row.Field<string>("Asignatura"))
-                                                         .Distinct()
-                                                         .ToList();
-
-                // Actualizar el ComboBox de Materias con las materias filtradas
-                comboBoxMateria.DataSource = materiasFiltradas;
-
-                // Seleccionar la pestaña del TabControl correspondiente al semestre seleccionado
-                foreach (TabPage tabPage in semPanel.TabPages)
+                if (tabPage.Text == semestreSeleccionado)
                 {
-                    if (tabPage.Text == semestreSeleccionado)
-                    {
-                        semPanel.SelectedTab = tabPage;
-                        break;
-                    }
+                    semPanel.SelectedTab = tabPage;
+                    break;
                 }
             }
         }
@@ -367,18 +333,23 @@ namespace sistema_de_registro_de_docentes
 
         private void FiltrarMateriasPorDocente()
         {
+            string carreraSeleccionada = carreraBox.SelectedItem?.ToString();
+            string semestreSeleccionado = semestreBox.SelectedItem?.ToString();
             string docenteSeleccionado = comboBoxDocente.SelectedItem?.ToString();
-            if (docenteSeleccionado != null)
-            {
-                var materiasFiltradas = originalDataTable.AsEnumerable()
-                                                         .Where(row => string.Join(" ", row.Field<string>("Apellido Paterno"), row.Field<string>("Apellido Materno"), row.Field<string>("Nombres")) == docenteSeleccionado)
-                                                         .Select(row => row.Field<string>("Asignatura"))
-                                                         .Distinct()
-                                                         .ToList();
 
-                comboBoxMateria.DataSource = materiasFiltradas;
-            }
+            if (string.IsNullOrEmpty(carreraSeleccionada) || string.IsNullOrEmpty(semestreSeleccionado) || string.IsNullOrEmpty(docenteSeleccionado)) return;
+
+            var materiasFiltradas = originalDataTable.AsEnumerable()
+                .Where(row => row.Field<string>("Carrera") == carreraSeleccionada &&
+                              row.Field<object>("Semestre Académico")?.ToString() == semestreSeleccionado &&
+                              string.Join(" ", row.Field<string>("Apellido Paterno"), row.Field<string>("Apellido Materno"), row.Field<string>("Nombres")) == docenteSeleccionado)
+                .Select(row => row.Field<string>("Asignatura"))
+                .Distinct()
+                .ToList();
+
+            comboBoxMateria.DataSource = materiasFiltradas;
         }
+
         private IEnumerable<DataRow> FiltrarFilasPorSemestreDocente(string semestreSeleccionado, string docenteSeleccionado, string materiaSeleccionada)
         {
             // Filtrar las filas por el semestre y docente seleccionados
@@ -406,6 +377,20 @@ namespace sistema_de_registro_de_docentes
 
             return filasFiltradas;
         }
+
+        private int GetColumnIndex(string columnName)
+        {
+            System.Data.DataTable dt = originalDataTable;
+            for (int i = 0; i < dt.Columns.Count; i++)
+            {
+                if (dt.Columns[i].ColumnName == columnName)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
 
 
         private void AgregarAsignacionHorario1(string docente, string materia, string dia, string horaEntrada, string horaSalida)
@@ -492,11 +477,13 @@ namespace sistema_de_registro_de_docentes
                     TextAlign = System.Drawing.ContentAlignment.MiddleCenter,
                     Dock = DockStyle.Fill,
                     AutoSize = false,
-                    // Ajustar el máximo tamaño en altura
                     Padding = new Padding(2),
-                    Font = new System.Drawing.Font("Arial", 8) // Tamaño de letra reducido
+                    Font = new System.Drawing.Font("Arial", 8), // Tamaño de letra reducido
+                    BackColor = System.Drawing.Color.Blue, // Aquí puedes cambiar el color a tu preferencia
+                    ForeColor = System.Drawing.Color.White // Aquí puedes cambiar el color de la letra a tu preferenc
                 }, i, 0);
             }
+
 
             // Horas específicas
             string[] horas = { "7:45-8:30", "8:30-9:15", "9:15-10:00", "10:15-11:00", "11:00-11:45", "12:00-12:45", "12:45-13:30", "13:30-14:15", "14:15-15:00", "15:00-15:45" };
@@ -509,11 +496,14 @@ namespace sistema_de_registro_de_docentes
                     Text = horas[row - 1],
                     TextAlign = System.Drawing.ContentAlignment.MiddleCenter,
                     Dock = DockStyle.Fill,
-                    AutoSize = true,
-                    // Ajustar el máximo tamaño en altura
-                    Padding = new Padding(2),
-                    Font = new System.Drawing.Font("Arial", 8) // Tamaño de letra reducido
+                    AutoSize = false,
+                    MinimumSize = new System.Drawing.Size(10, 0), // Establecer un ancho mínimo fijo
+                    Padding = new Padding(0),
+                    Font = new System.Drawing.Font("Arial", 8), // Tamaño de letra reducido
+                    BackColor = System.Drawing.Color.FromArgb(224, 224, 224), // Color gris claro
+                    BorderStyle = BorderStyle.FixedSingle // Borde simple
                 }, 0, row);
+
                 for (int col = 1; col < 6; col++)
                 {
                     System.Windows.Forms.Label materiaLabel = new System.Windows.Forms.Label
@@ -521,28 +511,17 @@ namespace sistema_de_registro_de_docentes
                         Dock = DockStyle.Fill,
                         TextAlign = System.Drawing.ContentAlignment.MiddleCenter, // Centrar el texto
                         AutoSize = true,
-                        // Ajustar el máximo tamaño en altura
                         Padding = new Padding(2), // Ajustar padding
                         Font = new System.Drawing.Font("Arial", 7), // Tamaño de letra reducido
-                        Text = "\n" // Texto de ejemplo con salto de línea
+                        Text = "\n", // Texto de ejemplo con salto de línea
+                        BorderStyle = BorderStyle.FixedSingle // Borde simple
                     };
                     tableLayoutPanel.Controls.Add(materiaLabel, col, row);
                 }
             }
 
+
             return tableLayoutPanel;
-        }
-        private int GetColumnIndex(string columnName)
-        {
-            System.Data.DataTable dt = originalDataTable;
-            for (int i = 0; i < dt.Columns.Count; i++)
-            {
-                if (dt.Columns[i].ColumnName == columnName)
-                {
-                    return i;
-                }
-            }
-            return -1;
         }
 
 
@@ -594,6 +573,8 @@ namespace sistema_de_registro_de_docentes
 
 
        
+
+
         private System.Data.DataTable LeerArchivoExcel(string filePath)
         {
             System.Data.DataTable dataTable = null;
@@ -669,7 +650,6 @@ namespace sistema_de_registro_de_docentes
                 return;
             }
 
-            // Comparar y actualizar el DataTable
             foreach (DataRow row in originalDataTable.Rows)
             {
                 string semestre = row["Semestre Académico"]?.ToString();
@@ -685,17 +665,34 @@ namespace sistema_de_registro_de_docentes
                         row["Dia"] = diaSeleccionado;
                         row["Hora entrada"] = $"{horaEntrada}-{horaSalida}";
                     }
-                    else
+                    else if (string.IsNullOrEmpty(row["Dia 2"]?.ToString()))
                     {
                         row["Dia 2"] = diaSeleccionado;
                         row["Hora entrada 2"] = $"{horaEntrada}-{horaSalida}";
+                    }
+                    else if (string.IsNullOrEmpty(row["Dia 3"]?.ToString()))
+                    {
+                        row["Dia 3"] = diaSeleccionado;
+                        row["Hora entrada 3"] = $"{horaEntrada}-{horaSalida}";
+                    }
+                    else
+                    {
+                        MessageBox.Show("Esta materia ya tiene asignados 3 días de clase.");
+                        return;
                     }
                     break;
                 }
             }
 
-            // Guardar cambios en el archivo Excel
             GuardarCambiosEnExcelActualizado();
+
+            // Actualizar el horario visual
+            string carreraActual = carreraBox.SelectedItem?.ToString();
+            if (horariosPorCarrera.ContainsKey(carreraActual))
+            {
+                CrearHorariosPorCarrera(carreraActual);
+                MostrarHorariosPorCarrera(carreraActual);
+            }
         }
         private void GuardarCambiosEnExcelActualizado()
         {
@@ -718,6 +715,8 @@ namespace sistema_de_registro_de_docentes
                                 worksheet.Cells[j, GetColumnIndex(worksheet, "Hora entrada")].Value = row["Hora entrada"];
                                 worksheet.Cells[j, GetColumnIndex(worksheet, "Dia 2")].Value = row["Dia 2"];
                                 worksheet.Cells[j, GetColumnIndex(worksheet, "Hora entrada 2")].Value = row["Hora entrada 2"];
+                                worksheet.Cells[j, GetColumnIndex(worksheet, "Dia 3")].Value = row["Dia 3"];
+                                worksheet.Cells[j, GetColumnIndex(worksheet, "Hora entrada 3")].Value = row["Hora entrada 3"];
                                 worksheet.Cells[j, GetColumnIndex(worksheet, "Carga horaria")].Value = row["Carga horaria"];
                                 break;
                             }
@@ -743,6 +742,82 @@ namespace sistema_de_registro_de_docentes
                 }
             }
             return -1; // Retornar -1 si la columna no se encuentra
+        }
+
+        private void carreraBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string carreraSeleccionada = carreraBox.SelectedItem?.ToString();
+            if (string.IsNullOrEmpty(carreraSeleccionada)) return;
+
+            MostrarHorariosPorCarrera(carreraSeleccionada);
+            ActualizarComboBoxes(carreraSeleccionada);
+        }
+        private void MostrarHorariosPorCarrera(string carrera)
+        {
+            semPanel.TabPages.Clear();
+
+            if (horariosPorCarrera.ContainsKey(carrera))
+            {
+                foreach (var kvp in horariosPorCarrera[carrera])
+                {
+                    string semestre = kvp.Key;
+                    TableLayoutPanel horarioTableLayoutPanel = kvp.Value;
+
+                    TabPage tabPage = new TabPage(semestre);
+                    tabPage.Name = ObtenerNombreSemestre(semestre);
+                    tabPage.Controls.Add(horarioTableLayoutPanel);
+                    semPanel.TabPages.Add(tabPage);
+                }
+            }
+        }
+
+        private void LlenarHorarioSemestre(string carrera, string semestre, TableLayoutPanel horarioTableLayoutPanel)
+        {
+            var horarios = originalDataTable.AsEnumerable()
+                .Where(row => row.Field<string>("Carrera") == carrera &&
+                              row.Field<object>("Semestre Académico")?.ToString() == semestre)
+                .ToList();
+
+            foreach (var row in horarios)
+            {
+                string docente = string.Join(" ", row["Apellido Paterno"], row["Apellido Materno"], row["Nombres"]);
+                string materia = row["Asignatura"]?.ToString();
+
+                // Día 1
+                string dia1 = row["Dia"]?.ToString();
+                string horasEntrada1 = row["Hora entrada"]?.ToString();
+                AgregarAsignacionSiExiste(horarioTableLayoutPanel, docente, materia, dia1, horasEntrada1);
+
+                // Día 2
+                string dia2 = row["Dia 2"]?.ToString();
+                string horasEntrada2 = row["Hora entrada 2"]?.ToString();
+                AgregarAsignacionSiExiste(horarioTableLayoutPanel, docente, materia, dia2, horasEntrada2);
+
+                // Día 3
+                string dia3 = row["Dia 3"]?.ToString();
+                string horasEntrada3 = row["Hora entrada 3"]?.ToString();
+                AgregarAsignacionSiExiste(horarioTableLayoutPanel, docente, materia, dia3, horasEntrada3);
+            }
+        }
+
+        private void AgregarAsignacionSiExiste(TableLayoutPanel horarioTableLayoutPanel, string docente, string materia, string dia, string horasEntrada)
+        {
+            if (!string.IsNullOrEmpty(horasEntrada))
+            {
+                var horas = horasEntrada.Split('-');
+                if (horas.Length == 2)
+                {
+                    AgregarAsignacionHorario(horarioTableLayoutPanel, docente, materia, dia, horas[0], horas[1]);
+                }
+            }
+        }
+        private void ActualizarComboBoxes(string carrera)
+        {
+            var semestres = horariosPorCarrera[carrera].Keys.OrderBy(s => s).ToList();
+            semestreBox.DataSource = semestres;
+
+            comboBoxDocente.DataSource = null;
+            comboBoxMateria.DataSource = null;
         }
     }
 }
