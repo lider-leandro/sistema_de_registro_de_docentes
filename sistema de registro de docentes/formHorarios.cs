@@ -217,7 +217,7 @@ namespace sistema_de_registro_de_docentes
             LlenarComboBoxMaterias();
 
             // Llenar el ComboBox de carreras
-            carreraBox.Items.AddRange(new object[] { "ING. DE SISTEMAS", "ING. DE TELECOMUNICACIONES", "ING. DE SISTEMAS ELECTRONICOS", "ING. MECATRONICA" });
+            carreraBox.Items.AddRange(new object[] { "Sistemas", "Telecomunicaciones", "Sistemas Electronicos", "Mecatronica" });
 
             // Añadir evento al ComboBox de Semestre para seleccionar pestañas
             semestreBox.SelectedIndexChanged += semestreBox_SelectedIndexChanged;
@@ -407,19 +407,6 @@ namespace sistema_de_registro_de_docentes
             return filasFiltradas;
         }
 
-        private int GetColumnIndex(string columnName)
-        {
-            System.Data.DataTable dt = originalDataTable;
-            for (int i = 0; i < dt.Columns.Count; i++)
-            {
-                if (dt.Columns[i].ColumnName == columnName)
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
 
         private void AgregarAsignacionHorario1(string docente, string materia, string dia, string horaEntrada, string horaSalida)
         {
@@ -545,6 +532,18 @@ namespace sistema_de_registro_de_docentes
 
             return tableLayoutPanel;
         }
+        private int GetColumnIndex(string columnName)
+        {
+            System.Data.DataTable dt = originalDataTable;
+            for (int i = 0; i < dt.Columns.Count; i++)
+            {
+                if (dt.Columns[i].ColumnName == columnName)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
 
 
 
@@ -595,8 +594,6 @@ namespace sistema_de_registro_de_docentes
 
 
        
-
-
         private System.Data.DataTable LeerArchivoExcel(string filePath)
         {
             System.Data.DataTable dataTable = null;
@@ -654,14 +651,6 @@ namespace sistema_de_registro_de_docentes
             GuardarDatosActualizado();
         }
 
-        private void cancelarButton_Click_1(object sender, EventArgs e)
-        {
-            LimpiarHorarios();
-            LlenarHorarioDesdeExcel();
-            /*LlenarComboBoxSemestre();
-            LlenarComboBoxDocentes();
-            LlenarComboBoxMaterias();*/
-        }
         private void GuardarDatosActualizado()
         {
             string semestreSeleccionado = semestreBox.SelectedItem?.ToString();
