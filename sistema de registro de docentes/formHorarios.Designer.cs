@@ -29,27 +29,16 @@
         private void InitializeComponent()
         {
             this.semestreBox = new System.Windows.Forms.ComboBox();
-            this.comboBoxDia = new System.Windows.Forms.ComboBox();
-            this.comBoxSalida = new System.Windows.Forms.ComboBox();
-            this.comBoxEntrada = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
             this.semPanel = new System.Windows.Forms.TabControl();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.leer = new System.Windows.Forms.Button();
             this.buttonAgregarDocente = new System.Windows.Forms.Button();
-            this.comboBoxDocente = new System.Windows.Forms.ComboBox();
-            this.comboBoxMateria = new System.Windows.Forms.ComboBox();
             this.carreraBox = new System.Windows.Forms.ComboBox();
-            this.btnLimpiarMateria = new System.Windows.Forms.Button();
-            this.btnLimpiarSemestre = new System.Windows.Forms.Button();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -64,33 +53,6 @@
             this.semestreBox.TabIndex = 0;
             this.semestreBox.SelectedIndexChanged += new System.EventHandler(this.semestreBox_SelectedIndexChanged);
             // 
-            // comboBoxDia
-            // 
-            this.comboBoxDia.FormattingEnabled = true;
-            this.comboBoxDia.Location = new System.Drawing.Point(156, 180);
-            this.comboBoxDia.Margin = new System.Windows.Forms.Padding(2);
-            this.comboBoxDia.Name = "comboBoxDia";
-            this.comboBoxDia.Size = new System.Drawing.Size(174, 21);
-            this.comboBoxDia.TabIndex = 1;
-            // 
-            // comBoxSalida
-            // 
-            this.comBoxSalida.FormattingEnabled = true;
-            this.comBoxSalida.Location = new System.Drawing.Point(476, 179);
-            this.comBoxSalida.Margin = new System.Windows.Forms.Padding(2);
-            this.comBoxSalida.Name = "comBoxSalida";
-            this.comBoxSalida.Size = new System.Drawing.Size(72, 21);
-            this.comBoxSalida.TabIndex = 6;
-            // 
-            // comBoxEntrada
-            // 
-            this.comBoxEntrada.FormattingEnabled = true;
-            this.comBoxEntrada.Location = new System.Drawing.Point(382, 178);
-            this.comBoxEntrada.Margin = new System.Windows.Forms.Padding(2);
-            this.comBoxEntrada.Name = "comBoxEntrada";
-            this.comBoxEntrada.Size = new System.Drawing.Size(78, 21);
-            this.comBoxEntrada.TabIndex = 5;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -101,36 +63,6 @@
             this.label2.TabIndex = 8;
             this.label2.Text = "SEMESTRE:";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(83, 138);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(62, 13);
-            this.label3.TabIndex = 9;
-            this.label3.Text = "DOCENTE:";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(83, 162);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(58, 13);
-            this.label4.TabIndex = 10;
-            this.label4.Text = "MATERIA:";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(83, 183);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(28, 13);
-            this.label5.TabIndex = 11;
-            this.label5.Text = "DIA:";
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -140,26 +72,6 @@
             this.label6.Size = new System.Drawing.Size(62, 13);
             this.label6.TabIndex = 12;
             this.label6.Text = "CARRERA:";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(380, 148);
-            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(85, 13);
-            this.label7.TabIndex = 13;
-            this.label7.Text = "Hora de Entrada";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(473, 148);
-            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(77, 13);
-            this.label8.TabIndex = 14;
-            this.label8.Text = "Hora de Salida";
             // 
             // semPanel
             // 
@@ -245,25 +157,6 @@
             this.buttonAgregarDocente.TabIndex = 4;
             this.buttonAgregarDocente.Text = "AGREGAR";
             this.buttonAgregarDocente.UseVisualStyleBackColor = false;
-            this.buttonAgregarDocente.Click += new System.EventHandler(this.agregarButton_Click_1);
-            // 
-            // comboBoxDocente
-            // 
-            this.comboBoxDocente.FormattingEnabled = true;
-            this.comboBoxDocente.Location = new System.Drawing.Point(156, 130);
-            this.comboBoxDocente.Name = "comboBoxDocente";
-            this.comboBoxDocente.Size = new System.Drawing.Size(211, 21);
-            this.comboBoxDocente.TabIndex = 19;
-            this.comboBoxDocente.SelectedIndexChanged += new System.EventHandler(this.docenteBox_SelectedIndexChanged);
-            // 
-            // comboBoxMateria
-            // 
-            this.comboBoxMateria.FormattingEnabled = true;
-            this.comboBoxMateria.Location = new System.Drawing.Point(156, 154);
-            this.comboBoxMateria.Name = "comboBoxMateria";
-            this.comboBoxMateria.Size = new System.Drawing.Size(211, 21);
-            this.comboBoxMateria.TabIndex = 20;
-            this.comboBoxMateria.SelectedIndexChanged += new System.EventHandler(this.MateriaBox_SelectedIndexChanged);
             // 
             // carreraBox
             // 
@@ -274,41 +167,12 @@
             this.carreraBox.TabIndex = 21;
             this.carreraBox.SelectedIndexChanged += new System.EventHandler(this.carreraBox_SelectedIndexChanged);
             // 
-            // btnLimpiarMateria
+            // flowLayoutPanel1
             // 
-            this.btnLimpiarMateria.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btnLimpiarMateria.BackColor = System.Drawing.Color.OrangeRed;
-            this.btnLimpiarMateria.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btnLimpiarMateria.FlatAppearance.BorderSize = 0;
-            this.btnLimpiarMateria.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLimpiarMateria.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLimpiarMateria.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnLimpiarMateria.Location = new System.Drawing.Point(372, 80);
-            this.btnLimpiarMateria.Margin = new System.Windows.Forms.Padding(2);
-            this.btnLimpiarMateria.Name = "btnLimpiarMateria";
-            this.btnLimpiarMateria.Size = new System.Drawing.Size(114, 49);
-            this.btnLimpiarMateria.TabIndex = 8;
-            this.btnLimpiarMateria.Text = "QUITAR MATERIA DE SEMESTRE";
-            this.btnLimpiarMateria.UseVisualStyleBackColor = false;
-            this.btnLimpiarMateria.Click += new System.EventHandler(this.btnLimpiarMateria_Click);
-            // 
-            // btnLimpiarSemestre
-            // 
-            this.btnLimpiarSemestre.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btnLimpiarSemestre.BackColor = System.Drawing.Color.Red;
-            this.btnLimpiarSemestre.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btnLimpiarSemestre.FlatAppearance.BorderSize = 0;
-            this.btnLimpiarSemestre.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLimpiarSemestre.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLimpiarSemestre.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnLimpiarSemestre.Location = new System.Drawing.Point(500, 80);
-            this.btnLimpiarSemestre.Margin = new System.Windows.Forms.Padding(2);
-            this.btnLimpiarSemestre.Name = "btnLimpiarSemestre";
-            this.btnLimpiarSemestre.Size = new System.Drawing.Size(114, 49);
-            this.btnLimpiarSemestre.TabIndex = 22;
-            this.btnLimpiarSemestre.Text = "LIMPIAR HORARIO DE SEMESTRE";
-            this.btnLimpiarSemestre.UseVisualStyleBackColor = false;
-            this.btnLimpiarSemestre.Click += new System.EventHandler(this.btnLimpiarSemestre_Click);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(86, 151);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(539, 65);
+            this.flowLayoutPanel1.TabIndex = 22;
             // 
             // formHorarios
             // 
@@ -316,23 +180,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(718, 436);
-            this.Controls.Add(this.btnLimpiarSemestre);
-            this.Controls.Add(this.btnLimpiarMateria);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.carreraBox);
-            this.Controls.Add(this.comboBoxMateria);
-            this.Controls.Add(this.comboBoxDocente);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.semPanel);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.comBoxSalida);
-            this.Controls.Add(this.comBoxEntrada);
-            this.Controls.Add(this.comboBoxDia);
             this.Controls.Add(this.semestreBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(2);
@@ -349,26 +202,15 @@
         #endregion
 
         private System.Windows.Forms.ComboBox semestreBox;
-        private System.Windows.Forms.ComboBox comboBoxDia;
-        private System.Windows.Forms.ComboBox comBoxSalida;
-        private System.Windows.Forms.ComboBox comBoxEntrada;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TabControl semPanel;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button leer;
         public System.Windows.Forms.Button buttonAgregarDocente;
-        private System.Windows.Forms.ComboBox comboBoxDocente;
-        private System.Windows.Forms.ComboBox comboBoxMateria;
         private System.Windows.Forms.ComboBox carreraBox;
-        private System.Windows.Forms.Button btnLimpiarMateria;
-        private System.Windows.Forms.Button btnLimpiarSemestre;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }
