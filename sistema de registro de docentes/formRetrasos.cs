@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ClosedXML.Excel;
+using System.Globalization;
 
 namespace sistema_de_registro_de_docentes
 {
@@ -19,7 +20,7 @@ namespace sistema_de_registro_de_docentes
         {
             InitializeComponent();
         }
-         DataSet LeerArchivoExcel(string direccion)
+        DataSet LeerArchivoExcel(string direccion)
         {
             // Verificar que el archivo exista en la ruta especificada
             if (File.Exists(direccion))
@@ -80,12 +81,59 @@ namespace sistema_de_registro_de_docentes
                 return null;
             }
         }
+        static string[,] FiltrarMatrizPorCarrera(string[,] matriz, List<string> carrerasAFiltrar, int columnaCarrera)//aumento
+        {
+            // Lista para almacenar filas filtradas
+            List<string[]> filasFiltradas = new List<string[]>();
 
+            // Filtrar filas
+            for (int i = 0; i < matriz.GetLength(0); i++)
+            {
+                string carrera = matriz[i, columnaCarrera]; // Columna de carrera
+                if (carrerasAFiltrar.Contains(carrera))
+                {
+                    // Crear una nueva fila
+                    string[] fila = new string[matriz.GetLength(1)];
+                    for (int j = 0; j < matriz.GetLength(1); j++)
+                    {
+                        fila[j] = matriz[i, j];
+                    }
+                    filasFiltradas.Add(fila);
+                }
+            }
+
+            // Convertir la lista de filas filtradas a una matriz
+            string[,] matrizFiltrada = new string[filasFiltradas.Count, matriz.GetLength(1)];
+            for (int i = 0; i < filasFiltradas.Count; i++)
+            {
+                for (int j = 0; j < matriz.GetLength(1); j++)
+                {
+                    matrizFiltrada[i, j] = filasFiltradas[i][j];
+                }
+            }
+
+            return matrizFiltrada;
+        }
+        static string AddMinutesToStringTime(string time, int minutesToAdd)//aumento
+        {
+            // Convertir la cadena de tiempo a TimeSpan
+            TimeSpan timeSpan = TimeSpan.Parse(time);
+
+            // Añadir los minutos
+            timeSpan = timeSpan.Add(TimeSpan.FromMinutes(minutesToAdd));
+
+            // Convertir TimeSpan a cadena en formato "HH:mm"
+            return timeSpan.ToString(@"hh\:mm");
+        }
+        private bool IsDateInRange(DateTime date, DateTime startDate, DateTime endDate)
+        {
+            return date >= startDate && date <= endDate;
+        }
         public void SeleccionarYLeerArchivoExcel()
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.Filter = "Todos los archivos (*.*)|*.*";
+                openFileDialog.Filter = "Todos los archivos (.)|.";
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
 
@@ -251,7 +299,7 @@ namespace sistema_de_registro_de_docentes
                         // Abrir un cuadro de diálogo para guardar el archivo (opcional)
                         SaveFileDialog saveFileDialog = new SaveFileDialog
                         {
-                            Filter = "Archivos Excel (*.xlsx)|*.xlsx",
+                            Filter = "Archivos Excel (.xlsx)|.xlsx",
                             FileName = Path.GetFileName(nombreArchivo)
                         };
 
@@ -280,14 +328,35 @@ namespace sistema_de_registro_de_docentes
             rutaexcel = Path.GetFullPath(rutaexcel);
             DataSet dataset = LeerArchivoExcel(rutaexcel);
             string[,] materiasHorarios = ConvertirDataSetEnMatriz(dataset);
+            if (comboBoxCarrera.SelectedItem != null)//aumento
+            {
+                List<string> carrerasAFiltrar = new List<string> {
+                     comboBoxCarrera.SelectedItem.ToString(),
+                };
+                materiasHorarios = FiltrarMatrizPorCarrera(materiasHorarios, carrerasAFiltrar, 6);
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar una carrera");
+                return;
+            }
+            if (comboBoxHorario.SelectedItem == null)
+            {
+                MessageBox.Show("Debe seleccionar un horario");
+                return;
+            }
 
-            using (OpenFileDialog ofd = new OpenFileDialog() { Filter = "Todos los archivos (*.*)|*.*" })
+            using (OpenFileDialog ofd = new OpenFileDialog()
+            {
+                Filter = "Archivos de Excel (*.xls;*.xlsx)|*.xls;*.xlsx|Todos los archivos (*.*)|*.*"
+            })
             {
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     dataset = LeerArchivoExcel(ofd.FileName);
                 }
             }
+
 
             string[,] registrosEntrada = ConvertirDataSetEnMatriz(dataset);
 
@@ -317,8 +386,14 @@ namespace sistema_de_registro_de_docentes
 
                 if (horarioSplit.Length > 1) // Verificar que haya al menos dos elementos después de dividir
                 {
+
                     horario[0] = horarioSplit[0];//horario 1 hora de entrada
                     horario[1] = horarioSplit[1];//horario 1 hora de finalizacion
+                    if (comboBoxHorario.SelectedItem.ToString() == "HORARIO INVERNAL")
+                    {
+                        horario[0] = AddMinutesToStringTime(horario[0], 30);
+                        horario[1] = AddMinutesToStringTime(horario[1], 30);
+                    }
                 }
                 else
                 {
@@ -334,6 +409,11 @@ namespace sistema_de_registro_de_docentes
                     {
                         horario[2] = horarioSplit[0];//horario 2 hora de entrada
                         horario[3] = horarioSplit[1];//horario 2 hora de finalizacion
+                        if (comboBoxHorario.SelectedItem.ToString() == "HORARIO INVERNAL")
+                        {
+                            horario[2] = AddMinutesToStringTime(horario[2], 30);
+                            horario[3] = AddMinutesToStringTime(horario[3], 30);
+                        }
                     }
                     else
                     {
@@ -349,6 +429,11 @@ namespace sistema_de_registro_de_docentes
                     {
                         horario[4] = horarioSplit[0];//horario 3 hora de entrada
                         horario[5] = horarioSplit[1];//horario 3 hora de finalizacion
+                        if (comboBoxHorario.SelectedItem.ToString() == "HORARIO INVERNAL")
+                        {
+                            horario[4] = AddMinutesToStringTime(horario[4], 30);
+                            horario[5] = AddMinutesToStringTime(horario[5], 30);
+                        }
                     }
                     else
                     {
@@ -373,46 +458,53 @@ namespace sistema_de_registro_de_docentes
                         string[] f = fecha.Split('/');
                         DateTime date = new DateTime(int.Parse(f[2]), int.Parse(f[1]), int.Parse(f[0]));
                         string dia = ObtenerNombreDiaEnEspanol(date.DayOfWeek);
+                        DateTime startDate = dateTimePicker1.Value.Date;
+                        DateTime endDate = dateTimePicker2.Value.Date;
+                        DateTime dateToCheck = DateTime.ParseExact(fecha, "d/M/yyyy", CultureInfo.InvariantCulture);
 
-                        //verifica el dia del reporte cuadra con el dia 1 del horario del docente
-                        if (dias[0] == dia && dias[0] != "0" && dias[0] != "" && dias[0] != " ")//cambio aumente mas restricciones al if
+                        if (IsDateInRange(dateToCheck, startDate, endDate))
                         {
-                            //calcula el tiempo de atraso y el tiempo maximo a atrasarse
-                            tiempo_atrasado = int.Parse(CalcularAtraso(hora_llegada, horario[0]));
-                            int tiempo_atrasado_limite = int.Parse(CalcularAtraso(horario[1], horario[0]));
-                            //verifica si el tiempo atrasado pertenece al horario adecuado
-                            if (tiempo_atrasado < tiempo_atrasado_limite)
+                            //verifica el dia del reporte cuadra con el dia 1 del horario del docente
+                            if (dias[0] == dia && dias[0] != "0" && dias[0] != "" && dias[0] != " ")//cambio aumente mas restricciones al if
                             {
-                                materiasHorarios[i, 17] = (tiempo_atrasado + int.Parse(materiasHorarios[i, 17])).ToString();
+                                //calcula el tiempo de atraso y el tiempo maximo a atrasarse
+                                tiempo_atrasado = int.Parse(CalcularAtraso(hora_llegada, horario[0]));
+                                int tiempo_atrasado_limite = int.Parse(CalcularAtraso(horario[1], horario[0]));
+                                //verifica si el tiempo atrasado pertenece al horario adecuado
+                                if (tiempo_atrasado < 30)
+                                {
+                                    materiasHorarios[i, 17] = (tiempo_atrasado + int.Parse(materiasHorarios[i, 17])).ToString();
+                                }
+                            }
+                            //verifica el dia del reporte cuadra con el dia 2 del horario del docente
+                            if (dias[1] == dia && dias[1] != "0" && dias[1] != "" && dias[1] != " ")//cambio aumente mas restricciones al if
+                            {
+                                tiempo_atrasado = int.Parse(CalcularAtraso(hora_llegada, horario[2]));
+                                int tiempo_atrasado_limite = int.Parse(CalcularAtraso(horario[3], horario[2]));
+                                if (tiempo_atrasado < 30)
+                                {
+                                    materiasHorarios[i, 17] = (tiempo_atrasado + int.Parse(materiasHorarios[i, 17])).ToString();
+
+                                }
+                            }
+                            if (dias[2] == dia && dias[2] != "0" && dias[2] != "" && dias[2] != " ")//cambio aumente mas restricciones al if
+                            {
+                                tiempo_atrasado = int.Parse(CalcularAtraso(hora_llegada, horario[4]));
+                                int tiempo_atrasado_limite = int.Parse(CalcularAtraso(horario[5], horario[4]));
+                                if (tiempo_atrasado < 30)
+                                {
+                                    materiasHorarios[i, 17] = (tiempo_atrasado + int.Parse(materiasHorarios[i, 17])).ToString();
+
+                                }
                             }
                         }
-                        //verifica el dia del reporte cuadra con el dia 2 del horario del docente
-                        if (dias[1] == dia && dias[1] != "0" && dias[1] != "" && dias[1] != " ")//cambio aumente mas restricciones al if
+                        if (materiasHorarios[i, 17] == "" || materiasHorarios[i, 17] == " ")//cambio añadi el if
                         {
-                            tiempo_atrasado = int.Parse(CalcularAtraso(hora_llegada, horario[2]));
-                            int tiempo_atrasado_limite = int.Parse(CalcularAtraso(horario[3], horario[2]));
-                            if (tiempo_atrasado < tiempo_atrasado_limite)
-                            {
-                                materiasHorarios[i, 17] = (tiempo_atrasado + int.Parse(materiasHorarios[i, 17])).ToString();
-                            }
-                        }
-                        if (dias[2] == dia && dias[2] != "0" && dias[2] != "" && dias[2] != " ")//cambio aumente mas restricciones al if
-                        {
-                            tiempo_atrasado = int.Parse(CalcularAtraso(hora_llegada, horario[4]));
-                            int tiempo_atrasado_limite = int.Parse(CalcularAtraso(horario[5], horario[4]));
-                            if (tiempo_atrasado < tiempo_atrasado_limite)
-                            {
-                                materiasHorarios[i, 17] = (tiempo_atrasado + int.Parse(materiasHorarios[i, 17])).ToString();
-                            }
+                            materiasHorarios[i, 17] = "0";
                         }
                     }
                 }
-                if (materiasHorarios[i, 17] == "" || materiasHorarios[i, 17] == " ")//cambio añadi el if
-                {
-                    materiasHorarios[i, 17] = "0";
-                }
             }
-
             string[,] matrizNueva = new string[materiasHorarios.GetLength(0) + 2, 11];
 
             // Imprimir la matriz nueva para verificar
@@ -437,6 +529,7 @@ namespace sistema_de_registro_de_docentes
         {
 
         }
+
 
     }
 }

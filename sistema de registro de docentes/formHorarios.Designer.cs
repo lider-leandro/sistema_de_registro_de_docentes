@@ -48,6 +48,8 @@
             this.comboBoxDocente = new System.Windows.Forms.ComboBox();
             this.comboBoxMateria = new System.Windows.Forms.ComboBox();
             this.carreraBox = new System.Windows.Forms.ComboBox();
+            this.btnLimpiarMateria = new System.Windows.Forms.Button();
+            this.btnLimpiarSemestre = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -168,7 +170,7 @@
             this.semPanel.Margin = new System.Windows.Forms.Padding(2);
             this.semPanel.Name = "semPanel";
             this.semPanel.SelectedIndex = 0;
-            this.semPanel.Size = new System.Drawing.Size(514, 197);
+            this.semPanel.Size = new System.Drawing.Size(572, 197);
             this.semPanel.TabIndex = 15;
             // 
             // panel2
@@ -182,7 +184,7 @@
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(660, 70);
+            this.panel2.Size = new System.Drawing.Size(718, 70);
             this.panel2.TabIndex = 18;
             // 
             // label1
@@ -201,7 +203,7 @@
             this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.pictureBox1.BackColor = System.Drawing.Color.LimeGreen;
             this.pictureBox1.Image = global::sistema_de_registro_de_docentes.Properties.Resources.mas;
-            this.pictureBox1.Location = new System.Drawing.Point(532, 35);
+            this.pictureBox1.Location = new System.Drawing.Point(567, 27);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(15, 16);
@@ -218,13 +220,14 @@
             this.leer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.leer.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.leer.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.leer.Location = new System.Drawing.Point(382, 27);
+            this.leer.Location = new System.Drawing.Point(437, 19);
             this.leer.Margin = new System.Windows.Forms.Padding(2);
             this.leer.Name = "leer";
             this.leer.Size = new System.Drawing.Size(114, 32);
             this.leer.TabIndex = 2;
-            this.leer.Text = "ACTUALIZAR";
+            this.leer.Text = "EXPORTAR";
             this.leer.UseVisualStyleBackColor = false;
+            this.leer.Click += new System.EventHandler(this.btnExportar_Click);
             // 
             // buttonAgregarDocente
             // 
@@ -235,7 +238,7 @@
             this.buttonAgregarDocente.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonAgregarDocente.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.buttonAgregarDocente.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonAgregarDocente.Location = new System.Drawing.Point(522, 27);
+            this.buttonAgregarDocente.Location = new System.Drawing.Point(557, 19);
             this.buttonAgregarDocente.Margin = new System.Windows.Forms.Padding(2);
             this.buttonAgregarDocente.Name = "buttonAgregarDocente";
             this.buttonAgregarDocente.Size = new System.Drawing.Size(114, 32);
@@ -271,12 +274,50 @@
             this.carreraBox.TabIndex = 21;
             this.carreraBox.SelectedIndexChanged += new System.EventHandler(this.carreraBox_SelectedIndexChanged);
             // 
+            // btnLimpiarMateria
+            // 
+            this.btnLimpiarMateria.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnLimpiarMateria.BackColor = System.Drawing.Color.OrangeRed;
+            this.btnLimpiarMateria.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnLimpiarMateria.FlatAppearance.BorderSize = 0;
+            this.btnLimpiarMateria.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLimpiarMateria.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLimpiarMateria.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnLimpiarMateria.Location = new System.Drawing.Point(372, 80);
+            this.btnLimpiarMateria.Margin = new System.Windows.Forms.Padding(2);
+            this.btnLimpiarMateria.Name = "btnLimpiarMateria";
+            this.btnLimpiarMateria.Size = new System.Drawing.Size(114, 49);
+            this.btnLimpiarMateria.TabIndex = 8;
+            this.btnLimpiarMateria.Text = "QUITAR MATERIA DE SEMESTRE";
+            this.btnLimpiarMateria.UseVisualStyleBackColor = false;
+            this.btnLimpiarMateria.Click += new System.EventHandler(this.btnLimpiarMateria_Click);
+            // 
+            // btnLimpiarSemestre
+            // 
+            this.btnLimpiarSemestre.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnLimpiarSemestre.BackColor = System.Drawing.Color.Red;
+            this.btnLimpiarSemestre.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnLimpiarSemestre.FlatAppearance.BorderSize = 0;
+            this.btnLimpiarSemestre.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLimpiarSemestre.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLimpiarSemestre.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnLimpiarSemestre.Location = new System.Drawing.Point(500, 80);
+            this.btnLimpiarSemestre.Margin = new System.Windows.Forms.Padding(2);
+            this.btnLimpiarSemestre.Name = "btnLimpiarSemestre";
+            this.btnLimpiarSemestre.Size = new System.Drawing.Size(114, 49);
+            this.btnLimpiarSemestre.TabIndex = 22;
+            this.btnLimpiarSemestre.Text = "LIMPIAR HORARIO DE SEMESTRE";
+            this.btnLimpiarSemestre.UseVisualStyleBackColor = false;
+            this.btnLimpiarSemestre.Click += new System.EventHandler(this.btnLimpiarSemestre_Click);
+            // 
             // formHorarios
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(660, 436);
+            this.ClientSize = new System.Drawing.Size(718, 436);
+            this.Controls.Add(this.btnLimpiarSemestre);
+            this.Controls.Add(this.btnLimpiarMateria);
             this.Controls.Add(this.carreraBox);
             this.Controls.Add(this.comboBoxMateria);
             this.Controls.Add(this.comboBoxDocente);
@@ -327,5 +368,7 @@
         private System.Windows.Forms.ComboBox comboBoxDocente;
         private System.Windows.Forms.ComboBox comboBoxMateria;
         private System.Windows.Forms.ComboBox carreraBox;
+        private System.Windows.Forms.Button btnLimpiarMateria;
+        private System.Windows.Forms.Button btnLimpiarSemestre;
     }
 }
