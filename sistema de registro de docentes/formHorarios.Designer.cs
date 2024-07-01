@@ -30,8 +30,6 @@
         {
             this.semestreBox = new System.Windows.Forms.ComboBox();
             this.comboBoxDia = new System.Windows.Forms.ComboBox();
-            this.comboBoxMateria = new System.Windows.Forms.ComboBox();
-            this.comboBoxDocente = new System.Windows.Forms.ComboBox();
             this.comBoxSalida = new System.Windows.Forms.ComboBox();
             this.comBoxEntrada = new System.Windows.Forms.ComboBox();
             this.carreraBox = new System.Windows.Forms.ComboBox();
@@ -48,6 +46,8 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.leer = new System.Windows.Forms.Button();
             this.buttonAgregarDocente = new System.Windows.Forms.Button();
+            this.comboBoxDocente = new System.Windows.Forms.ComboBox();
+            this.comboBoxMateria = new System.Windows.Forms.ComboBox();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -67,24 +67,6 @@
             this.comboBoxDia.Name = "comboBoxDia";
             this.comboBoxDia.Size = new System.Drawing.Size(231, 24);
             this.comboBoxDia.TabIndex = 1;
-            // 
-            // comboBoxMateria
-            // 
-            this.comboBoxMateria.FormattingEnabled = true;
-            this.comboBoxMateria.Location = new System.Drawing.Point(208, 192);
-            this.comboBoxMateria.Name = "comboBoxMateria";
-            this.comboBoxMateria.Size = new System.Drawing.Size(280, 24);
-            this.comboBoxMateria.Sorted = true;
-            this.comboBoxMateria.TabIndex = 2;
-            // 
-            // comboBoxDocente
-            // 
-            this.comboBoxDocente.FormattingEnabled = true;
-            this.comboBoxDocente.Location = new System.Drawing.Point(208, 162);
-            this.comboBoxDocente.Name = "comboBoxDocente";
-            this.comboBoxDocente.Size = new System.Drawing.Size(280, 24);
-            this.comboBoxDocente.Sorted = true;
-            this.comboBoxDocente.TabIndex = 3;
             // 
             // comBoxSalida
             // 
@@ -252,12 +234,30 @@
             this.buttonAgregarDocente.UseVisualStyleBackColor = false;
             this.buttonAgregarDocente.Click += new System.EventHandler(this.agregarButton_Click_1);
             // 
+            // comboBoxDocente
+            // 
+            this.comboBoxDocente.FormattingEnabled = true;
+            this.comboBoxDocente.Location = new System.Drawing.Point(208, 162);
+            this.comboBoxDocente.Name = "comboBoxDocente";
+            this.comboBoxDocente.Size = new System.Drawing.Size(231, 24);
+            this.comboBoxDocente.TabIndex = 19;
+            // 
+            // comboBoxMateria
+            // 
+            this.comboBoxMateria.FormattingEnabled = true;
+            this.comboBoxMateria.Location = new System.Drawing.Point(208, 192);
+            this.comboBoxMateria.Name = "comboBoxMateria";
+            this.comboBoxMateria.Size = new System.Drawing.Size(273, 24);
+            this.comboBoxMateria.TabIndex = 20;
+            // 
             // formHorarios
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(880, 537);
+            this.Controls.Add(this.comboBoxMateria);
+            this.Controls.Add(this.comboBoxDocente);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.semPanel);
             this.Controls.Add(this.label8);
@@ -270,8 +270,6 @@
             this.Controls.Add(this.comBoxSalida);
             this.Controls.Add(this.comBoxEntrada);
             this.Controls.Add(this.carreraBox);
-            this.Controls.Add(this.comboBoxDocente);
-            this.Controls.Add(this.comboBoxMateria);
             this.Controls.Add(this.comboBoxDia);
             this.Controls.Add(this.semestreBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -289,8 +287,6 @@
 
         private System.Windows.Forms.ComboBox semestreBox;
         private System.Windows.Forms.ComboBox comboBoxDia;
-        private System.Windows.Forms.ComboBox comboBoxMateria;
-        private System.Windows.Forms.ComboBox comboBoxDocente;
         private System.Windows.Forms.ComboBox comBoxSalida;
         private System.Windows.Forms.ComboBox comBoxEntrada;
         private System.Windows.Forms.ComboBox carreraBox;
@@ -307,5 +303,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button leer;
         public System.Windows.Forms.Button buttonAgregarDocente;
+        private System.Windows.Forms.ComboBox comboBoxDocente;
+        private System.Windows.Forms.ComboBox comboBoxMateria;
     }
 }

@@ -80,7 +80,50 @@ namespace sistema_de_registro_de_docentes
                 return null;
             }
         }
+        static string[,] FiltrarMatrizPorCarrera(string[,] matriz, List<string> carrerasAFiltrar, int columnaCarrera)//aumento
+        {
+            // Lista para almacenar filas filtradas
+            List<string[]> filasFiltradas = new List<string[]>();
 
+            // Filtrar filas
+            for (int i = 0; i < matriz.GetLength(0); i++)
+            {
+                string carrera = matriz[i, columnaCarrera]; // Columna de carrera
+                if (carrerasAFiltrar.Contains(carrera))
+                {
+                    // Crear una nueva fila
+                    string[] fila = new string[matriz.GetLength(1)];
+                    for (int j = 0; j < matriz.GetLength(1); j++)
+                    {
+                        fila[j] = matriz[i, j];
+                    }
+                    filasFiltradas.Add(fila);
+                }
+            }
+
+            // Convertir la lista de filas filtradas a una matriz
+            string[,] matrizFiltrada = new string[filasFiltradas.Count, matriz.GetLength(1)];
+            for (int i = 0; i < filasFiltradas.Count; i++)
+            {
+                for (int j = 0; j < matriz.GetLength(1); j++)
+                {
+                    matrizFiltrada[i, j] = filasFiltradas[i][j];
+                }
+            }
+
+            return matrizFiltrada;
+        }
+        static string AddMinutesToStringTime(string time, int minutesToAdd)//aumento
+        {
+            // Convertir la cadena de tiempo a TimeSpan
+            TimeSpan timeSpan = TimeSpan.Parse(time);
+
+            // Añadir los minutos
+            timeSpan = timeSpan.Add(TimeSpan.FromMinutes(minutesToAdd));
+
+            // Convertir TimeSpan a cadena en formato "HH:mm"
+            return timeSpan.ToString(@"hh\:mm");
+        }
         public void SeleccionarYLeerArchivoExcel()
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
@@ -280,6 +323,23 @@ namespace sistema_de_registro_de_docentes
             rutaexcel = Path.GetFullPath(rutaexcel);
             DataSet dataset = LeerArchivoExcel(rutaexcel);
             string[,] materiasHorarios = ConvertirDataSetEnMatriz(dataset);
+            if (comboBoxCarrera.SelectedItem != null)//aumento
+            {
+                List<string> carrerasAFiltrar = new List<string> {
+                     comboBoxCarrera.SelectedItem.ToString(),
+                };
+                materiasHorarios = FiltrarMatrizPorCarrera(materiasHorarios, carrerasAFiltrar, 6);
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar una carrera");
+                return;
+            }
+            if (comboBoxHorario.SelectedItem == null)
+            {
+                MessageBox.Show("Debe seleccionar un horario");
+                return;
+            }
 
             using (OpenFileDialog ofd = new OpenFileDialog() { Filter = "Todos los archivos (*.*)|*.*" })
             {
@@ -317,8 +377,14 @@ namespace sistema_de_registro_de_docentes
 
                 if (horarioSplit.Length > 1) // Verificar que haya al menos dos elementos después de dividir
                 {
+
                     horario[0] = horarioSplit[0];//horario 1 hora de entrada
                     horario[1] = horarioSplit[1];//horario 1 hora de finalizacion
+                    if (comboBoxHorario.SelectedItem.ToString() == "HORARIO INVERNAL")
+                    {
+                        horario[0] = AddMinutesToStringTime(horario[0], 30);
+                        horario[1] = AddMinutesToStringTime(horario[1], 30);
+                    }
                 }
                 else
                 {
@@ -334,6 +400,11 @@ namespace sistema_de_registro_de_docentes
                     {
                         horario[2] = horarioSplit[0];//horario 2 hora de entrada
                         horario[3] = horarioSplit[1];//horario 2 hora de finalizacion
+                        if (comboBoxHorario.SelectedItem.ToString() == "HORARIO INVERNAL")
+                        {
+                            horario[2] = AddMinutesToStringTime(horario[2], 30);
+                            horario[3] = AddMinutesToStringTime(horario[3], 30);
+                        }
                     }
                     else
                     {
@@ -349,6 +420,11 @@ namespace sistema_de_registro_de_docentes
                     {
                         horario[4] = horarioSplit[0];//horario 3 hora de entrada
                         horario[5] = horarioSplit[1];//horario 3 hora de finalizacion
+                        if (comboBoxHorario.SelectedItem.ToString() == "HORARIO INVERNAL")
+                        {
+                            horario[4] = AddMinutesToStringTime(horario[4], 30);
+                            horario[5] = AddMinutesToStringTime(horario[5], 30);
+                        }
                     }
                     else
                     {
@@ -437,6 +513,7 @@ namespace sistema_de_registro_de_docentes
         {
 
         }
+
 
     }
 }
