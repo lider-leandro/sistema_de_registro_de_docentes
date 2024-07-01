@@ -36,9 +36,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.leer = new System.Windows.Forms.Button();
-            this.buttonAgregarDocente = new System.Windows.Forms.Button();
+            this.buttonGuardar = new System.Windows.Forms.Button();
             this.carreraBox = new System.Windows.Forms.ComboBox();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowMaterias = new System.Windows.Forms.FlowLayoutPanel();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -46,7 +46,7 @@
             // semestreBox
             // 
             this.semestreBox.FormattingEnabled = true;
-            this.semestreBox.Location = new System.Drawing.Point(156, 107);
+            this.semestreBox.Location = new System.Drawing.Point(352, 78);
             this.semestreBox.Margin = new System.Windows.Forms.Padding(2);
             this.semestreBox.Name = "semestreBox";
             this.semestreBox.Size = new System.Drawing.Size(174, 21);
@@ -56,7 +56,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(83, 114);
+            this.label2.Location = new System.Drawing.Point(279, 85);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(69, 13);
@@ -66,7 +66,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(83, 89);
+            this.label6.Location = new System.Drawing.Point(22, 86);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(62, 13);
@@ -78,11 +78,11 @@
             this.semPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.semPanel.Location = new System.Drawing.Point(73, 221);
+            this.semPanel.Location = new System.Drawing.Point(73, 170);
             this.semPanel.Margin = new System.Windows.Forms.Padding(2);
             this.semPanel.Name = "semPanel";
             this.semPanel.SelectedIndex = 0;
-            this.semPanel.Size = new System.Drawing.Size(572, 197);
+            this.semPanel.Size = new System.Drawing.Size(572, 255);
             this.semPanel.TabIndex = 15;
             // 
             // panel2
@@ -91,7 +91,7 @@
             this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.pictureBox1);
             this.panel2.Controls.Add(this.leer);
-            this.panel2.Controls.Add(this.buttonAgregarDocente);
+            this.panel2.Controls.Add(this.buttonGuardar);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Margin = new System.Windows.Forms.Padding(2);
@@ -141,38 +141,40 @@
             this.leer.UseVisualStyleBackColor = false;
             this.leer.Click += new System.EventHandler(this.btnExportar_Click);
             // 
-            // buttonAgregarDocente
+            // buttonGuardar
             // 
-            this.buttonAgregarDocente.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.buttonAgregarDocente.BackColor = System.Drawing.Color.LimeGreen;
-            this.buttonAgregarDocente.FlatAppearance.BorderSize = 0;
-            this.buttonAgregarDocente.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonAgregarDocente.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonAgregarDocente.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.buttonAgregarDocente.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonAgregarDocente.Location = new System.Drawing.Point(557, 19);
-            this.buttonAgregarDocente.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonAgregarDocente.Name = "buttonAgregarDocente";
-            this.buttonAgregarDocente.Size = new System.Drawing.Size(114, 32);
-            this.buttonAgregarDocente.TabIndex = 4;
-            this.buttonAgregarDocente.Text = "AGREGAR";
-            this.buttonAgregarDocente.UseVisualStyleBackColor = false;
+            this.buttonGuardar.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.buttonGuardar.BackColor = System.Drawing.Color.LimeGreen;
+            this.buttonGuardar.FlatAppearance.BorderSize = 0;
+            this.buttonGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonGuardar.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonGuardar.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.buttonGuardar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonGuardar.Location = new System.Drawing.Point(557, 19);
+            this.buttonGuardar.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonGuardar.Name = "buttonGuardar";
+            this.buttonGuardar.Size = new System.Drawing.Size(114, 32);
+            this.buttonGuardar.TabIndex = 4;
+            this.buttonGuardar.Text = "GUARDAR";
+            this.buttonGuardar.UseVisualStyleBackColor = false;
+            this.buttonGuardar.Click += new System.EventHandler(this.buttonGuardar_Click);
             // 
             // carreraBox
             // 
             this.carreraBox.FormattingEnabled = true;
-            this.carreraBox.Location = new System.Drawing.Point(156, 80);
+            this.carreraBox.Location = new System.Drawing.Point(95, 77);
             this.carreraBox.Name = "carreraBox";
             this.carreraBox.Size = new System.Drawing.Size(174, 21);
             this.carreraBox.TabIndex = 21;
             this.carreraBox.SelectedIndexChanged += new System.EventHandler(this.carreraBox_SelectedIndexChanged);
             // 
-            // flowLayoutPanel1
+            // flowMaterias
             // 
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(86, 151);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(539, 65);
-            this.flowLayoutPanel1.TabIndex = 22;
+            this.flowMaterias.AutoSize = true;
+            this.flowMaterias.Location = new System.Drawing.Point(25, 104);
+            this.flowMaterias.Name = "flowMaterias";
+            this.flowMaterias.Size = new System.Drawing.Size(670, 51);
+            this.flowMaterias.TabIndex = 22;
             // 
             // formHorarios
             // 
@@ -180,7 +182,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(718, 436);
-            this.Controls.Add(this.flowLayoutPanel1);
+            this.Controls.Add(this.flowMaterias);
             this.Controls.Add(this.carreraBox);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.semPanel);
@@ -209,8 +211,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button leer;
-        public System.Windows.Forms.Button buttonAgregarDocente;
+        public System.Windows.Forms.Button buttonGuardar;
         private System.Windows.Forms.ComboBox carreraBox;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.FlowLayoutPanel flowMaterias;
     }
 }
