@@ -52,15 +52,15 @@ namespace sistema_de_registro_de_docentes
                     hoja = libro.ActiveSheet;
 
                     hoja.Cells[1, 1] = "Nº";
-                    hoja.Cells[1, 2] = "Grado";
+                    hoja.Cells[1, 2] = "Grdo";
                     hoja.Cells[1, 3] = "Apellido Paterno";
                     hoja.Cells[1, 4] = "Apellido Materno";
                     hoja.Cells[1, 5] = "Nombres";
                     hoja.Cells[1, 6] = "CI";
-                    hoja.Cells[1, 16] = "Carrera";
-                    hoja.Cells[1, 7] = "Asignatura";
-                    hoja.Cells[1, 8] = "Semestre Académico";
-                    hoja.Cells[1, 9] = "Paralelo";
+                    hoja.Cells[1, 7] = "Carrera";
+                    hoja.Cells[1, 8] = "Asignatura";
+                    hoja.Cells[1, 9] = "Semestre Académico";
+                    hoja.Cells[1, 10] = "Paralelo";
                 }
                 else
                 {
@@ -86,10 +86,10 @@ namespace sistema_de_registro_de_docentes
                                 hoja.Cells[filaNumero, 4] = apellidoMaterno;
                                 hoja.Cells[filaNumero, 5] = nombres;
                                 hoja.Cells[filaNumero, 6] = ci;
-                                hoja.Cells[filaNumero, 16] = carrera;
-                                hoja.Cells[filaNumero, 7] = asignatura;
-                                hoja.Cells[filaNumero, 8] = semestre;
-                                hoja.Cells[filaNumero, 9] = paralelo;
+                                hoja.Cells[filaNumero, 7] = carrera;
+                                hoja.Cells[filaNumero, 8] = asignatura;
+                                hoja.Cells[filaNumero, 9] = semestre;
+                                hoja.Cells[filaNumero, 10] = paralelo;
                                 filaNumero++;
                             }
                         }

@@ -98,8 +98,7 @@ namespace sistema_de_registro_de_docentes
                     var headers = worksheet.FirstRow().Cells().ToDictionary(c => c.Value.ToString(), c => c.Address.ColumnNumber);
 
                     // Buscar la fila donde coincide el Carnet de identidad original
-                    var rowToUpdate = worksheet.RowsUsed().Where(r =>
-                        r.Cell(headers["Carnet de identidad"]).GetString() == carnetIdentidadOriginal).FirstOrDefault();
+                    var rowToUpdate = worksheet.RowsUsed().Where(r =>r.Cell(headers["Carnet de identidad"]).GetString() == carnetIdentidadOriginal).FirstOrDefault();
 
                     if (rowToUpdate != null)
                     {

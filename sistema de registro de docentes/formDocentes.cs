@@ -16,23 +16,28 @@ namespace sistema_de_registro_de_docentes
     public partial class formDocentes : Form
     {
         private DataTable tabla;
-        private string rutaexcel;
+        private string rutaexceldoc;
+        private string carnet;
 
         public formDocentes()
         {
             InitializeComponent();
-            rutaexcel = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\Resources\lista_doc.xlsx");
-            CargarDatosDesdeExcel();
+            rutaexceldoc = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\Resources\lista_doc.xlsx");
+            CargarDatosDesdeExcelDocentes();
 
             // Ajustar las columnas del DataGridView para llenar el espacio disponible
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
         }
 
-        private void CargarDatosDesdeExcel()
+
+        private void CargarDatosDesdeExcelDocentes()
         {
-            // Combina con la ruta adicional hasta llegar a la carpeta "sistema de registro de docentes"
+            string rutaexcel = Path.Combine(rutaexceldoc);
+            string rutaImagenes = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\Resources\imagenes");
+
             rutaexcel = Path.GetFullPath(rutaexcel);
+            rutaImagenes = Path.GetFullPath(rutaImagenes);
 
             try
             {
@@ -48,32 +53,125 @@ namespace sistema_de_registro_de_docentes
                             }
                         });
 
-                        // Crear una copia del DataTable original
-                        DataTable originalDataTable = dataSet.Tables[0].Copy();
+                        var dataTable = dataSet.Tables["Hoja2"];
 
-                        // Filtrar las columnas que deseas mostrar
-                        DataTable filteredDataTable = new DataTable();
-                        foreach (string columnName in new string[] { "Nº", "Grdo", "Apellido Paterno", "Apellido Materno", "Nombres", "CI", "Asignatura", "Semestre Académico", "Paralelo", "Estado" })
+                        // Ordenar los datos: Activos primero, luego inactivos
+                        DataView dataView = new DataView(dataTable);
+                        dataView.Sort = "Estado ASC";
+
+                        DataTable sortedDataTable = dataView.ToTable();
+
+                        DataTable filteredDataTable = sortedDataTable.DefaultView.ToTable(false,
+                            "Nº", "Grdo", "Apellido Paterno", "Apellido Materno", "Nombres", "CI", "Carrera", "Asignatura", "Semestre Académico", "Estado");
+
+                        // Reenumerar la columna "Nro"
+                        int nro = 1;
+                        foreach (DataRow row in filteredDataTable.Rows)
                         {
-                            if (originalDataTable.Columns.Contains(columnName))
-                            {
-                                filteredDataTable.Columns.Add(columnName);
-                            }
+                            row["Nº"] = nro++;
                         }
 
-                        foreach (DataRow row in originalDataTable.Rows)
-                        {
-                            DataRow newRow = filteredDataTable.NewRow();
-                            foreach (string columnName in filteredDataTable.Columns.Cast<DataColumn>().Select(c => c.ColumnName))
-                            {
-                                newRow[columnName] = row[columnName];
-                            }
-                            filteredDataTable.Rows.Add(newRow);
-                        }
-
-                        // Asignar la tabla filtrada al origen de datos del DataGridView
                         dataGridView1.DataSource = filteredDataTable;
-                        tabla = filteredDataTable; // Guardar la tabla para su posterior uso
+
+                        if (!dataGridView1.Columns.Contains("Detalle"))
+                        {
+                            DataGridViewButtonColumn btnDetalle = new DataGridViewButtonColumn();
+                            btnDetalle.Name = "Detalle";
+                            btnDetalle.HeaderText = "Detalle";
+                            btnDetalle.Text = "Detalles";
+                            btnDetalle.UseColumnTextForButtonValue = false; // Importante para personalizar el texto
+                            dataGridView1.Columns.Add(btnDetalle);
+                        }
+
+                        // Ajustar el ancho de la columna "Detalle"
+                        dataGridView1.Columns["Detalle"].Width = 280;
+
+                        dataGridView1.ReadOnly = true;
+                        dataGridView1.SelectionMode = DataGridViewSelectionMode.CellSelect;
+                        dataGridView1.MultiSelect = false;
+                        dataGridView1.AllowUserToAddRows = false;
+                        dataGridView1.AllowUserToDeleteRows = false;
+                        dataGridView1.AllowUserToResizeColumns = false;
+                        dataGridView1.AllowUserToResizeRows = false;
+                        dataGridView1.AllowUserToOrderColumns = false;
+
+                        dataGridView1.EnableHeadersVisualStyles = false;
+                        dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = Color.White;
+                        dataGridView1.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.White;
+                        dataGridView1.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.Black;
+
+                        AdjustColumnWidths();
+
+                        dataGridView1.CellMouseEnter += new DataGridViewCellEventHandler(dataGridView1_CellMouseEnter);
+                        dataGridView1.CellMouseLeave += new DataGridViewCellEventHandler(dataGridView1_CellMouseLeave);
+
+                        dataGridView1.CellPainting += (s, e) =>
+                        {
+                            if (e.ColumnIndex >= 0 && e.RowIndex >= 0 && dataGridView1.Columns[e.ColumnIndex].Name == "Estado")
+                            {
+                                e.Paint(e.CellBounds, DataGridViewPaintParts.Background);
+                                e.Paint(e.CellBounds, DataGridViewPaintParts.Border);
+
+                                string estado = dataGridView1.Rows[e.RowIndex].Cells["Estado"].Value.ToString();
+                                string iconoRuta = estado == "ACTIVO" ? Path.Combine(rutaImagenes, "check.png") : Path.Combine(rutaImagenes, "cancelarRojo.png");
+                                Color textColor = estado == "ACTIVO" ? Color.Green : Color.Red;
+
+                                if (File.Exists(iconoRuta))
+                                {
+                                    Image img = ResizeImage(Image.FromFile(iconoRuta), 16, 16);
+                                    int imgX = e.CellBounds.Left + 35;
+                                    int imgY = e.CellBounds.Top + (e.CellBounds.Height - img.Height) / 2;
+
+                                    e.Graphics.DrawImage(img, new Rectangle(imgX, imgY, img.Width, img.Height));
+
+                                    using (Brush textBrush = new SolidBrush(textColor))
+                                    {
+                                        e.Graphics.DrawString(estado, e.CellStyle.Font, textBrush, imgX + img.Width + 5, e.CellBounds.Top + ((e.CellBounds.Height - e.Graphics.MeasureString(estado, e.CellStyle.Font).Height) / 2));
+                                    }
+                                }
+
+                                e.Handled = true;
+                            }
+                        };
+
+                        // Personalizar el botón "Detalle"
+                        dataGridView1.CellPainting += (s, e) =>
+                        {
+                            if (e.ColumnIndex >= 0 && dataGridView1.Columns[e.ColumnIndex].Name == "Detalle" && e.RowIndex >= 0)
+                            {
+                                dataGridView1.Columns["Detalle"].Width = 180;
+                                e.Paint(e.CellBounds, DataGridViewPaintParts.Background);
+
+                                // Rellenar la celda con el color de fondo
+                                e.Graphics.FillRectangle(Brushes.DarkBlue, e.CellBounds);
+
+                                // Dibujar el borde de la celda
+                                using (Pen pen = new Pen(Color.LightBlue, 2)) // Ajustar el color y el grosor del borde según sea necesario
+                                {
+                                    e.Graphics.DrawRectangle(pen, e.CellBounds.Left, e.CellBounds.Top, e.CellBounds.Width - 1, e.CellBounds.Height - 1);
+                                }
+
+                                // Pintar el resto de la celda
+                                e.Paint(e.CellBounds, DataGridViewPaintParts.Border);
+
+                                string iconoRuta = Path.Combine(rutaImagenes, "menu.png");
+                                if (File.Exists(iconoRuta))
+                                {
+                                    Image img = ResizeImage(Image.FromFile(iconoRuta), 10, 10);
+                                    int imgX = e.CellBounds.Left + 3;
+                                    int imgY = e.CellBounds.Top + (e.CellBounds.Height - img.Height) / 2;
+
+                                    e.Graphics.DrawImage(img, new Rectangle(imgX, imgY, img.Width, img.Height));
+                                }
+
+                                using (Brush textBrush = new SolidBrush(Color.White))
+                                {
+                                    e.Graphics.DrawString("Detalles", e.CellStyle.Font, textBrush, e.CellBounds.Left + 13, e.CellBounds.Top + ((e.CellBounds.Height - e.Graphics.MeasureString("Detalles", e.CellStyle.Font).Height) / 2));
+                                }
+
+                                e.Handled = true;
+                            }
+                        };
                     }
                 }
             }
@@ -83,49 +181,49 @@ namespace sistema_de_registro_de_docentes
             }
         }
 
-        public void GuardarDatosEnExcel()
+        private void AdjustColumnWidths()
         {
-            // Combina con la ruta adicional hasta llegar a la carpeta "sistema de registro de docentes"
-            rutaexcel = Path.GetFullPath(rutaexcel);
+            int totalWidth = dataGridView1.ClientSize.Width;
+            int usedWidth = 0;
 
-            try
+            // Ajustar el ancho de la columna "Expedido"
+            var expedidoColumn = dataGridView1.Columns["Grdo"];
+            if (expedidoColumn != null)
             {
-                using (var workbook = new XLWorkbook(rutaexcel))
-                {
-                    var worksheet = workbook.Worksheet("Hoja2");
-
-                    // Limpiar el contenido de la hoja
-                    worksheet.Clear();
-
-                    // Escribir los datos del DataTable en la hoja
-                    int filaInicio = 1;
-                    int columnaInicio = 1;
-
-                    // Escribir los nombres de las columnas
-                    for (int columna = 0; columna < tabla.Columns.Count; columna++)
-                    {
-                        worksheet.Cell(filaInicio, columnaInicio + columna).Value = tabla.Columns[columna].ColumnName;
-                    }
-
-                    // Escribir los datos de las filas
-                    for (int fila = 0; fila < tabla.Rows.Count; fila++)
-                    {
-                        for (int columna = 0; columna < tabla.Columns.Count; columna++)
-                        {
-                            worksheet.Cell(fila + filaInicio + 1, columnaInicio + columna).Value = tabla.Rows[fila][columna]?.ToString() ?? string.Empty;
-                        }
-                    }
-
-                    // Guardar el libro de trabajo
-                    workbook.Save();
-                }
-                MessageBox.Show("Datos guardados en el archivo Excel correctamente.");
+                expedidoColumn.Width = 20; // Ajusta el ancho según sea necesario
+                usedWidth += expedidoColumn.Width;
             }
-            catch (Exception ex)
+
+            // Ajustar el ancho de las demás columnas excepto "Detalle" y "Nro"
+            foreach (DataGridViewColumn column in dataGridView1.Columns)
             {
-                MessageBox.Show("Error al guardar los datos en Excel: " + ex.Message);
+                if (column.Name != "Nombres")
+                {
+                    column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    usedWidth += column.Width;
+                }
+            }
+
+            // Ajustar el ancho de la columna "Detalle"
+
+        }
+
+        private void dataGridView1_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == dataGridView1.Columns["Detalle"].Index && e.RowIndex >= 0)
+            {
+                dataGridView1.Cursor = Cursors.Hand;
             }
         }
+
+        private void dataGridView1_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == dataGridView1.Columns["Detalle"].Index && e.RowIndex >= 0)
+            {
+                dataGridView1.Cursor = Cursors.Default;
+            }
+        }
+
 
         private Form activateForm = null;
 
@@ -169,8 +267,60 @@ namespace sistema_de_registro_de_docentes
 
         private void leer_Click(object sender, EventArgs e)
         {
-            CargarDatosDesdeExcel();
+            CargarDatosDesdeExcelDocentes();
             abriFormHijo(new formDocentes());
+        }
+        private Image ResizeImage(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+                graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+                graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new System.Drawing.Imaging.ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(System.Drawing.Drawing2D.WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
+        }
+        private void formDocentes_Load(object sender, EventArgs e)
+        {
+            dataGridView1.CellContentClick += new DataGridViewCellEventHandler(dataGridView1_CellContentClick);
+        }
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataGridView1.Columns[e.ColumnIndex].Name == "Detalle" && e.RowIndex >= 0)
+            {
+                DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
+                DataRowView dataRowView = row.DataBoundItem as DataRowView;
+
+                if (dataRowView != null)
+                {
+                    DataRow dataRow = dataRowView.Row;
+                    string carnetIdentidad = dataRow["CI"].ToString();
+                    string asignatura = dataRow["Asignatura"].ToString();
+                    string carrera = dataRow["Carrera"].ToString();
+                    string rutaexcel = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\Resources\lista_doc.xlsx");
+
+                    transparente transparentForm = new transparente();
+                    FormDetalleDocente detalleFormDocentes = new FormDetalleDocente();
+                    transparentForm.Show();
+                    detalleFormDocentes.SetDocenteData(carnetIdentidad, rutaexcel,asignatura,carrera);
+                    detalleFormDocentes.ShowDialog();
+                    transparentForm.Close();
+                }
+            }
         }
     }
 }

@@ -24,7 +24,8 @@ namespace sistema_de_registro_de_docentes
         {
             InitializeComponent();
             this.DoubleBuffered = true; // Habilitar doble búfer para reducir el parpadeo
-        }public void SetUsuarioData(string carnetIdentidad, string expedido, string excelPath)
+        }
+        public void SetUsuarioData(string carnetIdentidad, string expedido, string excelPath)
         {
             this.carnetIdentidad = carnetIdentidad;
             this.expedido = expedido;
@@ -66,6 +67,7 @@ namespace sistema_de_registro_de_docentes
                             throw new Exception("No se encontraron todas las columnas necesarias en el archivo Excel.");
                         }
 
+                        
                         if (row.Cell(carnetDeIdentidadColIndex).GetValue<string>() == carnetIdentidad && row.Cell(expedidoColIndex).GetValue<string>() == expedido)
                         {
                             lblCI.Text = $"{row.Cell(carnetDeIdentidadColIndex).GetValue<string>()} {row.Cell(expedidoColIndex).GetValue<string>()}";

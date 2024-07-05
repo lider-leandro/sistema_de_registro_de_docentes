@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using ExcelDataReader;
+using ClosedXML.Excel;
 
 namespace sistema_de_registro_de_docentes
 {
