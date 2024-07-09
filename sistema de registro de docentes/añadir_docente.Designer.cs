@@ -35,7 +35,6 @@
             this.textBoxApellidoPaterno = new System.Windows.Forms.TextBox();
             this.textBoxApellidoMaterno = new System.Windows.Forms.TextBox();
             this.textBoxCI = new System.Windows.Forms.TextBox();
-            this.textBoxParalelo = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -60,6 +59,7 @@
             this.checkedListBoxAsignatura = new System.Windows.Forms.CheckedListBox();
             this.label10 = new System.Windows.Forms.Label();
             this.textBoxGrado = new System.Windows.Forms.ComboBox();
+            this.textBoxParalelo = new System.Windows.Forms.ComboBox();
             btnAñadirDocenteExcel = new System.Windows.Forms.Button();
             btnCancelar = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -134,15 +134,6 @@
             this.textBoxCI.Name = "textBoxCI";
             this.textBoxCI.Size = new System.Drawing.Size(221, 36);
             this.textBoxCI.TabIndex = 5;
-            // 
-            // textBoxParalelo
-            // 
-            this.textBoxParalelo.BackColor = System.Drawing.Color.White;
-            this.textBoxParalelo.Font = new System.Drawing.Font("Yu Gothic Medium", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxParalelo.Location = new System.Drawing.Point(560, 248);
-            this.textBoxParalelo.Name = "textBoxParalelo";
-            this.textBoxParalelo.Size = new System.Drawing.Size(221, 36);
-            this.textBoxParalelo.TabIndex = 6;
             // 
             // label1
             // 
@@ -407,6 +398,18 @@
             this.textBoxGrado.Size = new System.Drawing.Size(221, 24);
             this.textBoxGrado.TabIndex = 41;
             // 
+            // textBoxParalelo
+            // 
+            this.textBoxParalelo.FormattingEnabled = true;
+            this.textBoxParalelo.Items.AddRange(new object[] {
+            "A",
+            "B",
+            "C"});
+            this.textBoxParalelo.Location = new System.Drawing.Point(560, 253);
+            this.textBoxParalelo.Name = "textBoxParalelo";
+            this.textBoxParalelo.Size = new System.Drawing.Size(221, 24);
+            this.textBoxParalelo.TabIndex = 89;
+            // 
             // añadir_docente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -415,6 +418,7 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1025, 609);
             this.ControlBox = false;
+            this.Controls.Add(this.textBoxParalelo);
             this.Controls.Add(this.textBoxGrado);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.checkedListBoxAsignatura);
@@ -433,7 +437,6 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBoxParalelo);
             this.Controls.Add(this.textBoxCI);
             this.Controls.Add(this.textBoxApellidoMaterno);
             this.Controls.Add(this.textBoxApellidoPaterno);
@@ -459,7 +462,6 @@
         private System.Windows.Forms.TextBox textBoxApellidoPaterno;
         private System.Windows.Forms.TextBox textBoxApellidoMaterno;
         private System.Windows.Forms.TextBox textBoxCI;
-        private System.Windows.Forms.TextBox textBoxParalelo;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
@@ -484,5 +486,6 @@
         private System.Windows.Forms.CheckedListBox checkedListBoxAsignatura;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ComboBox textBoxGrado;
+        private System.Windows.Forms.ComboBox textBoxParalelo;
     }
 }

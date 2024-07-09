@@ -46,7 +46,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBoxParalelo = new System.Windows.Forms.TextBox();
             this.textBoxCI = new System.Windows.Forms.TextBox();
             this.textBoxApellidoMaterno = new System.Windows.Forms.TextBox();
             this.textBoxApellidoPaterno = new System.Windows.Forms.TextBox();
@@ -63,6 +62,9 @@
             this.label32 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.textBoxGrado = new System.Windows.Forms.ComboBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.textBoxParalelo = new System.Windows.Forms.ComboBox();
             btnAñadirDocenteExcel = new System.Windows.Forms.Button();
             btnCancelar = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -83,25 +85,6 @@
             btnAñadirDocenteExcel.UseVisualStyleBackColor = false;
             btnAñadirDocenteExcel.Click += new System.EventHandler(this.btnAñadirDocenteExcel_Click);
             // 
-            // btnCancelar
-            // 
-            btnCancelar.BackColor = System.Drawing.Color.Red;
-            btnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            btnCancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            btnCancelar.ForeColor = System.Drawing.Color.White;
-            btnCancelar.Image = ((System.Drawing.Image)(resources.GetObject("btnCancelar.Image")));
-            btnCancelar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            btnCancelar.Location = new System.Drawing.Point(874, 536);
-            btnCancelar.Name = "btnCancelar";
-            btnCancelar.Padding = new System.Windows.Forms.Padding(11, 0, 0, 0);
-            btnCancelar.Size = new System.Drawing.Size(137, 44);
-            btnCancelar.TabIndex = 56;
-            btnCancelar.Text = "Cancelar";
-            btnCancelar.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            btnCancelar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            btnCancelar.UseVisualStyleBackColor = false;
-            btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
-            // 
             // label10
             // 
             this.label10.AutoSize = true;
@@ -117,7 +100,7 @@
             // 
             this.checkedListBoxAsignatura.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.checkedListBoxAsignatura.FormattingEnabled = true;
-            this.checkedListBoxAsignatura.Location = new System.Drawing.Point(572, 350);
+            this.checkedListBoxAsignatura.Location = new System.Drawing.Point(572, 375);
             this.checkedListBoxAsignatura.Name = "checkedListBoxAsignatura";
             this.checkedListBoxAsignatura.ScrollAlwaysVisible = true;
             this.checkedListBoxAsignatura.Size = new System.Drawing.Size(439, 155);
@@ -127,7 +110,7 @@
             // checkedListBoxSemestreAcademico
             // 
             this.checkedListBoxSemestreAcademico.FormattingEnabled = true;
-            this.checkedListBoxSemestreAcademico.Location = new System.Drawing.Point(315, 350);
+            this.checkedListBoxSemestreAcademico.Location = new System.Drawing.Point(315, 375);
             this.checkedListBoxSemestreAcademico.Name = "checkedListBoxSemestreAcademico";
             this.checkedListBoxSemestreAcademico.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.checkedListBoxSemestreAcademico.Size = new System.Drawing.Size(234, 157);
@@ -137,7 +120,7 @@
             // checkedListBoxCarrera
             // 
             this.checkedListBoxCarrera.FormattingEnabled = true;
-            this.checkedListBoxCarrera.Location = new System.Drawing.Point(39, 350);
+            this.checkedListBoxCarrera.Location = new System.Drawing.Point(39, 375);
             this.checkedListBoxCarrera.Name = "checkedListBoxCarrera";
             this.checkedListBoxCarrera.Size = new System.Drawing.Size(252, 157);
             this.checkedListBoxCarrera.TabIndex = 68;
@@ -169,7 +152,7 @@
             // 
             this.label_mensaje_estado.AutoSize = true;
             this.label_mensaje_estado.Font = new System.Drawing.Font("Yu Gothic Medium", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_mensaje_estado.Location = new System.Drawing.Point(116, 378);
+            this.label_mensaje_estado.Location = new System.Drawing.Point(116, 403);
             this.label_mensaje_estado.Name = "label_mensaje_estado";
             this.label_mensaje_estado.Size = new System.Drawing.Size(0, 23);
             this.label_mensaje_estado.TabIndex = 55;
@@ -178,7 +161,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Yu Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(57, 307);
+            this.label8.Location = new System.Drawing.Point(57, 332);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(58, 20);
             this.label8.TabIndex = 54;
@@ -188,7 +171,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Yu Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(329, 307);
+            this.label7.Location = new System.Drawing.Point(329, 332);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(153, 20);
             this.label7.TabIndex = 53;
@@ -198,7 +181,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Yu Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(601, 307);
+            this.label6.Location = new System.Drawing.Point(601, 332);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(83, 20);
             this.label6.TabIndex = 52;
@@ -254,15 +237,6 @@
             this.label1.TabIndex = 47;
             this.label1.Text = "Grado";
             // 
-            // textBoxParalelo
-            // 
-            this.textBoxParalelo.BackColor = System.Drawing.Color.White;
-            this.textBoxParalelo.Font = new System.Drawing.Font("Yu Gothic Medium", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxParalelo.Location = new System.Drawing.Point(572, 240);
-            this.textBoxParalelo.Name = "textBoxParalelo";
-            this.textBoxParalelo.Size = new System.Drawing.Size(221, 36);
-            this.textBoxParalelo.TabIndex = 46;
-            // 
             // textBoxCI
             // 
             this.textBoxCI.BackColor = System.Drawing.Color.White;
@@ -305,7 +279,7 @@
             this.label9.BackColor = System.Drawing.Color.Transparent;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.Red;
-            this.label9.Location = new System.Drawing.Point(309, 302);
+            this.label9.Location = new System.Drawing.Point(309, 327);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(27, 36);
             this.label9.TabIndex = 58;
@@ -329,7 +303,7 @@
             this.label12.BackColor = System.Drawing.Color.Transparent;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label12.ForeColor = System.Drawing.Color.Red;
-            this.label12.Location = new System.Drawing.Point(36, 302);
+            this.label12.Location = new System.Drawing.Point(36, 327);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(27, 36);
             this.label12.TabIndex = 60;
@@ -365,7 +339,7 @@
             this.label15.BackColor = System.Drawing.Color.Transparent;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label15.ForeColor = System.Drawing.Color.Red;
-            this.label15.Location = new System.Drawing.Point(577, 302);
+            this.label15.Location = new System.Drawing.Point(577, 327);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(27, 36);
             this.label15.TabIndex = 63;
@@ -442,12 +416,68 @@
             this.textBoxGrado.Size = new System.Drawing.Size(221, 24);
             this.textBoxGrado.TabIndex = 85;
             // 
+            // btnCancelar
+            // 
+            btnCancelar.BackColor = System.Drawing.Color.Red;
+            btnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            btnCancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            btnCancelar.ForeColor = System.Drawing.Color.White;
+            btnCancelar.Image = ((System.Drawing.Image)(resources.GetObject("btnCancelar.Image")));
+            btnCancelar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            btnCancelar.Location = new System.Drawing.Point(874, 536);
+            btnCancelar.Name = "btnCancelar";
+            btnCancelar.Padding = new System.Windows.Forms.Padding(11, 0, 0, 0);
+            btnCancelar.Size = new System.Drawing.Size(137, 44);
+            btnCancelar.TabIndex = 56;
+            btnCancelar.Text = "Cancelar";
+            btnCancelar.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            btnCancelar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            btnCancelar.UseVisualStyleBackColor = false;
+            btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Yu Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.Location = new System.Drawing.Point(70, 291);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(405, 20);
+            this.label20.TabIndex = 86;
+            this.label20.Text = "Seleccione una carrera, Semestre Académico y Asignatura";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.BackColor = System.Drawing.Color.Transparent;
+            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.ForeColor = System.Drawing.Color.Red;
+            this.label21.Location = new System.Drawing.Point(37, 291);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(27, 36);
+            this.label21.TabIndex = 87;
+            this.label21.Text = "*";
+            // 
+            // textBoxParalelo
+            // 
+            this.textBoxParalelo.FormattingEnabled = true;
+            this.textBoxParalelo.Items.AddRange(new object[] {
+            "A",
+            "B",
+            "C"});
+            this.textBoxParalelo.Location = new System.Drawing.Point(572, 245);
+            this.textBoxParalelo.Name = "textBoxParalelo";
+            this.textBoxParalelo.Size = new System.Drawing.Size(221, 24);
+            this.textBoxParalelo.TabIndex = 88;
+            // 
             // editarDatosDocente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1041, 600);
+            this.Controls.Add(this.textBoxParalelo);
+            this.Controls.Add(this.label21);
+            this.Controls.Add(this.label20);
             this.Controls.Add(this.textBoxGrado);
             this.Controls.Add(this.checkBoxEstado);
             this.Controls.Add(this.label32);
@@ -469,7 +499,6 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBoxParalelo);
             this.Controls.Add(this.textBoxCI);
             this.Controls.Add(this.textBoxApellidoMaterno);
             this.Controls.Add(this.textBoxApellidoPaterno);
@@ -508,7 +537,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBoxParalelo;
         private System.Windows.Forms.TextBox textBoxCI;
         private System.Windows.Forms.TextBox textBoxApellidoMaterno;
         private System.Windows.Forms.TextBox textBoxApellidoPaterno;
@@ -525,5 +553,8 @@
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.ComboBox textBoxGrado;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.ComboBox textBoxParalelo;
     }
 }

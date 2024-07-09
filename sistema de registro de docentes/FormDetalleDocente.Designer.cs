@@ -70,7 +70,7 @@
             buttonEditar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             buttonEditar.ForeColor = System.Drawing.Color.White;
             buttonEditar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            buttonEditar.Location = new System.Drawing.Point(415, 405);
+            buttonEditar.Location = new System.Drawing.Point(495, 405);
             buttonEditar.Name = "buttonEditar";
             buttonEditar.Size = new System.Drawing.Size(112, 44);
             buttonEditar.TabIndex = 56;
@@ -87,7 +87,7 @@
             button2.ForeColor = System.Drawing.Color.White;
             button2.Image = ((System.Drawing.Image)(resources.GetObject("button2.Image")));
             button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            button2.Location = new System.Drawing.Point(533, 405);
+            button2.Location = new System.Drawing.Point(613, 405);
             button2.Name = "button2";
             button2.Padding = new System.Windows.Forms.Padding(11, 0, 0, 0);
             button2.Size = new System.Drawing.Size(131, 44);
@@ -106,7 +106,7 @@
             btnCancelar.ForeColor = System.Drawing.Color.White;
             btnCancelar.Image = ((System.Drawing.Image)(resources.GetObject("btnCancelar.Image")));
             btnCancelar.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            btnCancelar.Location = new System.Drawing.Point(627, 18);
+            btnCancelar.Location = new System.Drawing.Point(688, 18);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Padding = new System.Windows.Forms.Padding(11, 0, 0, 0);
             btnCancelar.Size = new System.Drawing.Size(46, 42);
@@ -356,7 +356,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(696, 471);
+            this.ClientSize = new System.Drawing.Size(769, 471);
             this.Controls.Add(this.labelhora3);
             this.Controls.Add(this.labeldia3);
             this.Controls.Add(this.labelhora2);

@@ -29,22 +29,27 @@
         private void InitializeComponent()
         {
             this.panelMenuLateral = new System.Windows.Forms.Panel();
-            this.pictureBoxUsuario = new System.Windows.Forms.PictureBox();
             this.lblRol = new System.Windows.Forms.Label();
             this.lblNombreApellido = new System.Windows.Forms.Label();
             this.btnUsuarios = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.iconodocente = new System.Windows.Forms.PictureBox();
-            this.iconohorario = new System.Windows.Forms.PictureBox();
             this.btn_Docentes = new System.Windows.Forms.Button();
-            this.iconomanual = new System.Windows.Forms.PictureBox();
-            this.iconoretraso = new System.Windows.Forms.PictureBox();
             this.buttonHorarios = new System.Windows.Forms.Button();
             this.buttonRetrasos = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.iconousuario = new System.Windows.Forms.PictureBox();
+            this.pictureBoxUsuario = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.iconodocente = new System.Windows.Forms.PictureBox();
+            this.iconohorario = new System.Windows.Forms.PictureBox();
+            this.iconomanual = new System.Windows.Forms.PictureBox();
+            this.iconoretraso = new System.Windows.Forms.PictureBox();
             this.panelHijo = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.panelMenuLateral.SuspendLayout();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.iconousuario)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUsuario)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.iconodocente)).BeginInit();
@@ -57,6 +62,7 @@
             // 
             this.panelMenuLateral.AutoScroll = true;
             this.panelMenuLateral.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.panelMenuLateral.Controls.Add(this.iconousuario);
             this.panelMenuLateral.Controls.Add(this.pictureBoxUsuario);
             this.panelMenuLateral.Controls.Add(this.lblRol);
             this.panelMenuLateral.Controls.Add(this.lblNombreApellido);
@@ -75,17 +81,6 @@
             this.panelMenuLateral.Name = "panelMenuLateral";
             this.panelMenuLateral.Size = new System.Drawing.Size(250, 629);
             this.panelMenuLateral.TabIndex = 5;
-            // 
-            // pictureBoxUsuario
-            // 
-            this.pictureBoxUsuario.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBoxUsuario.Location = new System.Drawing.Point(57, 99);
-            this.pictureBoxUsuario.Name = "pictureBoxUsuario";
-            this.pictureBoxUsuario.Size = new System.Drawing.Size(142, 138);
-            this.pictureBoxUsuario.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBoxUsuario.TabIndex = 22;
-            this.pictureBoxUsuario.TabStop = false;
             // 
             // lblRol
             // 
@@ -128,40 +123,6 @@
             this.btnUsuarios.UseVisualStyleBackColor = false;
             this.btnUsuarios.Click += new System.EventHandler(this.btnUsuarios_Click);
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackgroundImage = global::sistema_de_registro_de_docentes.Properties.Resources.logoEmi;
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.Location = new System.Drawing.Point(72, 12);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(112, 67);
-            this.pictureBox1.TabIndex = 13;
-            this.pictureBox1.TabStop = false;
-            // 
-            // iconodocente
-            // 
-            this.iconodocente.BackColor = System.Drawing.Color.Transparent;
-            this.iconodocente.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.iconodocente.Image = global::sistema_de_registro_de_docentes.Properties.Resources.usuario;
-            this.iconodocente.Location = new System.Drawing.Point(36, 467);
-            this.iconodocente.Name = "iconodocente";
-            this.iconodocente.Size = new System.Drawing.Size(33, 33);
-            this.iconodocente.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.iconodocente.TabIndex = 18;
-            this.iconodocente.TabStop = false;
-            // 
-            // iconohorario
-            // 
-            this.iconohorario.BackColor = System.Drawing.Color.Transparent;
-            this.iconohorario.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.iconohorario.Image = global::sistema_de_registro_de_docentes.Properties.Resources.horario;
-            this.iconohorario.Location = new System.Drawing.Point(36, 551);
-            this.iconohorario.Name = "iconohorario";
-            this.iconohorario.Size = new System.Drawing.Size(33, 33);
-            this.iconohorario.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.iconohorario.TabIndex = 17;
-            this.iconohorario.TabStop = false;
-            // 
             // btn_Docentes
             // 
             this.btn_Docentes.BackColor = System.Drawing.Color.Transparent;
@@ -180,30 +141,6 @@
             this.btn_Docentes.Text = "Docentes";
             this.btn_Docentes.UseVisualStyleBackColor = false;
             this.btn_Docentes.Click += new System.EventHandler(this.btn_Docentes_Click);
-            // 
-            // iconomanual
-            // 
-            this.iconomanual.BackColor = System.Drawing.Color.Transparent;
-            this.iconomanual.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.iconomanual.Image = global::sistema_de_registro_de_docentes.Properties.Resources.manual;
-            this.iconomanual.Location = new System.Drawing.Point(36, 727);
-            this.iconomanual.Name = "iconomanual";
-            this.iconomanual.Size = new System.Drawing.Size(33, 33);
-            this.iconomanual.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.iconomanual.TabIndex = 16;
-            this.iconomanual.TabStop = false;
-            // 
-            // iconoretraso
-            // 
-            this.iconoretraso.BackColor = System.Drawing.Color.Transparent;
-            this.iconoretraso.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.iconoretraso.Image = global::sistema_de_registro_de_docentes.Properties.Resources.horacaducado;
-            this.iconoretraso.Location = new System.Drawing.Point(36, 638);
-            this.iconoretraso.Name = "iconoretraso";
-            this.iconoretraso.Size = new System.Drawing.Size(33, 33);
-            this.iconoretraso.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.iconoretraso.TabIndex = 16;
-            this.iconoretraso.TabStop = false;
             // 
             // buttonHorarios
             // 
@@ -263,10 +200,93 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.Navy;
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.button1);
             this.panel1.Location = new System.Drawing.Point(250, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(915, 157);
             this.panel1.TabIndex = 7;
+            // 
+            // iconousuario
+            // 
+            this.iconousuario.BackColor = System.Drawing.Color.Transparent;
+            this.iconousuario.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.iconousuario.Image = global::sistema_de_registro_de_docentes.Properties.Resources.usuario;
+            this.iconousuario.Location = new System.Drawing.Point(36, 372);
+            this.iconousuario.Name = "iconousuario";
+            this.iconousuario.Size = new System.Drawing.Size(33, 33);
+            this.iconousuario.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.iconousuario.TabIndex = 23;
+            this.iconousuario.TabStop = false;
+            // 
+            // pictureBoxUsuario
+            // 
+            this.pictureBoxUsuario.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBoxUsuario.Location = new System.Drawing.Point(57, 99);
+            this.pictureBoxUsuario.Name = "pictureBoxUsuario";
+            this.pictureBoxUsuario.Size = new System.Drawing.Size(130, 138);
+            this.pictureBoxUsuario.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxUsuario.TabIndex = 22;
+            this.pictureBoxUsuario.TabStop = false;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackgroundImage = global::sistema_de_registro_de_docentes.Properties.Resources.logoEmi;
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox1.Location = new System.Drawing.Point(72, 12);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(112, 67);
+            this.pictureBox1.TabIndex = 13;
+            this.pictureBox1.TabStop = false;
+            // 
+            // iconodocente
+            // 
+            this.iconodocente.BackColor = System.Drawing.Color.Transparent;
+            this.iconodocente.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.iconodocente.Image = global::sistema_de_registro_de_docentes.Properties.Resources.usuario;
+            this.iconodocente.Location = new System.Drawing.Point(36, 467);
+            this.iconodocente.Name = "iconodocente";
+            this.iconodocente.Size = new System.Drawing.Size(33, 33);
+            this.iconodocente.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.iconodocente.TabIndex = 18;
+            this.iconodocente.TabStop = false;
+            // 
+            // iconohorario
+            // 
+            this.iconohorario.BackColor = System.Drawing.Color.Transparent;
+            this.iconohorario.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.iconohorario.Image = global::sistema_de_registro_de_docentes.Properties.Resources.horario;
+            this.iconohorario.Location = new System.Drawing.Point(36, 551);
+            this.iconohorario.Name = "iconohorario";
+            this.iconohorario.Size = new System.Drawing.Size(33, 33);
+            this.iconohorario.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.iconohorario.TabIndex = 17;
+            this.iconohorario.TabStop = false;
+            // 
+            // iconomanual
+            // 
+            this.iconomanual.BackColor = System.Drawing.Color.Transparent;
+            this.iconomanual.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.iconomanual.Image = global::sistema_de_registro_de_docentes.Properties.Resources.manual;
+            this.iconomanual.Location = new System.Drawing.Point(36, 727);
+            this.iconomanual.Name = "iconomanual";
+            this.iconomanual.Size = new System.Drawing.Size(33, 33);
+            this.iconomanual.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.iconomanual.TabIndex = 16;
+            this.iconomanual.TabStop = false;
+            // 
+            // iconoretraso
+            // 
+            this.iconoretraso.BackColor = System.Drawing.Color.Transparent;
+            this.iconoretraso.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.iconoretraso.Image = global::sistema_de_registro_de_docentes.Properties.Resources.horacaducado;
+            this.iconoretraso.Location = new System.Drawing.Point(36, 638);
+            this.iconoretraso.Name = "iconoretraso";
+            this.iconoretraso.Size = new System.Drawing.Size(33, 33);
+            this.iconoretraso.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.iconoretraso.TabIndex = 16;
+            this.iconoretraso.TabStop = false;
             // 
             // panelHijo
             // 
@@ -281,6 +301,33 @@
             this.panelHijo.Name = "panelHijo";
             this.panelHijo.Size = new System.Drawing.Size(880, 551);
             this.panelHijo.TabIndex = 6;
+            // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.BackColor = System.Drawing.Color.DarkBlue;
+            this.button1.BackgroundImage = global::sistema_de_registro_de_docentes.Properties.Resources.cerrarsesion;
+            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.ForeColor = System.Drawing.Color.DarkBlue;
+            this.button1.Location = new System.Drawing.Point(848, 12);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(40, 40);
+            this.button1.TabIndex = 0;
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.Crimson;
+            this.label1.Location = new System.Drawing.Point(720, 21);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(113, 20);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Cerrar Sesion";
             // 
             // FormPrincipal
             // 
@@ -298,6 +345,9 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.panelMenuLateral.ResumeLayout(false);
             this.panelMenuLateral.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.iconousuario)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUsuario)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.iconodocente)).EndInit();
@@ -325,5 +375,8 @@
         private System.Windows.Forms.PictureBox pictureBoxUsuario;
         private System.Windows.Forms.Label lblRol;
         private System.Windows.Forms.Label lblNombreApellido;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.PictureBox iconousuario;
+        private System.Windows.Forms.Label label1;
     }
 }

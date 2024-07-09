@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static sistema_de_registro_de_docentes.FormPrincipal;
 
 namespace sistema_de_registro_de_docentes
 {
@@ -23,6 +24,7 @@ namespace sistema_de_registro_de_docentes
 
             // Mostrar u ocultar el botón basado en el rol del usuario
             btnUsuarios.Visible = user.Role == "ADMINISTRADOR";
+            iconousuario.Visible = user.Role == "ADMINISTRADOR";
 
             // Mostrar la información del usuario
             MostrarInformacionUsuario(user);
@@ -129,6 +131,8 @@ namespace sistema_de_registro_de_docentes
                         iconoretraso.Image = Properties.Resources.horacaducado;
                     else if (button == button5)
                         iconomanual.Image = Properties.Resources.manual;
+                    else if (button == btnUsuarios)
+                        iconousuario.Image = Properties.Resources.usuario;
                 }
             }
         }
@@ -136,6 +140,9 @@ namespace sistema_de_registro_de_docentes
         private void btnUsuarios_Click(object sender, EventArgs e)
         {
             abriFormHijo(new formUsuarios());
+            btnUsuarios.ForeColor = Color.Blue; // Cambia al color que desees
+            iconousuario.Image = Properties.Resources.usuariocolor; // Cambia a la imagen que desees
+            ResetButtons(btnUsuarios);
         }
        
         public class User
@@ -145,6 +152,14 @@ namespace sistema_de_registro_de_docentes
             public string Nombres { get; set; }
             public string ApellidoPaterno { get; set; }
             public string ApellidoMaterno { get; set; }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Form1 login = new Form1();
+            this.Close();
+            login.Show();
+             
         }
     }
 }

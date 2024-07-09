@@ -520,7 +520,7 @@ namespace sistema_de_registro_de_docentes
                 for (int j = 0; j < registrosEntrada.GetLength(0); j++)
                 {
                     // verifica si la entrada pertenece a algun docente
-                    if (registrosEntrada[j, 0] == ci && registrosEntrada[j, 3] == "M/Ent" && registrosEntrada[j, 4] != "M/Sal") //cambio aumente una restriccion mas
+                    if (registrosEntrada[j, 0] == ci && registrosEntrada[j, 3] == "M/Ent" && registrosEntrada[j, 4] != "M/Sal" && materiasHorarios[i,20]=="ACTIVO") //cambio aumente una restriccion mas
                     {
                         //se separa la fecha y la hora del reporte
                         string fecha = registrosEntrada[j, 2].Split(' ')[0];
@@ -530,7 +530,7 @@ namespace sistema_de_registro_de_docentes
                         string[] f = fecha.Split('/');
                         DateTime date = new DateTime(int.Parse(f[2]), int.Parse(f[1]), int.Parse(f[0]));
                         string dia = ObtenerNombreDiaEnEspanol(date.DayOfWeek);
-
+                        tieneRegistro[i] = true;
 
                         DateTime dateToCheck = DateTime.ParseExact(fecha, "d/M/yyyy", CultureInfo.InvariantCulture);
                         if (dia1 != null)
@@ -799,9 +799,19 @@ namespace sistema_de_registro_de_docentes
                     matrizNueva[i, j] = materiasHorarios[i, j];
                 }
                 matrizNueva[i, 0] = (i + 1) + "";
-                matrizNueva[i, 10] = materiasHorarios[i, 17];
-                matrizNueva[i, 11] = materiasHorarios[i, 18];
-                matrizNueva[i, 12] = materiasHorarios[i, 19];
+                if (tieneRegistro[i])
+                {
+                    matrizNueva[i, 10] = materiasHorarios[i, 17];
+                    matrizNueva[i, 11] = materiasHorarios[i, 18];
+                    matrizNueva[i, 12] = materiasHorarios[i, 19];
+                }
+                else
+                {
+                    matrizNueva[i, 10] ="0";
+                    matrizNueva[i, 11] = "No existe registro en los reportes";
+                    matrizNueva[i, 12] = "No existe registro en los reportes";
+                }
+
 
             }
             return matrizNueva;

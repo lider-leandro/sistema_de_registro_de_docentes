@@ -254,6 +254,7 @@
     <Compile Include="transparente.Designer.cs">
       <DependentUpon>transparente.cs</DependentUpon>
     </Compile>
+    <None Include="Resources\imagenes\cerrarsesion.png" />
     <None Include="Resources\imagenes\buscarblanco.png" />
     <None Include="Resources\imagenes_usuarios\perfilPorDefecto.png" />
     <None Include="Resources\cancelar.png" />

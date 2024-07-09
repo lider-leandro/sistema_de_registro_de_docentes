@@ -49,6 +49,7 @@ namespace sistema_de_registro_de_docentes
                 materiaOriginal = usuarioActual["Asignatura"].ToString();
                 carreraOriginal = usuarioActual["Carrera"].ToString();
                 checkBoxEstado.Checked = usuarioActual["Estado"].ToString() == "ACTIVO";
+
             }
         }
         private void CargarHojasDesdeExcel()
@@ -237,7 +238,10 @@ namespace sistema_de_registro_de_docentes
             Excel.Worksheet hoja = null;
             string materiavalida= usuarioActual["Asignatura"].ToString();
             string carreravalida = usuarioActual["Carrera"].ToString();
-            string carnetvalida = usuarioActual["CI"].ToString(); ;
+            string carnetvalida = usuarioActual["CI"].ToString();
+            string estado = usuarioActual["Estado"].ToString();
+
+
             //MessageBox.Show($"{materiavalida}  {carreravalida}   {carnetvalida}");
             try
             {
@@ -256,7 +260,7 @@ namespace sistema_de_registro_de_docentes
                     hoja.Cells[1, 8] = "Asignatura";
                     hoja.Cells[1, 9] = "Semestre Académico";
                     hoja.Cells[1, 10] = "Paralelo";
-                  
+                    hoja.Cells[1, 21] = "Estado";
                 }
                 else
                 {
@@ -294,14 +298,19 @@ namespace sistema_de_registro_de_docentes
                     filaCoincidente.Cells[8].Value = asignatura;
                     filaCoincidente.Cells[9].Value = semestre;
                     filaCoincidente.Cells[10].Value = paralelo;
-                    
+                    filaCoincidente.Cells[21].Value = estado;
+
+
                 }
                 libro.Save();
+                MessageBox.Show("Guardo Correctamente");
+                this.Close();
                 return true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error al guardar los datos en Excel: " + ex.Message);
+                
                 return false;
             }
             finally

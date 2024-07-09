@@ -69,6 +69,35 @@ namespace sistema_de_registro_de_docentes
                     hoja = libro.ActiveSheet;
                 }
 
+                // Leer todos los datos existentes
+                int ultimaFila = hoja.Cells[hoja.Rows.Count, 1].End[Excel.XlDirection.xlUp].Row;
+
+                foreach (var semestre in semestresAcademicos)
+                {
+                    if (asignaturasPorSemestre.ContainsKey(semestre))
+                    {
+                        foreach (var asignatura in asignaturasPorSemestre[semestre])
+                        {
+                            if (checkedListBoxAsignatura.CheckedItems.Contains(asignatura))
+                            {
+                                for (int i = 2; i <= ultimaFila; i++)
+                                {
+                                    string existingCarrera = hoja.Cells[i, 7]?.Value?.ToString();
+                                    string existingAsignatura = hoja.Cells[i, 8]?.Value?.ToString();
+                                    string existingParalelo = hoja.Cells[i, 10]?.Value?.ToString();
+
+                                    if (existingCarrera == carrera && existingAsignatura == asignatura && existingParalelo == paralelo)
+                                    {
+                                        MessageBox.Show($"Ya existe un docente con la materia asignada en la CARRERA:.{carrera} {"ASIGNATURA:"} {asignatura} {"PARALELO"} {paralelo}");
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Agregar nuevos datos
                 Excel.Range ultimaCelda = hoja.Cells[hoja.Rows.Count, 5];
                 Excel.Range filaVacia = ultimaCelda.End[Excel.XlDirection.xlUp].Offset[1, 0];
 
@@ -82,7 +111,7 @@ namespace sistema_de_registro_de_docentes
                         {
                             if (checkedListBoxAsignatura.CheckedItems.Contains(asignatura))
                             {
-                                hoja.Cells[filaNumero, 1] = filaNumero +11; // Número de fila
+                                hoja.Cells[filaNumero, 1] = filaNumero + 11; // Número de fila
                                 hoja.Cells[filaNumero, 2] = grado;
                                 hoja.Cells[filaNumero, 3] = apellidoPaterno;
                                 hoja.Cells[filaNumero, 4] = apellidoMaterno;
@@ -101,6 +130,7 @@ namespace sistema_de_registro_de_docentes
 
                 libro.Save();
                 MessageBox.Show("Datos del Docente guardados correctamente.");
+                this.Close();
                 return true;
             }
             catch (Exception ex)
@@ -119,6 +149,8 @@ namespace sistema_de_registro_de_docentes
                 }
             }
         }
+
+
 
         private void buttonGuardar_Click(object sender, EventArgs e)
         {
@@ -282,5 +314,7 @@ namespace sistema_de_registro_de_docentes
         {
             this.Close();
         }
+
+        
     }
 }
