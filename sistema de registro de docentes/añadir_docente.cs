@@ -61,6 +61,7 @@ namespace sistema_de_registro_de_docentes
                     hoja.Cells[1, 8] = "Asignatura";
                     hoja.Cells[1, 9] = "Semestre Académico";
                     hoja.Cells[1, 10] = "Paralelo";
+                    hoja.Cells[1, 21] = "Estado";
                 }
                 else
                 {
@@ -70,6 +71,7 @@ namespace sistema_de_registro_de_docentes
 
                 Excel.Range ultimaCelda = hoja.Cells[hoja.Rows.Count, 5];
                 Excel.Range filaVacia = ultimaCelda.End[Excel.XlDirection.xlUp].Offset[1, 0];
+
                 int filaNumero = filaVacia.Row;
 
                 foreach (var semestre in semestresAcademicos)
@@ -80,7 +82,7 @@ namespace sistema_de_registro_de_docentes
                         {
                             if (checkedListBoxAsignatura.CheckedItems.Contains(asignatura))
                             {
-                                hoja.Cells[filaNumero, 1] = filaNumero - 1; // Número de fila
+                                hoja.Cells[filaNumero, 1] = filaNumero +11; // Número de fila
                                 hoja.Cells[filaNumero, 2] = grado;
                                 hoja.Cells[filaNumero, 3] = apellidoPaterno;
                                 hoja.Cells[filaNumero, 4] = apellidoMaterno;
@@ -90,6 +92,7 @@ namespace sistema_de_registro_de_docentes
                                 hoja.Cells[filaNumero, 8] = asignatura;
                                 hoja.Cells[filaNumero, 9] = semestre;
                                 hoja.Cells[filaNumero, 10] = paralelo;
+                                hoja.Cells[filaNumero, 21] = "ACTIVO";
                                 filaNumero++;
                             }
                         }
@@ -97,6 +100,7 @@ namespace sistema_de_registro_de_docentes
                 }
 
                 libro.Save();
+                MessageBox.Show("Datos del Docente guardados correctamente.");
                 return true;
             }
             catch (Exception ex)

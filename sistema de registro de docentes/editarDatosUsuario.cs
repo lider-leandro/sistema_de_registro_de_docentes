@@ -53,31 +53,6 @@ namespace sistema_de_registro_de_docentes
                 checkBoxEstado.Checked = usuarioActual["Estado"].ToString() == "ACTIVO";
             }
         }
-
-        private void btnGuardar_Click(object sender, EventArgs e)
-        {
-            if (usuarioActual != null)
-            {
-                usuarioActual["Nombre"] = txtNombres.Text;
-                usuarioActual["Apellido Paterno"] = txtApellidoPaterno.Text;
-                usuarioActual["Apellido Materno"] = txtApellidoMaterno.Text;
-                usuarioActual["Unidad Academica"] = comboBoxUnidadAcademica.Text;
-                usuarioActual["rol"] = comboBoxRol.Text;
-                usuarioActual["Carnet de identidad"] = txtCarnetIdentidad.Text;
-                usuarioActual["Expedido"] = comboBoxExpedido.Text;
-                usuarioActual["Direccion"] = txtDireccion.Text;
-                usuarioActual["Telefono"] = txtTelefono.Text;
-                usuarioActual["Celular"] = txtCelular.Text;
-                usuarioActual["Correo Institucional"] = txtCorreoInstitucional.Text;
-                usuarioActual["Email Personal"] = txtEmail.Text;
-                usuarioActual["Nivel Academico"] = comboBoxNivelAcademico.Text;
-                usuarioActual["Usuario"] = txtUsuario.Text;
-                usuarioActual["contrasena"] = txtContrasena.Text;
-                usuarioActual["Estado"] = checkBoxEstado.Checked ? "ACTIVO" : "INACTIVO";
-                GuardarCambiosEnExcel();
-            }
-        }
-
         private void GuardarCambiosEnExcel()
         {
             string rutaexcel = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\Resources\sportsc.xlsx");
@@ -139,9 +114,33 @@ namespace sistema_de_registro_de_docentes
 
 
 
-        private void btnCancelar_Click(object sender, EventArgs e)
+        private void btnCancelar_Click_1(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnGuardar_Click_1(object sender, EventArgs e)
+        {
+            if (usuarioActual != null)
+            {
+                usuarioActual["Nombre"] = txtNombres.Text;
+                usuarioActual["Apellido Paterno"] = txtApellidoPaterno.Text;
+                usuarioActual["Apellido Materno"] = txtApellidoMaterno.Text;
+                usuarioActual["Unidad Academica"] = comboBoxUnidadAcademica.Text;
+                usuarioActual["rol"] = comboBoxRol.Text;
+                usuarioActual["Carnet de identidad"] = txtCarnetIdentidad.Text;
+                usuarioActual["Expedido"] = comboBoxExpedido.Text;
+                usuarioActual["Direccion"] = txtDireccion.Text;
+                usuarioActual["Telefono"] = txtTelefono.Text;
+                usuarioActual["Celular"] = txtCelular.Text;
+                usuarioActual["Correo Institucional"] = txtCorreoInstitucional.Text;
+                usuarioActual["Email Personal"] = txtEmail.Text;
+                usuarioActual["Nivel Academico"] = comboBoxNivelAcademico.Text;
+                usuarioActual["Usuario"] = txtUsuario.Text;
+                usuarioActual["contrasena"] = txtContrasena.Text;
+                usuarioActual["Estado"] = checkBoxEstado.Checked ? "ACTIVO" : "INACTIVO";
+                GuardarCambiosEnExcel();
+            }
         }
     }
 }

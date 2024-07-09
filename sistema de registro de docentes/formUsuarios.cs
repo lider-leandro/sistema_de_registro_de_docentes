@@ -17,7 +17,7 @@ namespace sistema_de_registro_de_docentes
     {
         private string rutaexcel = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\Resources\sportsc.xlsx");
         private string rutaImagenes = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\Resources\imagenes");
-
+        private DataTable originalDataTable;
         public formUsuarios()
         {
             InitializeComponent();
@@ -46,10 +46,10 @@ namespace sistema_de_registro_de_docentes
                             }
                         });
 
-                        var dataTable = dataSet.Tables["Credenciales"];
+                        originalDataTable = dataSet.Tables["Credenciales"];
 
                         // Ordenar los datos: Activos primero, luego inactivos
-                        DataView dataView = new DataView(dataTable);
+                        DataView dataView = new DataView(originalDataTable);
                         dataView.Sort = "Estado ASC";
 
                         DataTable sortedDataTable = dataView.ToTable();
@@ -296,6 +296,59 @@ namespace sistema_de_registro_de_docentes
             }
 
             return destImage;
+        }
+        private void textBoxBusqueda_TextChanged(object sender, EventArgs e)
+        {
+            string textoBusqueda = textBoxSearch.Text.Trim();
+            // Obtener la DataTable actual del DataGridView
+            DataTable dataTable = (DataTable)dataGridView1.DataSource;
+
+            // Aplicar filtro si el texto de búsqueda no está vacío
+            if (!string.IsNullOrEmpty(textoBusqueda))
+            {
+                // Filtrar los datos por la columna "CI"
+                DataTable filteredDataTable = originalDataTable.Clone(); // Clonar la estructura de la DataTable original
+
+                foreach (DataRow row in originalDataTable.Rows)
+                {
+                    if (row["Carnet de identidad"].ToString().Contains(textoBusqueda))
+                    {
+                        filteredDataTable.ImportRow(row);
+                    }
+                }
+
+                // Mostrar los datos filtrados en el DataGridView
+
+
+                filteredDataTable.DefaultView.Sort = "Carnet de identidad ASC";
+                AjustarAnchoColumnas();
+                dataGridView1.DataSource = filteredDataTable.DefaultView.ToTable(false,
+                            "Nro", "Apellido Paterno", "Apellido Materno", "Nombre", "Unidad Academica", "rol", "Carnet de identidad", "Expedido", "Estado");
+
+
+            }
+            else
+            {
+                CargarDatosDesdeExcel();
+                AjustarAnchoColumnas();
+
+            }
+        }
+        private void AjustarAnchoColumnas()
+        {
+            foreach (DataGridViewColumn column in dataGridView1.Columns)
+            {
+                if (column.Name == "Detalle")
+                {
+                    column.Width = 120; // Ancho específico para la columna Detalle
+                }
+                /*
+                else if (column.Name == "Grdo")
+                {
+                    column.Width = 60; // Ancho específico para la columna Grdo
+                }*/
+
+            }
         }
     }
 }

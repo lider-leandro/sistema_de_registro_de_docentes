@@ -238,7 +238,7 @@ namespace sistema_de_registro_de_docentes
             string materiavalida= usuarioActual["Asignatura"].ToString();
             string carreravalida = usuarioActual["Carrera"].ToString();
             string carnetvalida = usuarioActual["CI"].ToString(); ;
-            MessageBox.Show($"{materiavalida}  {carreravalida}   {carnetvalida}");
+            //MessageBox.Show($"{materiavalida}  {carreravalida}   {carnetvalida}");
             try
             {
                 if (!File.Exists(rutaexcel))

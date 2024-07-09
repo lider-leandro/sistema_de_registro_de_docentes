@@ -18,7 +18,7 @@ namespace sistema_de_registro_de_docentes
         private DataTable tabla;
         private string rutaexceldoc;
         private string carnet;
-
+        private DataTable originalDataTable;
         public formDocentes()
         {
             InitializeComponent();
@@ -53,10 +53,10 @@ namespace sistema_de_registro_de_docentes
                             }
                         });
 
-                        var dataTable = dataSet.Tables["Hoja2"];
+                        originalDataTable = dataSet.Tables["Hoja2"]; // Guardar los datos originales
 
                         // Ordenar los datos: Activos primero, luego inactivos
-                        DataView dataView = new DataView(dataTable);
+                        DataView dataView = new DataView(originalDataTable);
                         dataView.Sort = "Estado ASC";
 
                         DataTable sortedDataTable = dataView.ToTable();
@@ -139,7 +139,7 @@ namespace sistema_de_registro_de_docentes
                         {
                             if (e.ColumnIndex >= 0 && dataGridView1.Columns[e.ColumnIndex].Name == "Detalle" && e.RowIndex >= 0)
                             {
-                                dataGridView1.Columns["Detalle"].Width = 180;
+                                //dataGridView1.Columns["Detalle"].Width = 60;
                                 e.Paint(e.CellBounds, DataGridViewPaintParts.Background);
 
                                 // Rellenar la celda con el color de fondo
@@ -181,6 +181,7 @@ namespace sistema_de_registro_de_docentes
             }
         }
 
+
         private void AdjustColumnWidths()
         {
             int totalWidth = dataGridView1.ClientSize.Width;
@@ -207,7 +208,27 @@ namespace sistema_de_registro_de_docentes
             // Ajustar el ancho de la columna "Detalle"
 
         }
+        private void ButtonSearch_Click(object sender, EventArgs e)
+        {
+            string searchValue = textBoxSearch.Text;
 
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                // Suponiendo que el DataGridView ya está poblado con datos del archivo Excel
+                DataTable dataTable = dataGridView1.DataSource as DataTable;
+                if (dataTable != null)
+                {
+                    DataView dataView = new DataView(dataTable);
+                    dataView.RowFilter = string.Format("CI LIKE '%{0}%'", searchValue);
+                    dataGridView1.DataSource = dataView;
+                }
+            }
+            else
+            {
+                // Si searchValue está vacío, restablecer el DataGridView para mostrar todos los datos
+                CargarDatosDesdeExcelDocentes();
+            }
+        }
         private void dataGridView1_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == dataGridView1.Columns["Detalle"].Index && e.RowIndex >= 0)
@@ -320,6 +341,58 @@ namespace sistema_de_registro_de_docentes
                     detalleFormDocentes.ShowDialog();
                     transparentForm.Close();
                 }
+            }
+        }
+
+        
+        private void textBoxBusqueda_TextChanged(object sender, EventArgs e)
+        {
+            string textoBusqueda = textBoxSearch.Text.Trim();
+            // Obtener la DataTable actual del DataGridView
+            DataTable dataTable = (DataTable)dataGridView1.DataSource;
+
+            // Aplicar filtro si el texto de búsqueda no está vacío
+            if (!string.IsNullOrEmpty(textoBusqueda))
+            {
+                // Filtrar los datos por la columna "CI"
+                DataTable filteredDataTable = originalDataTable.Clone(); // Clonar la estructura de la DataTable original
+
+                foreach (DataRow row in originalDataTable.Rows)
+                {
+                    if (row["CI"].ToString().Contains(textoBusqueda))
+                    {
+                        filteredDataTable.ImportRow(row);
+                    }
+                }
+
+                // Mostrar los datos filtrados en el DataGridView
+
+
+                filteredDataTable.DefaultView.Sort = "CI ASC";
+                AjustarAnchoColumnas();
+                dataGridView1.DataSource = filteredDataTable.DefaultView.ToTable(false,"Nº", "Grdo", "Apellido Paterno", "Apellido Materno", "Nombres", "CI", "Carrera", "Asignatura", "Semestre Académico", "Estado");
+                
+            }    
+            else
+            {
+                CargarDatosDesdeExcelDocentes();
+                AjustarAnchoColumnas();
+                
+            }
+        }
+        private void AjustarAnchoColumnas()
+        {
+            foreach (DataGridViewColumn column in dataGridView1.Columns)
+            {
+                if (column.Name == "Detalle")
+                {
+                    column.Width = 120; // Ancho específico para la columna Detalle
+                }
+                else if (column.Name == "Grdo")
+                {
+                    column.Width = 60; // Ancho específico para la columna Grdo
+                }
+                
             }
         }
     }

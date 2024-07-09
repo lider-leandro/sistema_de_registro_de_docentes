@@ -87,6 +87,40 @@
             btnCancelar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
+            // btnGuardar
+            // 
+            btnGuardar.BackColor = System.Drawing.Color.LimeGreen;
+            btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            btnGuardar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            btnGuardar.ForeColor = System.Drawing.Color.White;
+            btnGuardar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            btnGuardar.Location = new System.Drawing.Point(558, 547);
+            btnGuardar.Name = "btnGuardar";
+            btnGuardar.Size = new System.Drawing.Size(103, 44);
+            btnGuardar.TabIndex = 91;
+            btnGuardar.Text = "Guardar";
+            btnGuardar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            btnGuardar.UseVisualStyleBackColor = false;
+            btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click_1);
+            // 
+            // btnCancelar
+            // 
+            btnCancelar.BackColor = System.Drawing.Color.Red;
+            btnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            btnCancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            btnCancelar.ForeColor = System.Drawing.Color.White;
+            btnCancelar.Image = ((System.Drawing.Image)(resources.GetObject("btnCancelar.Image")));
+            btnCancelar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            btnCancelar.Location = new System.Drawing.Point(667, 547);
+            btnCancelar.Name = "btnCancelar";
+            btnCancelar.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            btnCancelar.Size = new System.Drawing.Size(134, 44);
+            btnCancelar.TabIndex = 90;
+            btnCancelar.Text = "Cancelar";
+            btnCancelar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            btnCancelar.UseVisualStyleBackColor = false;
+            btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click_1);
+            // 
             // comboBoxExpedido
             // 
             this.comboBoxExpedido.FormattingEnabled = true;
@@ -561,21 +595,6 @@
             this.label17.TabIndex = 113;
             this.label17.Text = "*";
             // 
-            // btnGuardar
-            // 
-            btnGuardar.BackColor = System.Drawing.Color.LimeGreen;
-            btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            btnGuardar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            btnGuardar.ForeColor = System.Drawing.Color.White;
-            btnGuardar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            btnGuardar.Location = new System.Drawing.Point(558, 547);
-            btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new System.Drawing.Size(103, 44);
-            btnGuardar.TabIndex = 91;
-            btnGuardar.Text = "Guardar";
-            btnGuardar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            btnGuardar.UseVisualStyleBackColor = false;
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -586,23 +605,6 @@
             this.label1.Size = new System.Drawing.Size(196, 25);
             this.label1.TabIndex = 89;
             this.label1.Text = "Usuarios del Sistema";
-            // 
-            // btnCancelar
-            // 
-            btnCancelar.BackColor = System.Drawing.Color.Red;
-            btnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            btnCancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            btnCancelar.ForeColor = System.Drawing.Color.White;
-            btnCancelar.Image = ((System.Drawing.Image)(resources.GetObject("btnCancelar.Image")));
-            btnCancelar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            btnCancelar.Location = new System.Drawing.Point(667, 547);
-            btnCancelar.Name = "btnCancelar";
-            btnCancelar.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            btnCancelar.Size = new System.Drawing.Size(134, 44);
-            btnCancelar.TabIndex = 90;
-            btnCancelar.Text = "Cancelar";
-            btnCancelar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            btnCancelar.UseVisualStyleBackColor = false;
             // 
             // label24
             // 

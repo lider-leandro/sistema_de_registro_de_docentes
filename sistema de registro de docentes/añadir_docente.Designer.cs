@@ -34,7 +34,6 @@
             this.textBoxNombres = new System.Windows.Forms.TextBox();
             this.textBoxApellidoPaterno = new System.Windows.Forms.TextBox();
             this.textBoxApellidoMaterno = new System.Windows.Forms.TextBox();
-            this.textBoxGrado = new System.Windows.Forms.TextBox();
             this.textBoxCI = new System.Windows.Forms.TextBox();
             this.textBoxParalelo = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -60,6 +59,7 @@
             this.checkedListBoxSemestreAcademico = new System.Windows.Forms.CheckedListBox();
             this.checkedListBoxAsignatura = new System.Windows.Forms.CheckedListBox();
             this.label10 = new System.Windows.Forms.Label();
+            this.textBoxGrado = new System.Windows.Forms.ComboBox();
             btnAñadirDocenteExcel = new System.Windows.Forms.Button();
             btnCancelar = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -79,6 +79,25 @@
             btnAñadirDocenteExcel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             btnAñadirDocenteExcel.UseVisualStyleBackColor = false;
             btnAñadirDocenteExcel.Click += new System.EventHandler(this.buttonGuardar_Click);
+            // 
+            // btnCancelar
+            // 
+            btnCancelar.BackColor = System.Drawing.Color.Red;
+            btnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            btnCancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            btnCancelar.ForeColor = System.Drawing.Color.White;
+            btnCancelar.Image = ((System.Drawing.Image)(resources.GetObject("btnCancelar.Image")));
+            btnCancelar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            btnCancelar.Location = new System.Drawing.Point(862, 544);
+            btnCancelar.Name = "btnCancelar";
+            btnCancelar.Padding = new System.Windows.Forms.Padding(11, 0, 0, 0);
+            btnCancelar.Size = new System.Drawing.Size(137, 44);
+            btnCancelar.TabIndex = 21;
+            btnCancelar.Text = "Cancelar";
+            btnCancelar.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            btnCancelar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            btnCancelar.UseVisualStyleBackColor = false;
+            btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
             // 
             // textBoxNombres
             // 
@@ -106,15 +125,6 @@
             this.textBoxApellidoMaterno.Name = "textBoxApellidoMaterno";
             this.textBoxApellidoMaterno.Size = new System.Drawing.Size(221, 36);
             this.textBoxApellidoMaterno.TabIndex = 3;
-            // 
-            // textBoxGrado
-            // 
-            this.textBoxGrado.BackColor = System.Drawing.Color.White;
-            this.textBoxGrado.Font = new System.Drawing.Font("Yu Gothic Medium", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxGrado.Location = new System.Drawing.Point(27, 248);
-            this.textBoxGrado.Name = "textBoxGrado";
-            this.textBoxGrado.Size = new System.Drawing.Size(221, 36);
-            this.textBoxGrado.TabIndex = 4;
             // 
             // textBoxCI
             // 
@@ -382,24 +392,20 @@
             this.label10.TabIndex = 40;
             this.label10.Text = "Ingrese los datos del docente";
             // 
-            // btnCancelar
+            // textBoxGrado
             // 
-            btnCancelar.BackColor = System.Drawing.Color.Red;
-            btnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            btnCancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            btnCancelar.ForeColor = System.Drawing.Color.White;
-            btnCancelar.Image = ((System.Drawing.Image)(resources.GetObject("btnCancelar.Image")));
-            btnCancelar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            btnCancelar.Location = new System.Drawing.Point(862, 544);
-            btnCancelar.Name = "btnCancelar";
-            btnCancelar.Padding = new System.Windows.Forms.Padding(11, 0, 0, 0);
-            btnCancelar.Size = new System.Drawing.Size(137, 44);
-            btnCancelar.TabIndex = 21;
-            btnCancelar.Text = "Cancelar";
-            btnCancelar.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            btnCancelar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            btnCancelar.UseVisualStyleBackColor = false;
-            btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
+            this.textBoxGrado.FormattingEnabled = true;
+            this.textBoxGrado.Items.AddRange(new object[] {
+            "LIC.",
+            "ING.",
+            "MY. DIM.",
+            "MSC.",
+            "PhD.",
+            "Ms. Sc."});
+            this.textBoxGrado.Location = new System.Drawing.Point(31, 253);
+            this.textBoxGrado.Name = "textBoxGrado";
+            this.textBoxGrado.Size = new System.Drawing.Size(221, 24);
+            this.textBoxGrado.TabIndex = 41;
             // 
             // añadir_docente
             // 
@@ -409,6 +415,7 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1025, 609);
             this.ControlBox = false;
+            this.Controls.Add(this.textBoxGrado);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.checkedListBoxAsignatura);
             this.Controls.Add(this.checkedListBoxSemestreAcademico);
@@ -428,7 +435,6 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxParalelo);
             this.Controls.Add(this.textBoxCI);
-            this.Controls.Add(this.textBoxGrado);
             this.Controls.Add(this.textBoxApellidoMaterno);
             this.Controls.Add(this.textBoxApellidoPaterno);
             this.Controls.Add(this.textBoxNombres);
@@ -452,7 +458,6 @@
         private System.Windows.Forms.TextBox textBoxNombres;
         private System.Windows.Forms.TextBox textBoxApellidoPaterno;
         private System.Windows.Forms.TextBox textBoxApellidoMaterno;
-        private System.Windows.Forms.TextBox textBoxGrado;
         private System.Windows.Forms.TextBox textBoxCI;
         private System.Windows.Forms.TextBox textBoxParalelo;
         private System.Windows.Forms.Label label1;
@@ -478,5 +483,6 @@
         private System.Windows.Forms.CheckedListBox checkedListBoxSemestreAcademico;
         private System.Windows.Forms.CheckedListBox checkedListBoxAsignatura;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ComboBox textBoxGrado;
     }
 }
