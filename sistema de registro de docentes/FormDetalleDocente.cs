@@ -36,7 +36,7 @@ namespace sistema_de_registro_de_docentes
         public string carnet;
         private void CargarDatosUsuario()
         {
-            MessageBox.Show($"{carnetIdentidad} {carrera} {materia}");
+            //MessageBox.Show($"{carnetIdentidad} {carrera} {materia}");
             try
             {
                 using (var workbook = new XLWorkbook(excelPath))
@@ -81,7 +81,7 @@ namespace sistema_de_registro_de_docentes
                         if (row.Cell(carnetDeIdentidadColIndex).GetValue<string>() == carnetIdentidad && row.Cell(correoInstitucionalColIndex).GetValue<string>() == carrera && row.Cell(direccionColIndex).GetValue<string>() == materia)
                         {
                             // Mensaje de depuración para verificar que la fila coincidente fue encontrada
-                            MessageBox.Show("Fila coincidente encontrada.");
+                            //MessageBox.Show("Fila coincidente encontrada.");
 
                             lblCI.Text = carnetIdentidadValue;
                             lblNombre.Text = $"{row.Cell(expedidoColIndex).GetValue<string>().Trim()} {row.Cell(nombreColIndex).GetValue<string>().Trim()} {row.Cell(apellidoPaternoColIndex).GetValue<string>().Trim()} {row.Cell(apellidoMaternoColIndex).GetValue<string>().Trim()}";

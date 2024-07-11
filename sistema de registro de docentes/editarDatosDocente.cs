@@ -239,6 +239,9 @@ namespace sistema_de_registro_de_docentes
             string materiavalida= usuarioActual["Asignatura"].ToString();
             string carreravalida = usuarioActual["Carrera"].ToString();
             string carnetvalida = usuarioActual["CI"].ToString();
+            string carnetnuevo = textBoxCI.Text;
+            bool isChecked = checkBoxEstado.Checked;
+            string estadoactualizado = isChecked ? "ACTIVO" : "INACTIVO";
             string estado = usuarioActual["Estado"].ToString();
 
 
@@ -293,17 +296,17 @@ namespace sistema_de_registro_de_docentes
                     filaCoincidente.Cells[3].Value = apellidoPaterno;
                     filaCoincidente.Cells[4].Value = apellidoMaterno;
                     filaCoincidente.Cells[5].Value = nombres;
-                    
+                    filaCoincidente.Cells[6].Value = carnetnuevo;
                     filaCoincidente.Cells[7].Value = carrera;
                     filaCoincidente.Cells[8].Value = asignatura;
                     filaCoincidente.Cells[9].Value = semestre;
                     filaCoincidente.Cells[10].Value = paralelo;
-                    filaCoincidente.Cells[21].Value = estado;
+                    filaCoincidente.Cells[21].Value = estadoactualizado;
 
 
                 }
                 libro.Save();
-                MessageBox.Show("Guardo Correctamente");
+                //MessageBox.Show("Guardo Correctamente");
                 this.Close();
                 return true;
             }
