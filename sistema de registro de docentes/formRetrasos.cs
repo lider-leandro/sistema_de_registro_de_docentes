@@ -88,7 +88,7 @@ namespace sistema_de_registro_de_docentes
                 return null;
             }
         }
-        static string[,] FiltrarMatrizPorCarrera(string[,] matriz, List<string> carrerasAFiltrar, int columnaCarrera)//aumento
+        static string[,] FiltrarMatrizPorCarrera(string[,] matriz, string carrerasAFiltrar, int columnaCarrera)//aumento
         {
             // Lista para almacenar filas filtradas
             List<string[]> filasFiltradas = new List<string[]>();
@@ -97,7 +97,7 @@ namespace sistema_de_registro_de_docentes
             for (int i = 0; i < matriz.GetLength(0); i++)
             {
                 string carrera = matriz[i, columnaCarrera]; // Columna de carrera
-                if (carrerasAFiltrar.Contains(carrera))
+                if (carrerasAFiltrar==carrera)
                 {
                     // Crear una nueva fila
                     string[] fila = new string[matriz.GetLength(1)];
@@ -382,14 +382,13 @@ namespace sistema_de_registro_de_docentes
             // Combina con la ruta adicional hasta llegar a la carpeta "sistema de registro de docentes"
             rutaexcel = Path.GetFullPath(rutaexcel);
             DataSet dataset = LeerArchivoExcel(rutaexcel);
-           
+
             string[,] materiasHorarios = ConvertirDataSetEnMatriz(dataset);
             if (comboBoxCarrera.SelectedItem != null)//aumento
             {
-                List<string> carrerasAFiltrar = new List<string> {
-                     comboBoxCarrera.SelectedItem.ToString(),
-                };
-                materiasHorarios = FiltrarMatrizPorCarrera(materiasHorarios, carrerasAFiltrar, 6);
+                
+                materiasHorarios = FiltrarMatrizPorCarrera(materiasHorarios, comboBoxCarrera.SelectedItem.ToString(), 6);
+                materiasHorarios = FiltrarMatrizPorCarrera(materiasHorarios, "ACTIVO", 20);
             }
             else
             {
@@ -520,7 +519,7 @@ namespace sistema_de_registro_de_docentes
                 for (int j = 0; j < registrosEntrada.GetLength(0); j++)
                 {
                     // verifica si la entrada pertenece a algun docente
-                    if (registrosEntrada[j, 0] == ci && registrosEntrada[j, 3] == "M/Ent" && registrosEntrada[j, 4] != "M/Sal" && materiasHorarios[i,20]=="ACTIVO") //cambio aumente una restriccion mas
+                    if (registrosEntrada[j, 0] == ci && registrosEntrada[j, 3] == "M/Ent" && registrosEntrada[j, 4] != "M/Sal" && materiasHorarios[i, 20] == "ACTIVO") //cambio aumente una restriccion mas
                     {
                         //se separa la fecha y la hora del reporte
                         string fecha = registrosEntrada[j, 2].Split(' ')[0];
@@ -735,7 +734,7 @@ namespace sistema_de_registro_de_docentes
                             {
                                 tiempoTotalPeriodo = tiempoTotalPeriodo - 15;
                             }
-                            materiasHorarios[i, 18] = materiasHorarios[i, 18] + dia1[j, 1] + ", ";
+                            materiasHorarios[i, 18] = materiasHorarios[i, 18] + dia1[j, 1] + "("+tiempoTotalPeriodo + "), ";
                             materiasHorarios[i, 17] = (tiempoTotalPeriodo + int.Parse(materiasHorarios[i, 17])).ToString();
                         }
                         if (dia1[j, 0] == "0" && dia1[j, 2] == "1")// veifica si vino en el dia pero no marco la materia
@@ -756,7 +755,8 @@ namespace sistema_de_registro_de_docentes
                             {
                                 tiempoTotalPeriodo = tiempoTotalPeriodo - 15;
                             }
-                            materiasHorarios[i, 18] = materiasHorarios[i, 18] + dia2[j, 1] + ", ";
+                            materiasHorarios[i, 18] = materiasHorarios[i, 18] + dia2[j, 1] + "(" + tiempoTotalPeriodo + "), ";
+
                             materiasHorarios[i, 17] = (tiempoTotalPeriodo + int.Parse(materiasHorarios[i, 17])).ToString();
                         }
                         if (dia2[j, 0] == "0" && dia2[j, 2] == "1")// veifica si vino en el dia pero no marco la materia
@@ -777,7 +777,8 @@ namespace sistema_de_registro_de_docentes
                             {
                                 tiempoTotalPeriodo = tiempoTotalPeriodo - 15;
                             }
-                            materiasHorarios[i, 18] = materiasHorarios[i, 18] + dia3[j, 1] + ", ";
+                            materiasHorarios[i, 18] = materiasHorarios[i, 18] + dia3[j, 1] + "(" + tiempoTotalPeriodo + "), ";
+
                             materiasHorarios[i, 17] = (tiempoTotalPeriodo + int.Parse(materiasHorarios[i, 17])).ToString();
                         }
                         if (dia3[j, 0] == "0" && dia3[j, 2] == "1")// veifica si vino en el dia pero no marco la materia
@@ -807,7 +808,7 @@ namespace sistema_de_registro_de_docentes
                 }
                 else
                 {
-                    matrizNueva[i, 10] ="0";
+                    matrizNueva[i, 10] = "0";
                     matrizNueva[i, 11] = "No existe registro en los reportes";
                     matrizNueva[i, 12] = "No existe registro en los reportes";
                 }

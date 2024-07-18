@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using ExcelDataReader;
 using ClosedXML.Excel;
 using System.IO;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace sistema_de_registro_de_docentes
 {
@@ -17,6 +18,7 @@ namespace sistema_de_registro_de_docentes
     {
         private DataTable tabla;
         private string rutaexceldoc;
+        private string rutaexceldocprueba;
         private string carnet;
         private DataTable originalDataTable;
         public formDocentes()
@@ -29,8 +31,94 @@ namespace sistema_de_registro_de_docentes
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
         }
+        /*
+        private void GuardarDatosEnExcelDocentes(DataView dataView)
+        {
+            rutaexceldocprueba = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\Resources\lista_doc.xlsx");
 
+            try
+            {
+                // Verificar si el archivo está siendo utilizado
+                if (IsFileLocked(new FileInfo(rutaexceldocprueba)))
+                {
+                    MessageBox.Show($"El archivo {rutaexceldocprueba} está siendo utilizado por otro proceso.");
+                    return;
+                }
 
+                // Convertir DataView a DataTable
+                DataTable dataTable = dataView.ToTable();
+
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("Hoja2");
+                    worksheet.Cell(1, 1).InsertTable(dataTable);
+
+                    // Guardar el archivo en la ruta especificada
+                    workbook.SaveAs(rutaexceldocprueba);
+                }
+
+                MessageBox.Show($"Datos guardados exitosamente en {rutaexceldocprueba}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al guardar los datos en el archivo Excel: {ex.Message}");
+            }
+        }
+        private void GuardarDatosEnExcelDocentesprueba(DataView dataView)
+        {
+            rutaexceldocprueba = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\Resources\prueba.xlsx");
+
+            try
+            {
+                // Verificar si el archivo está siendo utilizado
+                if (IsFileLocked(new FileInfo(rutaexceldocprueba)))
+                {
+                    MessageBox.Show($"El archivo {rutaexceldocprueba} está siendo utilizado por otro proceso.");
+                    return;
+                }
+
+                // Convertir DataView a DataTable
+                DataTable dataTable = dataView.ToTable();
+
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("Hoja2");
+                    worksheet.Cell(1, 1).InsertTable(dataTable);
+
+                    // Guardar el archivo en la ruta especificada
+                    workbook.SaveAs(rutaexceldocprueba);
+                }
+
+                MessageBox.Show($"Datos guardados exitosamente en {rutaexceldocprueba}");
+                GuardarDatosEnExcelDocentes(dataView);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al guardar los datos en el archivo Excel: {ex.Message}");
+            }
+        }
+        
+        private bool IsFileLocked(FileInfo file)
+        {
+            FileStream stream = null;
+
+            try
+            {
+                stream = file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+            }
+            catch (IOException)
+            {
+                return true;
+            }
+            finally
+            {
+                stream?.Close();
+            }
+
+            return false;
+        }
+        
+        */
         private void CargarDatosDesdeExcelDocentes()
         {
             string rutaexcel = Path.Combine(rutaexceldoc);
@@ -172,6 +260,8 @@ namespace sistema_de_registro_de_docentes
                                 e.Handled = true;
                             }
                         };
+                        //GuardarDatosEnExcelDocentesprueba(dataView);
+                        
                     }
                 }
             }

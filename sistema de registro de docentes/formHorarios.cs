@@ -36,7 +36,7 @@ namespace sistema_de_registro_de_docentes
             semestreBox.SelectedIndexChanged += semestreBox_SelectedIndexChanged;
             semPanel.SelectedIndexChanged += SemPanel_SelectedIndexChanged;
             // Ruta del archivo Excel
-            rutaExcel = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\Resources\lista_doc.xlsx");
+            rutaExcel = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\Resources\Lista_doc.xlsx");
 
             if (!File.Exists(rutaExcel))
             {
@@ -128,9 +128,15 @@ namespace sistema_de_registro_de_docentes
                     var control = horarioTableLayoutPanel.GetControlFromPosition(diaColumna, row);
                     if (control is System.Windows.Forms.Label label)
                     {
-                        label.Text = $"{materia}";
+                        // Formatear el texto para incluir la materia y el docente
+                        string[] nombreCompleto = docente.Split(' ');
+                        string nombreDocente = $"{nombreCompleto[0]} {nombreCompleto[1]} {nombreCompleto[2]}";
+                        label.Text = $"{materia}\n({nombreDocente})";
                         label.BackColor = colorMateria;
                         label.ForeColor = ObtenerColorContrastante(colorMateria);
+                        label.Font = new System.Drawing.Font("Arial", 6.5f); // Reducir el tamaño de la fuente
+                        label.AutoSize = false;
+                        label.TextAlign = ContentAlignment.MiddleCenter;
                     }
                 }
             }
@@ -323,10 +329,14 @@ namespace sistema_de_registro_de_docentes
                     row.Field<string>("Carrera") == carrera &&
                     row.Field<object>("Semestre Académico")?.ToString().Trim() == semestre.Trim() &&
                     row.Field<string>("Paralelo")?.Trim() == paralelo.Trim())
-                .Select(row => row.Field<string>("Asignatura"))
-                .Where(materia => !string.IsNullOrWhiteSpace(materia))
+                .Select(row => new
+                {
+                    Materia = row.Field<string>("Asignatura"),
+                    Docente = $"{row.Field<string>("Nombres")} {row.Field<string>("Apellido Paterno")} {row.Field<string>("Apellido Materno")}"
+                })
+                .Where(m => !string.IsNullOrWhiteSpace(m.Materia))
                 .Distinct()
-                .OrderBy(materia => materia)
+                .OrderBy(m => m.Materia)
                 .ToList();
 
             if (materiasFiltradas.Count == 0)
@@ -334,20 +344,20 @@ namespace sistema_de_registro_de_docentes
                 Console.WriteLine($"No se encontraron materias para Carrera: {carrera}, Semestre: {semestre}, Paralelo: {paralelo}");
             }
 
-            const int anchoLabel = 150;
-            const int altoLabel = 40;
+            const int anchoLabel = 180;
+            const int altoLabel = 40; // Aumentamos la altura para acomodar dos líneas de texto
 
             foreach (var materia in materiasFiltradas)
             {
-                Color colorMateria = ObtenerColorParaMateria(materia);
+                Color colorMateria = ObtenerColorParaMateria(materia.Materia);
 
                 System.Windows.Forms.Label labelMateria = new System.Windows.Forms.Label
                 {
-                    Text = materia,
+                    Text = $"{materia.Materia}\n({materia.Docente})",
                     Width = anchoLabel,
                     Height = altoLabel,
                     AutoSize = false,
-                    Font = new System.Drawing.Font("Arial", 7),
+                    Font = new System.Drawing.Font("Arial", 6.5f), // Reducimos el tamaño de la fuente
                     BorderStyle = BorderStyle.FixedSingle,
                     TextAlign = ContentAlignment.MiddleCenter,
                     Margin = new Padding(2),
@@ -375,19 +385,21 @@ namespace sistema_de_registro_de_docentes
             TableLayoutPanel tableLayoutPanel = new TableLayoutPanel
             {
                 ColumnCount = 6,
-                RowCount = 11, // Ajustamos la cantidad de filas a 10
+                RowCount = 11,
                 Dock = DockStyle.Fill,
                 CellBorderStyle = TableLayoutPanelCellBorderStyle.Single
             };
 
-
-            for (int i = 0; i < tableLayoutPanel.ColumnCount; i++)
+            // Reducir el ancho de la primera columna
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F)); // Primera columna más estrecha
+            for (int i = 1; i < tableLayoutPanel.ColumnCount; i++)
             {
-                tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17f)); // Cada columna tendrá el 16.66% del ancho
+                tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F)); // Resto de columnas
             }
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 15F)); // Altura de las filas
             for (int i = 1; i < tableLayoutPanel.RowCount; i++)
             {
-                tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 37F)); // Altura fija
+                tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F)); // Altura de las filas
             }
 
             // Agregar encabezados de columnas
@@ -449,6 +461,7 @@ namespace sistema_de_registro_de_docentes
 
                     tableLayoutPanel.Controls.Add(materiaLabel, col, row);
                 }
+
             }
             return tableLayoutPanel;
         }
@@ -464,8 +477,12 @@ namespace sistema_de_registro_de_docentes
         {
             if (sender is System.Windows.Forms.Label targetLabel)
             {
-                string materia = e.Data.GetData(DataFormats.Text).ToString();
-                targetLabel.Text = materia;
+                string textoCompleto = e.Data.GetData(DataFormats.Text).ToString();
+                string[] partes = textoCompleto.Split('\n');
+                string materia = partes[0];
+                string docente = partes.Length > 1 ? partes[1] : "";
+
+                targetLabel.Text = textoCompleto;
                 targetLabel.BackColor = ObtenerColorParaMateria(materia);
                 targetLabel.ForeColor = ObtenerColorContrastante(targetLabel.BackColor);
             }
@@ -614,7 +631,7 @@ namespace sistema_de_registro_de_docentes
 
             foreach (var row in horarios)
             {
-                string docente = string.Join(" ", row["Apellido Paterno"], row["Apellido Materno"], row["Nombres"]);
+                string docente = $"{row["Nombres"]} {row["Apellido Paterno"]} {row["Apellido Materno"]}";
                 string materia = row["Asignatura"]?.ToString();
 
                 // Día 1
@@ -1038,14 +1055,17 @@ namespace sistema_de_registro_de_docentes
             }
         }
 
+
+
         private void ActualizarHorarioEnExcel(ExcelWorksheet worksheet, string carrera, string semestre, string paralelo,
-            TableLayoutPanel horarioTableLayoutPanel, int carreraCol, int semestreCol, int paraleloCol, int asignaturaCol,
-            int cargaHorariaCol, int diaCol, int horaEntradaCol, int dia2Col, int horaEntrada2Col, int dia3Col, int horaEntrada3Col)
+    TableLayoutPanel horarioTableLayoutPanel, int carreraCol, int semestreCol, int paraleloCol, int asignaturaCol,
+    int cargaHorariaCol, int diaCol, int horaEntradaCol, int dia2Col, int horaEntrada2Col, int dia3Col, int horaEntrada3Col,
+    int apellidoPaternoCol, int apellidoMaternoCol, int nombresCol)
         {
             string[] diasSemana = { "Lunes", "Martes", "Miercoles", "Jueves", "Viernes" };
             string[] horas = { "7:45", "8:30", "9:15", "10:15", "11:00", "12:00", "12:45", "13:30", "14:15", "15:00", "15:45" };
 
-            Dictionary<string, Dictionary<string, List<(string horaInicio, string horaFin)>>> materiaHorarios = new Dictionary<string, Dictionary<string, List<(string, string)>>>();
+            Dictionary<string, Dictionary<string, List<(string horaInicio, string horaFin, string docente)>>> materiaHorarios = new Dictionary<string, Dictionary<string, List<(string, string, string)>>>();
 
             // Recopilar información de horarios
             for (int col = 1; col < 6; col++)
@@ -1055,20 +1075,22 @@ namespace sistema_de_registro_de_docentes
                     var control = horarioTableLayoutPanel.GetControlFromPosition(col, row);
                     if (control is System.Windows.Forms.Label label && !string.IsNullOrWhiteSpace(label.Text) && label.Text != "\n")
                     {
-                        string materia = label.Text;
+                        string[] partes = label.Text.Split('\n');
+                        string materia = partes[0].Trim();
+                        string docente = partes.Length > 1 ? partes[1].Trim('(', ')') : "";
                         string dia = diasSemana[col - 1];
                         string horaInicio = horas[row - 1];
                         string horaFin = (row < 10) ? horas[row] : "16:30";
 
                         if (!materiaHorarios.ContainsKey(materia))
                         {
-                            materiaHorarios[materia] = new Dictionary<string, List<(string, string)>>();
+                            materiaHorarios[materia] = new Dictionary<string, List<(string, string, string)>>();
                         }
                         if (!materiaHorarios[materia].ContainsKey(dia))
                         {
-                            materiaHorarios[materia][dia] = new List<(string, string)>();
+                            materiaHorarios[materia][dia] = new List<(string, string, string)>();
                         }
-                        materiaHorarios[materia][dia].Add((horaInicio, horaFin));
+                        materiaHorarios[materia][dia].Add((horaInicio, horaFin, docente));
                     }
                 }
             }
@@ -1088,6 +1110,7 @@ namespace sistema_de_registro_de_docentes
                         worksheet.Cells[row, cargaHorariaCol].Value = cargaHoraria;
 
                         int diaIndex = 0;
+                        string docente = "";
                         foreach (var diaHorario in horarios)
                         {
                             if (diaIndex >= 3) break; // Solo guardamos hasta 3 días
@@ -1098,9 +1121,35 @@ namespace sistema_de_registro_de_docentes
                             worksheet.Cells[row, currentDiaCol].Value = diaHorario.Key;
 
                             var horariosAgrupados = AgruparHorarios(diaHorario.Value);
-                            worksheet.Cells[row, currentHoraCol].Value = string.Join(", ", horariosAgrupados);
+                            worksheet.Cells[row, currentHoraCol].Value = string.Join(", ", horariosAgrupados.Select(h => $"{h.horaInicio}-{h.horaFin}"));
+
+                            if (string.IsNullOrEmpty(docente) && diaHorario.Value.Any())
+                            {
+                                docente = diaHorario.Value.First().docente;
+                            }
 
                             diaIndex++;
+                        }
+
+                        // Actualizar información del docente
+                        if (!string.IsNullOrEmpty(docente))
+                        {
+                            string[] nombreCompleto = docente.Split(' ');
+                            if (nombreCompleto.Length >= 3)
+                            {
+                                worksheet.Cells[row, apellidoPaternoCol].Value = nombreCompleto[0];
+                                worksheet.Cells[row, apellidoMaternoCol].Value = nombreCompleto[1];
+                                worksheet.Cells[row, nombresCol].Value = string.Join(" ", nombreCompleto.Skip(2));
+                            }
+                            else if (nombreCompleto.Length == 2)
+                            {
+                                worksheet.Cells[row, apellidoPaternoCol].Value = nombreCompleto[0];
+                                worksheet.Cells[row, nombresCol].Value = nombreCompleto[1];
+                            }
+                            else if (nombreCompleto.Length == 1)
+                            {
+                                worksheet.Cells[row, nombresCol].Value = nombreCompleto[0];
+                            }
                         }
 
                         // Limpiar los días y horas restantes si es necesario
@@ -1122,15 +1171,18 @@ namespace sistema_de_registro_de_docentes
                         worksheet.Cells[row, horaEntrada2Col].Value = "";
                         worksheet.Cells[row, dia3Col].Value = "";
                         worksheet.Cells[row, horaEntrada3Col].Value = "";
+                        worksheet.Cells[row, apellidoPaternoCol].Value = "";
+                        worksheet.Cells[row, apellidoMaternoCol].Value = "";
+                        worksheet.Cells[row, nombresCol].Value = "";
                     }
                 }
             }
         }
 
-        private List<string> AgruparHorarios(List<(string horaInicio, string horaFin)> horarios)
+        private List<(string horaInicio, string horaFin)> AgruparHorarios(List<(string horaInicio, string horaFin, string docente)> horarios)
         {
             var horariosOrdenados = horarios.OrderBy(h => TimeSpan.Parse(h.horaInicio)).ToList();
-            var horariosAgrupados = new List<string>();
+            var horariosAgrupados = new List<(string horaInicio, string horaFin)>();
 
             for (int i = 0; i < horariosOrdenados.Count; i++)
             {
@@ -1144,7 +1196,7 @@ namespace sistema_de_registro_de_docentes
                     i++;
                 }
 
-                horariosAgrupados.Add($"{horarioActual.horaInicio}-{horaFin:hh\\:mm}");
+                horariosAgrupados.Add((horarioActual.horaInicio, horaFin.ToString(@"hh\:mm")));
             }
 
             return horariosAgrupados;

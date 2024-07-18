@@ -39,6 +39,7 @@ namespace sistema_de_registro_de_docentes
             // Cargar y mostrar la imagen del usuario
             string fileName = $"{user.Nombres}_{user.ApellidoPaterno}.jpg";
             string imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\Resources\imagenes_usuarios", fileName);
+            string imageDefault = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\Resources\imagenes_usuarios\perfilPorDefecto.png");
 
             if (File.Exists(imagePath))
             {
@@ -47,6 +48,7 @@ namespace sistema_de_registro_de_docentes
             else
             {
                 MessageBox.Show("Imagen no encontrada para el usuario.");
+                pictureBoxUsuario.Image = Image.FromFile(imageDefault);
             }
         }
 

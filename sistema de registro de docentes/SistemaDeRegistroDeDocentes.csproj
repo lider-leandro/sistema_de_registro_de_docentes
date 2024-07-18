@@ -180,6 +180,12 @@
     <Compile Include="cambioContraseña.Designer.cs">
       <DependentUpon>cambioContraseña.cs</DependentUpon>
     </Compile>
+    <Compile Include="detallesAtrasos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="detallesAtrasos.Designer.cs">
+      <DependentUpon>detallesAtrasos.cs</DependentUpon>
+    </Compile>
     <Compile Include="editarDatosDocente.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -266,6 +272,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="cambioContraseña.resx">
       <DependentUpon>cambioContraseña.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="detallesAtrasos.resx">
+      <DependentUpon>detallesAtrasos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="editarDatosDocente.resx">
       <DependentUpon>editarDatosDocente.cs</DependentUpon>

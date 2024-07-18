@@ -82,10 +82,10 @@
             this.semPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.semPanel.Location = new System.Drawing.Point(97, 272);
+            this.semPanel.Location = new System.Drawing.Point(12, 267);
             this.semPanel.Name = "semPanel";
             this.semPanel.SelectedIndex = 0;
-            this.semPanel.Size = new System.Drawing.Size(685, 243);
+            this.semPanel.Size = new System.Drawing.Size(949, 318);
             this.semPanel.TabIndex = 15;
             // 
             // panel2
@@ -98,7 +98,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(880, 86);
+            this.panel2.Size = new System.Drawing.Size(973, 86);
             this.panel2.TabIndex = 18;
             // 
             // label1
@@ -116,7 +116,7 @@
             this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.pictureBox1.BackColor = System.Drawing.Color.LimeGreen;
             this.pictureBox1.Image = global::sistema_de_registro_de_docentes.Properties.Resources.mas;
-            this.pictureBox1.Location = new System.Drawing.Point(709, 43);
+            this.pictureBox1.Location = new System.Drawing.Point(802, 43);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(20, 20);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -132,7 +132,7 @@
             this.leer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.leer.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.leer.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.leer.Location = new System.Drawing.Point(510, 33);
+            this.leer.Location = new System.Drawing.Point(603, 33);
             this.leer.Name = "leer";
             this.leer.Size = new System.Drawing.Size(152, 39);
             this.leer.TabIndex = 2;
@@ -149,7 +149,7 @@
             this.buttonGuardar.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonGuardar.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.buttonGuardar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonGuardar.Location = new System.Drawing.Point(696, 33);
+            this.buttonGuardar.Location = new System.Drawing.Point(789, 33);
             this.buttonGuardar.Name = "buttonGuardar";
             this.buttonGuardar.Size = new System.Drawing.Size(152, 39);
             this.buttonGuardar.TabIndex = 4;
@@ -159,9 +159,9 @@
             // 
             // flowMaterias
             // 
-            this.flowMaterias.Location = new System.Drawing.Point(33, 142);
+            this.flowMaterias.Location = new System.Drawing.Point(13, 137);
             this.flowMaterias.Name = "flowMaterias";
-            this.flowMaterias.Size = new System.Drawing.Size(827, 105);
+            this.flowMaterias.Size = new System.Drawing.Size(928, 105);
             this.flowMaterias.TabIndex = 19;
             // 
             // formHorarios
@@ -169,7 +169,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(880, 537);
+            this.ClientSize = new System.Drawing.Size(973, 611);
             this.Controls.Add(this.flowMaterias);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.semPanel);
