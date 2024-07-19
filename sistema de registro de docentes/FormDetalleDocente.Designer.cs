@@ -200,7 +200,7 @@
             // 
             this.lblRol.AutoSize = true;
             this.lblRol.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblRol.Location = new System.Drawing.Point(310, 35);
+            this.lblRol.Location = new System.Drawing.Point(335, 35);
             this.lblRol.Name = "lblRol";
             this.lblRol.Size = new System.Drawing.Size(110, 25);
             this.lblRol.TabIndex = 44;

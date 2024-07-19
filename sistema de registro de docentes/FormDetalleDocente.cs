@@ -59,12 +59,14 @@ namespace sistema_de_registro_de_docentes
                         var nivelAcademicoColIndex = worksheet.FirstRow().Cells().FirstOrDefault(c => c.Value.ToString() == "Carga horaria")?.Address.ColumnNumber ?? -1;
                         var telefonoColIndex = worksheet.FirstRow().Cells().FirstOrDefault(c => c.Value.ToString() == "Dia")?.Address.ColumnNumber ?? -1;
                         var celularColIndex = worksheet.FirstRow().Cells().FirstOrDefault(c => c.Value.ToString() == "Hora entrada")?.Address.ColumnNumber ?? -1;
-                        var rolColIndex = worksheet.FirstRow().Cells().FirstOrDefault(c => c.Value.ToString() == "Dia 2")?.Address.ColumnNumber ?? -1;
+                        var dia2Index = worksheet.FirstRow().Cells().FirstOrDefault(c => c.Value.ToString() == "Dia 2")?.Address.ColumnNumber ?? -1;
                         var horaEntrada2Index = worksheet.FirstRow().Cells().FirstOrDefault(c => c.Value.ToString() == "Hora entrada 2")?.Address.ColumnNumber ?? -1;
+                        var dia3Index = worksheet.FirstRow().Cells().FirstOrDefault(c => c.Value.ToString() == "Dia 3")?.Address.ColumnNumber ?? -1;
+                        var horaEntrada3Index = worksheet.FirstRow().Cells().FirstOrDefault(c => c.Value.ToString() == "Hora entrada 3")?.Address.ColumnNumber ?? -1;
                         var estadoColIndex = worksheet.FirstRow().Cells().FirstOrDefault(c => c.Value.ToString() == "Estado")?.Address.ColumnNumber ?? -1;
 
                         // Verificación de las columnas necesarias
-                        if (carnetDeIdentidadColIndex == -1 || expedidoColIndex == -1 || nombreColIndex == -1 || apellidoPaternoColIndex == -1 || apellidoMaternoColIndex == -1 || direccionColIndex == -1 || correoInstitucionalColIndex == -1 || emailPersonalColIndex == -1 || unidadAcademicaColIndex == -1 || nivelAcademicoColIndex == -1 || telefonoColIndex == -1 || celularColIndex == -1 || rolColIndex == -1 || estadoColIndex == -1)
+                        if (carnetDeIdentidadColIndex == -1 || expedidoColIndex == -1 || nombreColIndex == -1 || apellidoPaternoColIndex == -1 || apellidoMaternoColIndex == -1 || direccionColIndex == -1 || correoInstitucionalColIndex == -1 || emailPersonalColIndex == -1 || unidadAcademicaColIndex == -1 || nivelAcademicoColIndex == -1 || telefonoColIndex == -1 || celularColIndex == -1 || estadoColIndex == -1)
                         {
                             throw new Exception("No se encontraron todas las columnas necesarias en el archivo Excel.");
                         }
@@ -92,8 +94,10 @@ namespace sistema_de_registro_de_docentes
                             lblNivelAcademico.Text = row.Cell(nivelAcademicoColIndex).GetValue<string>().Trim();
                             lblTelefono.Text = row.Cell(telefonoColIndex).GetValue<string>().Trim();
                             lblCelular.Text = row.Cell(celularColIndex).GetValue<string>().Trim();
-                            lblRol.Text = $"{row.Cell(rolColIndex).GetValue<string>().Trim()} DEL SISTEMA";
-
+                            labeldia2.Text = row.Cell(dia2Index).GetValue<string>().Trim();
+                            labelhora2.Text= row.Cell(horaEntrada2Index).GetValue<string>().Trim();
+                            labeldia3.Text = row.Cell(dia3Index).GetValue<string>().Trim();
+                            labelhora3.Text = row.Cell(horaEntrada3Index).GetValue<string>().Trim();
                             string fileName = $"{row.Cell(nombreColIndex).GetValue<string>().Trim().ToLower()}_{row.Cell(apellidoPaternoColIndex).GetValue<string>().Trim().ToLower()}.jpg";
                             string rutaImagen = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\Resources\imagenes_usuarios", fileName);
 

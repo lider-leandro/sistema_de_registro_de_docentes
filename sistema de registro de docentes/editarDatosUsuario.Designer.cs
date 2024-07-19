@@ -123,34 +123,38 @@
             // 
             // comboBoxExpedido
             // 
+            this.comboBoxExpedido.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxExpedido.FormattingEnabled = true;
             this.comboBoxExpedido.Location = new System.Drawing.Point(323, 263);
             this.comboBoxExpedido.Name = "comboBoxExpedido";
-            this.comboBoxExpedido.Size = new System.Drawing.Size(121, 24);
+            this.comboBoxExpedido.Size = new System.Drawing.Size(121, 30);
             this.comboBoxExpedido.TabIndex = 142;
             // 
             // comboBoxNivelAcademico
             // 
+            this.comboBoxNivelAcademico.Font = new System.Drawing.Font("Yu Gothic", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxNivelAcademico.FormattingEnabled = true;
             this.comboBoxNivelAcademico.Location = new System.Drawing.Point(579, 187);
             this.comboBoxNivelAcademico.Name = "comboBoxNivelAcademico";
-            this.comboBoxNivelAcademico.Size = new System.Drawing.Size(221, 24);
+            this.comboBoxNivelAcademico.Size = new System.Drawing.Size(221, 31);
             this.comboBoxNivelAcademico.TabIndex = 141;
             // 
             // comboBoxRol
             // 
+            this.comboBoxRol.Font = new System.Drawing.Font("Yu Gothic", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxRol.FormattingEnabled = true;
             this.comboBoxRol.Location = new System.Drawing.Point(323, 187);
             this.comboBoxRol.Name = "comboBoxRol";
-            this.comboBoxRol.Size = new System.Drawing.Size(222, 24);
+            this.comboBoxRol.Size = new System.Drawing.Size(222, 31);
             this.comboBoxRol.TabIndex = 140;
             // 
             // comboBoxUnidadAcademica
             // 
+            this.comboBoxUnidadAcademica.Font = new System.Drawing.Font("Yu Gothic", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxUnidadAcademica.FormattingEnabled = true;
             this.comboBoxUnidadAcademica.Location = new System.Drawing.Point(50, 187);
             this.comboBoxUnidadAcademica.Name = "comboBoxUnidadAcademica";
-            this.comboBoxUnidadAcademica.Size = new System.Drawing.Size(221, 24);
+            this.comboBoxUnidadAcademica.Size = new System.Drawing.Size(221, 31);
             this.comboBoxUnidadAcademica.TabIndex = 139;
             // 
             // btnSubirImagen
@@ -159,7 +163,7 @@
             this.btnSubirImagen.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnSubirImagen.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSubirImagen.ForeColor = System.Drawing.Color.White;
-            this.btnSubirImagen.Location = new System.Drawing.Point(326, 477);
+            this.btnSubirImagen.Location = new System.Drawing.Point(326, 491);
             this.btnSubirImagen.Name = "btnSubirImagen";
             this.btnSubirImagen.Size = new System.Drawing.Size(134, 34);
             this.btnSubirImagen.TabIndex = 138;
@@ -170,7 +174,7 @@
             // 
             this.label34.AutoSize = true;
             this.label34.Font = new System.Drawing.Font("Yu Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label34.Location = new System.Drawing.Point(339, 443);
+            this.label34.Location = new System.Drawing.Point(339, 457);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(99, 20);
             this.label34.TabIndex = 136;
@@ -182,7 +186,7 @@
             this.label35.BackColor = System.Drawing.Color.Transparent;
             this.label35.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label35.ForeColor = System.Drawing.Color.Red;
-            this.label35.Location = new System.Drawing.Point(318, 438);
+            this.label35.Location = new System.Drawing.Point(318, 452);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(27, 36);
             this.label35.TabIndex = 137;
@@ -191,7 +195,7 @@
             // checkBoxEstado
             // 
             this.checkBoxEstado.AutoSize = true;
-            this.checkBoxEstado.Location = new System.Drawing.Point(71, 479);
+            this.checkBoxEstado.Location = new System.Drawing.Point(71, 491);
             this.checkBoxEstado.Name = "checkBoxEstado";
             this.checkBoxEstado.Size = new System.Drawing.Size(122, 20);
             this.checkBoxEstado.TabIndex = 135;
@@ -200,44 +204,49 @@
             // 
             // txtEmail
             // 
+            this.txtEmail.Font = new System.Drawing.Font("Yu Gothic", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtEmail.Location = new System.Drawing.Point(581, 403);
             this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(221, 22);
+            this.txtEmail.Size = new System.Drawing.Size(221, 36);
             this.txtEmail.TabIndex = 134;
             // 
             // txtContrasena
             // 
+            this.txtContrasena.Font = new System.Drawing.Font("Yu Gothic", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtContrasena.Location = new System.Drawing.Point(325, 403);
             this.txtContrasena.Name = "txtContrasena";
-            this.txtContrasena.Size = new System.Drawing.Size(221, 22);
+            this.txtContrasena.Size = new System.Drawing.Size(221, 36);
             this.txtContrasena.TabIndex = 133;
             // 
             // txtUsuario
             // 
+            this.txtUsuario.Font = new System.Drawing.Font("Yu Gothic", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtUsuario.Location = new System.Drawing.Point(50, 403);
             this.txtUsuario.Name = "txtUsuario";
-            this.txtUsuario.Size = new System.Drawing.Size(221, 22);
+            this.txtUsuario.Size = new System.Drawing.Size(221, 36);
             this.txtUsuario.TabIndex = 132;
             // 
             // txtCorreoInstitucional
             // 
-            this.txtCorreoInstitucional.Location = new System.Drawing.Point(580, 345);
+            this.txtCorreoInstitucional.Font = new System.Drawing.Font("Yu Gothic", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCorreoInstitucional.Location = new System.Drawing.Point(579, 331);
             this.txtCorreoInstitucional.Name = "txtCorreoInstitucional";
-            this.txtCorreoInstitucional.Size = new System.Drawing.Size(221, 22);
+            this.txtCorreoInstitucional.Size = new System.Drawing.Size(221, 36);
             this.txtCorreoInstitucional.TabIndex = 131;
             // 
             // txtCelular
             // 
-            this.txtCelular.Location = new System.Drawing.Point(324, 336);
+            this.txtCelular.Font = new System.Drawing.Font("Yu Gothic", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCelular.Location = new System.Drawing.Point(321, 331);
             this.txtCelular.Name = "txtCelular";
-            this.txtCelular.Size = new System.Drawing.Size(221, 22);
+            this.txtCelular.Size = new System.Drawing.Size(221, 36);
             this.txtCelular.TabIndex = 130;
             // 
             // label32
             // 
             this.label32.AutoSize = true;
             this.label32.Font = new System.Drawing.Font("Yu Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label32.Location = new System.Drawing.Point(67, 445);
+            this.label32.Location = new System.Drawing.Point(67, 457);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(56, 20);
             this.label32.TabIndex = 128;
@@ -249,7 +258,7 @@
             this.label33.BackColor = System.Drawing.Color.Transparent;
             this.label33.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label33.ForeColor = System.Drawing.Color.Red;
-            this.label33.Location = new System.Drawing.Point(46, 440);
+            this.label33.Location = new System.Drawing.Point(46, 452);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(27, 36);
             this.label33.TabIndex = 129;
@@ -325,7 +334,7 @@
             // 
             this.label22.AutoSize = true;
             this.label22.Font = new System.Drawing.Font("Yu Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label22.Location = new System.Drawing.Point(611, 313);
+            this.label22.Location = new System.Drawing.Point(608, 308);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(142, 20);
             this.label22.TabIndex = 116;
@@ -337,7 +346,7 @@
             this.label25.BackColor = System.Drawing.Color.Transparent;
             this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label25.ForeColor = System.Drawing.Color.Red;
-            this.label25.Location = new System.Drawing.Point(587, 308);
+            this.label25.Location = new System.Drawing.Point(584, 303);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(27, 36);
             this.label25.TabIndex = 121;
@@ -448,7 +457,7 @@
             // txtTelefono
             // 
             this.txtTelefono.BackColor = System.Drawing.Color.White;
-            this.txtTelefono.Font = new System.Drawing.Font("Yu Gothic Medium", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTelefono.Font = new System.Drawing.Font("Yu Gothic", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTelefono.Location = new System.Drawing.Point(50, 331);
             this.txtTelefono.Name = "txtTelefono";
             this.txtTelefono.Size = new System.Drawing.Size(221, 36);
@@ -457,7 +466,7 @@
             // txtDireccion
             // 
             this.txtDireccion.BackColor = System.Drawing.Color.White;
-            this.txtDireccion.Font = new System.Drawing.Font("Yu Gothic Medium", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtDireccion.Font = new System.Drawing.Font("Yu Gothic", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtDireccion.Location = new System.Drawing.Point(579, 258);
             this.txtDireccion.Name = "txtDireccion";
             this.txtDireccion.Size = new System.Drawing.Size(221, 36);
@@ -466,7 +475,7 @@
             // txtCarnetIdentidad
             // 
             this.txtCarnetIdentidad.BackColor = System.Drawing.Color.White;
-            this.txtCarnetIdentidad.Font = new System.Drawing.Font("Yu Gothic Medium", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCarnetIdentidad.Font = new System.Drawing.Font("Yu Gothic", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtCarnetIdentidad.Location = new System.Drawing.Point(49, 258);
             this.txtCarnetIdentidad.Name = "txtCarnetIdentidad";
             this.txtCarnetIdentidad.Size = new System.Drawing.Size(221, 36);
@@ -475,7 +484,7 @@
             // txtApellidoMaterno
             // 
             this.txtApellidoMaterno.BackColor = System.Drawing.Color.White;
-            this.txtApellidoMaterno.Font = new System.Drawing.Font("Yu Gothic Medium", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtApellidoMaterno.Font = new System.Drawing.Font("Yu Gothic", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtApellidoMaterno.Location = new System.Drawing.Point(580, 110);
             this.txtApellidoMaterno.Name = "txtApellidoMaterno";
             this.txtApellidoMaterno.Size = new System.Drawing.Size(221, 36);
@@ -484,7 +493,7 @@
             // txtApellidoPaterno
             // 
             this.txtApellidoPaterno.BackColor = System.Drawing.Color.White;
-            this.txtApellidoPaterno.Font = new System.Drawing.Font("Yu Gothic Medium", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtApellidoPaterno.Font = new System.Drawing.Font("Yu Gothic", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtApellidoPaterno.Location = new System.Drawing.Point(323, 110);
             this.txtApellidoPaterno.Name = "txtApellidoPaterno";
             this.txtApellidoPaterno.Size = new System.Drawing.Size(221, 36);
@@ -493,7 +502,7 @@
             // txtNombres
             // 
             this.txtNombres.BackColor = System.Drawing.Color.White;
-            this.txtNombres.Font = new System.Drawing.Font("Yu Gothic Medium", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtNombres.Font = new System.Drawing.Font("Yu Gothic", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtNombres.Location = new System.Drawing.Point(51, 110);
             this.txtNombres.Name = "txtNombres";
             this.txtNombres.Size = new System.Drawing.Size(221, 36);
@@ -632,7 +641,7 @@
             // 
             this.label21.AutoSize = true;
             this.label21.Font = new System.Drawing.Font("Yu Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label21.Location = new System.Drawing.Point(339, 313);
+            this.label21.Location = new System.Drawing.Point(336, 308);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(57, 20);
             this.label21.TabIndex = 117;
@@ -644,7 +653,7 @@
             this.label23.BackColor = System.Drawing.Color.Transparent;
             this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label23.ForeColor = System.Drawing.Color.Red;
-            this.label23.Location = new System.Drawing.Point(319, 308);
+            this.label23.Location = new System.Drawing.Point(316, 303);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(27, 36);
             this.label23.TabIndex = 119;

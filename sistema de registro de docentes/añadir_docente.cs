@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using ExcelDataReader;
 using Excel = Microsoft.Office.Interop.Excel;
@@ -52,7 +53,7 @@ namespace sistema_de_registro_de_docentes
                     hoja = libro.ActiveSheet;
 
                     hoja.Cells[1, 1] = "Nº";
-                    hoja.Cells[1, 2] = "Grdo";
+                    hoja.Cells[1, 2] = "Grado";
                     hoja.Cells[1, 3] = "Apellido Paterno";
                     hoja.Cells[1, 4] = "Apellido Materno";
                     hoja.Cells[1, 5] = "Nombres";
@@ -72,27 +73,42 @@ namespace sistema_de_registro_de_docentes
                 // Leer todos los datos existentes
                 int ultimaFila = hoja.Cells[hoja.Rows.Count, 1].End[Excel.XlDirection.xlUp].Row;
 
-                foreach (var semestre in semestresAcademicos)
+                // Crear un conjunto para almacenar las combinaciones de carrera, asignatura y paralelo que ya existen
+                var combinacionesExistentes = new HashSet<string>();
+
+                for (int i = 2; i <= ultimaFila; i++)
+                {
+                    string existingCarrera = hoja.Cells[i, 7]?.Value?.ToString();
+                    string existingAsignatura = hoja.Cells[i, 8]?.Value?.ToString();
+                    string existingParalelo = hoja.Cells[i, 10]?.Value?.ToString();
+                    string existingEstado = hoja.Cells[i, 21]?.Value?.ToString();
+
+                    if (existingEstado == "ACTIVO")
+                    {
+                        combinacionesExistentes.Add($"{existingCarrera}-{existingAsignatura}-{existingParalelo}");
+                    }
+                }
+
+                // Filtrar asignaturas y semestres repetidos
+                foreach (var semestre in semestresAcademicos.ToList())
                 {
                     if (asignaturasPorSemestre.ContainsKey(semestre))
                     {
-                        foreach (var asignatura in asignaturasPorSemestre[semestre])
+                        foreach (var asignatura in asignaturasPorSemestre[semestre].ToList())
                         {
-                            if (checkedListBoxAsignatura.CheckedItems.Contains(asignatura))
+                            string combinacionNueva = $"{carrera}-{asignatura}-{paralelo}";
+                            if (combinacionesExistentes.Contains(combinacionNueva))
                             {
-                                for (int i = 2; i <= ultimaFila; i++)
-                                {
-                                    string existingCarrera = hoja.Cells[i, 7]?.Value?.ToString();
-                                    string existingAsignatura = hoja.Cells[i, 8]?.Value?.ToString();
-                                    string existingParalelo = hoja.Cells[i, 10]?.Value?.ToString();
-
-                                    if (existingCarrera == carrera && existingAsignatura == asignatura && existingParalelo == paralelo)
-                                    {
-                                        MessageBox.Show($"Ya existe un docente con la materia asignada en la CARRERA:.{carrera} {"ASIGNATURA:"} {asignatura} {"PARALELO"} {paralelo}");
-                                        return false;
-                                    }
-                                }
+                                // Eliminar la asignatura repetida
+                                asignaturasPorSemestre[semestre].Remove(asignatura);
                             }
+                        }
+
+                        // Si no quedan asignaturas para este semestre, eliminar el semestre
+                        if (asignaturasPorSemestre[semestre].Count == 0)
+                        {
+                            asignaturasPorSemestre.Remove(semestre);
+                            semestresAcademicos.Remove(semestre);
                         }
                     }
                 }
@@ -102,6 +118,7 @@ namespace sistema_de_registro_de_docentes
                 Excel.Range filaVacia = ultimaCelda.End[Excel.XlDirection.xlUp].Offset[1, 0];
 
                 int filaNumero = filaVacia.Row;
+                bool datosGuardados = false;
 
                 foreach (var semestre in semestresAcademicos)
                 {
@@ -111,25 +128,37 @@ namespace sistema_de_registro_de_docentes
                         {
                             if (checkedListBoxAsignatura.CheckedItems.Contains(asignatura))
                             {
-                                hoja.Cells[filaNumero, 1] = filaNumero + 11; // Número de fila
-                                hoja.Cells[filaNumero, 2] = grado;
-                                hoja.Cells[filaNumero, 3] = apellidoPaterno;
-                                hoja.Cells[filaNumero, 4] = apellidoMaterno;
-                                hoja.Cells[filaNumero, 5] = nombres;
-                                hoja.Cells[filaNumero, 6] = ci;
-                                hoja.Cells[filaNumero, 7] = carrera;
-                                hoja.Cells[filaNumero, 8] = asignatura;
-                                hoja.Cells[filaNumero, 9] = semestre;
-                                hoja.Cells[filaNumero, 10] = paralelo;
-                                hoja.Cells[filaNumero, 21] = "ACTIVO";
-                                filaNumero++;
+                                string combinacionNueva = $"{carrera}-{asignatura}-{paralelo}";
+                                if (!combinacionesExistentes.Contains(combinacionNueva))
+                                {
+                                    hoja.Cells[filaNumero, 1] = filaNumero - 10; // Número de fila
+                                    hoja.Cells[filaNumero, 2] = grado;
+                                    hoja.Cells[filaNumero, 3] = apellidoPaterno;
+                                    hoja.Cells[filaNumero, 4] = apellidoMaterno;
+                                    hoja.Cells[filaNumero, 5] = nombres;
+                                    hoja.Cells[filaNumero, 6] = ci;
+                                    hoja.Cells[filaNumero, 7] = carrera;
+                                    hoja.Cells[filaNumero, 8] = asignatura;
+                                    hoja.Cells[filaNumero, 9] = semestre;
+                                    hoja.Cells[filaNumero, 10] = paralelo;
+                                    hoja.Cells[filaNumero, 21] = "ACTIVO";
+                                    filaNumero++;
+                                    datosGuardados = true;
+                                }
                             }
                         }
                     }
                 }
 
-                libro.Save();
-                MessageBox.Show("Datos del Docente guardados correctamente.");
+                if (datosGuardados)
+                {
+                    libro.Save();
+                    MessageBox.Show("Datos del Docente guardados correctamente.");
+                }
+                else
+                {
+                    MessageBox.Show("No se guardaron datos porque todas las combinaciones ya existen y están activas.");
+                }
                 this.Close();
                 return true;
             }
@@ -149,6 +178,7 @@ namespace sistema_de_registro_de_docentes
                 }
             }
         }
+
 
 
 

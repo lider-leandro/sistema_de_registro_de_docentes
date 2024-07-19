@@ -48,6 +48,9 @@ namespace sistema_de_registro_de_docentes
                 carnetIdentidadOriginal = textBoxCI.Text;
                 materiaOriginal = usuarioActual["Asignatura"].ToString();
                 carreraOriginal = usuarioActual["Carrera"].ToString();
+                comboBoxCarrera.Text = usuarioActual["Carrera"].ToString();
+                comboBoxSemestre.Text = usuarioActual["Semestre Académico"].ToString();
+                comboBoxAsignatura.Text = usuarioActual["Asignatura"].ToString();
                 checkBoxEstado.Checked = usuarioActual["Estado"].ToString() == "ACTIVO";
 
             }
@@ -73,113 +76,69 @@ namespace sistema_de_registro_de_docentes
                 }
             }
 
+            // Limpiar ComboBox antes de añadir nuevos ítems
+            comboBoxCarrera.Items.Clear();
+
             foreach (DataTable table in dataSet.Tables)
             {
-                checkedListBoxCarrera.Items.Add(table.TableName);
+                comboBoxCarrera.Items.Add(table.TableName);
             }
         }
 
-        private Dictionary<string, List<string>> CargarAsignaturasPorSemestre(string carreraSeleccionada)
+
+        private void comboBoxCarrera_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var asignaturasPorSemestre = new Dictionary<string, List<string>>();
-            DataTable hoja = dataSet.Tables[carreraSeleccionada];
+            comboBoxSemestre.Items.Clear();
+            comboBoxAsignatura.Items.Clear();
 
-            for (int col = 0; col < hoja.Columns.Count; col++)
+            string carreraSeleccionada = comboBoxCarrera.SelectedItem?.ToString();
+            if (string.IsNullOrEmpty(carreraSeleccionada)) return;
+
+            DataTable table = dataSet.Tables[carreraSeleccionada];
+            if (table == null) return;
+
+            // Suponiendo que la primera fila contiene los nombres de los semestres
+            for (int i = 0; i < table.Columns.Count; i++)
             {
-                string semestre = hoja.Rows[0][col].ToString();
-                if (!asignaturasPorSemestre.ContainsKey(semestre))
+                string semestre = table.Rows[0][i].ToString();
+                if (!string.IsNullOrEmpty(semestre) && !comboBoxSemestre.Items.Contains(semestre))
                 {
-                    asignaturasPorSemestre[semestre] = new List<string>();
-                }
-
-                for (int row = 1; row < hoja.Rows.Count; row++)
-                {
-                    var asignatura = hoja.Rows[row][col];
-                    if (asignatura != null)
-                    {
-                        asignaturasPorSemestre[semestre].Add(asignatura.ToString());
-                    }
-                }
-            }
-
-            return asignaturasPorSemestre;
-        }
-
-        private void checkedListBoxCarrera_ItemCheck(object sender, ItemCheckEventArgs e)
-        {
-            checkedListBoxSemestreAcademico.Items.Clear();
-            checkedListBoxAsignatura.Items.Clear();
-
-            if (e.NewValue == CheckState.Checked)
-            {
-                string carreraSeleccionada = checkedListBoxCarrera.Items[e.Index].ToString();
-                DataTable table = dataSet.Tables[carreraSeleccionada];
-
-                for (int i = 0; i < table.Columns.Count; i++)
-                {
-                    string semestre = table.Rows[0][i].ToString();
-                    if (!string.IsNullOrEmpty(semestre) && !checkedListBoxSemestreAcademico.Items.Contains(semestre))
-                    {
-                        checkedListBoxSemestreAcademico.Items.Add(semestre);
-                    }
+                    comboBoxSemestre.Items.Add(semestre);
                 }
             }
         }
 
-        private void checkedListBoxSemestreAcademico_ItemCheck(object sender, ItemCheckEventArgs e)
+
+        private void comboBoxSemestre_SelectedIndexChanged(object sender, EventArgs e)
         {
-            checkedListBoxAsignatura.Items.Clear();
+            comboBoxAsignatura.Items.Clear();
 
-            foreach (var checkedItem in checkedListBoxSemestreAcademico.CheckedItems)
+            string semestreSeleccionado = comboBoxSemestre.SelectedItem?.ToString();
+            if (string.IsNullOrEmpty(semestreSeleccionado)) return;
+
+            string carreraSeleccionada = comboBoxCarrera.SelectedItem?.ToString();
+            if (string.IsNullOrEmpty(carreraSeleccionada)) return;
+
+            DataTable table = dataSet.Tables[carreraSeleccionada];
+            if (table == null) return;
+
+            for (int i = 0; i < table.Columns.Count; i++)
             {
-                string semestreSeleccionado = checkedItem.ToString();
-                foreach (var checkedCarrera in checkedListBoxCarrera.CheckedItems)
+                if (table.Rows[0][i].ToString() == semestreSeleccionado)
                 {
-                    string carreraSeleccionada = checkedCarrera.ToString();
-                    DataTable table = dataSet.Tables[carreraSeleccionada];
-
-                    for (int i = 0; i < table.Columns.Count; i++)
+                    for (int j = 1; j < table.Rows.Count; j++)
                     {
-                        if (table.Rows[0][i].ToString() == semestreSeleccionado)
+                        var asignatura = table.Rows[j][i].ToString();
+                        if (!string.IsNullOrEmpty(asignatura) && !comboBoxAsignatura.Items.Contains(asignatura))
                         {
-                            for (int j = 1; j < table.Rows.Count; j++)
-                            {
-                                var asignatura = table.Rows[j][i].ToString();
-                                if (!string.IsNullOrEmpty(asignatura) && !checkedListBoxAsignatura.Items.Contains(asignatura))
-                                {
-                                    checkedListBoxAsignatura.Items.Add(asignatura);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (e.NewValue == CheckState.Checked)
-            {
-                string semestreSeleccionado = checkedListBoxSemestreAcademico.Items[e.Index].ToString();
-                foreach (var checkedCarrera in checkedListBoxCarrera.CheckedItems)
-                {
-                    string carreraSeleccionada = checkedCarrera.ToString();
-                    DataTable table = dataSet.Tables[carreraSeleccionada];
-
-                    for (int i = 0; i < table.Columns.Count; i++)
-                    {
-                        if (table.Rows[0][i].ToString() == semestreSeleccionado)
-                        {
-                            for (int j = 1; j < table.Rows.Count; j++)
-                            {
-                                var asignatura = table.Rows[j][i].ToString();
-                                if (!string.IsNullOrEmpty(asignatura) && !checkedListBoxAsignatura.Items.Contains(asignatura))
-                                {
-                                    checkedListBoxAsignatura.Items.Add(asignatura);
-                                }
-                            }
+                            comboBoxAsignatura.Items.Add(asignatura);
                         }
                     }
                 }
             }
         }
+
+
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -193,29 +152,13 @@ namespace sistema_de_registro_de_docentes
             string nombres = textBoxNombres.Text;
             string ci = textBoxCI.Text;
             string paralelo = textBoxParalelo.Text;
-
-
             // Obtener la carrera seleccionada (el primer valor seleccionado)
-            string carreraSeleccionada = "";
-            if (checkedListBoxCarrera.CheckedItems.Count > 0)
-            {
-                carreraSeleccionada = checkedListBoxCarrera.CheckedItems[0].ToString();
-            }
-
+            string carreraSeleccionada = comboBoxCarrera.Text;
             // Obtener el semestre académico seleccionado (el primer valor seleccionado)
-            string semestreSeleccionado = "";
-            if (checkedListBoxSemestreAcademico.CheckedItems.Count > 0)
-            {
-                semestreSeleccionado = checkedListBoxSemestreAcademico.CheckedItems[0].ToString();
-            }
-
+            string semestreSeleccionado = comboBoxSemestre.Text;
             // Obtener la asignatura seleccionada (el primer valor seleccionado)
-            string asignaturaSeleccionada = "";
-            if (checkedListBoxAsignatura.CheckedItems.Count > 0)
-            {
-                asignaturaSeleccionada = checkedListBoxAsignatura.CheckedItems[0].ToString();
-            }
-
+            string asignaturaSeleccionada = comboBoxAsignatura.Text;
+            
             // Pasar los valores obtenidos a la función GuardarDatosEnExcel
             if (GuardarDatosEnExcel(grado, apellidoPaterno, apellidoMaterno, nombres, ci, carreraSeleccionada, semestreSeleccionado, paralelo, asignaturaSeleccionada))
             {

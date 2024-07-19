@@ -102,7 +102,7 @@
             // textBoxNombres
             // 
             this.textBoxNombres.BackColor = System.Drawing.Color.White;
-            this.textBoxNombres.Font = new System.Drawing.Font("Yu Gothic Medium", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxNombres.Font = new System.Drawing.Font("Yu Gothic", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxNombres.Location = new System.Drawing.Point(31, 156);
             this.textBoxNombres.Name = "textBoxNombres";
             this.textBoxNombres.Size = new System.Drawing.Size(221, 36);
@@ -111,7 +111,7 @@
             // textBoxApellidoPaterno
             // 
             this.textBoxApellidoPaterno.BackColor = System.Drawing.Color.White;
-            this.textBoxApellidoPaterno.Font = new System.Drawing.Font("Yu Gothic Medium", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxApellidoPaterno.Font = new System.Drawing.Font("Yu Gothic", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxApellidoPaterno.Location = new System.Drawing.Point(303, 156);
             this.textBoxApellidoPaterno.Name = "textBoxApellidoPaterno";
             this.textBoxApellidoPaterno.Size = new System.Drawing.Size(221, 36);
@@ -120,7 +120,7 @@
             // textBoxApellidoMaterno
             // 
             this.textBoxApellidoMaterno.BackColor = System.Drawing.Color.White;
-            this.textBoxApellidoMaterno.Font = new System.Drawing.Font("Yu Gothic Medium", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxApellidoMaterno.Font = new System.Drawing.Font("Yu Gothic", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxApellidoMaterno.Location = new System.Drawing.Point(560, 156);
             this.textBoxApellidoMaterno.Name = "textBoxApellidoMaterno";
             this.textBoxApellidoMaterno.Size = new System.Drawing.Size(221, 36);
@@ -129,7 +129,7 @@
             // textBoxCI
             // 
             this.textBoxCI.BackColor = System.Drawing.Color.White;
-            this.textBoxCI.Font = new System.Drawing.Font("Yu Gothic Medium", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxCI.Font = new System.Drawing.Font("Yu Gothic", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCI.Location = new System.Drawing.Point(303, 248);
             this.textBoxCI.Name = "textBoxCI";
             this.textBoxCI.Size = new System.Drawing.Size(221, 36);
@@ -385,6 +385,7 @@
             // 
             // textBoxGrado
             // 
+            this.textBoxGrado.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxGrado.FormattingEnabled = true;
             this.textBoxGrado.Items.AddRange(new object[] {
             "LIC.",
@@ -395,11 +396,12 @@
             "Ms. Sc."});
             this.textBoxGrado.Location = new System.Drawing.Point(31, 253);
             this.textBoxGrado.Name = "textBoxGrado";
-            this.textBoxGrado.Size = new System.Drawing.Size(221, 24);
+            this.textBoxGrado.Size = new System.Drawing.Size(221, 30);
             this.textBoxGrado.TabIndex = 41;
             // 
             // textBoxParalelo
             // 
+            this.textBoxParalelo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxParalelo.FormattingEnabled = true;
             this.textBoxParalelo.Items.AddRange(new object[] {
             "A",
@@ -407,7 +409,7 @@
             "C"});
             this.textBoxParalelo.Location = new System.Drawing.Point(560, 253);
             this.textBoxParalelo.Name = "textBoxParalelo";
-            this.textBoxParalelo.Size = new System.Drawing.Size(221, 24);
+            this.textBoxParalelo.Size = new System.Drawing.Size(221, 30);
             this.textBoxParalelo.TabIndex = 89;
             // 
             // añadir_docente

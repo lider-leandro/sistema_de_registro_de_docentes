@@ -17,7 +17,6 @@ using OfficeOpenXml;
 using OfficeOpenXml.Drawing;
 using OfficeOpenXml.Style;
 
-
 namespace sistema_de_registro_de_docentes
 {
     public partial class formHorarios : Form
@@ -28,7 +27,6 @@ namespace sistema_de_registro_de_docentes
         private Dictionary<string, Dictionary<string, TableLayoutPanel>> horariosPorCarrera = new Dictionary<string, Dictionary<string, TableLayoutPanel>>();
         private Dictionary<string, Color> colorPorMateria = new Dictionary<string, Color>();
         private Random random = new Random();
-
         public formHorarios()
         {
             InitializeComponent();
@@ -43,24 +41,35 @@ namespace sistema_de_registro_de_docentes
                 MessageBox.Show("El archivo especificado no existe: " + rutaExcel);
                 return;
             }
-
             CargarDatosDesdeExcel(rutaExcel);
             CargarComponentes();
             foreach (var carrera in carreraBox.Items)
             {
                 CrearHorariosPorCarrera(carrera.ToString());
             }
-
         }
-
         private void CargarDatosDesdeExcel(string filePath)
         {
-            originalDataTable = LeerArchivoExcel(filePath);
+            var allData = LeerArchivoExcel(filePath);
 
-            if (originalDataTable != null)
+            if (allData != null)
             {
-                ConvertirDataTableAMatriz();
+                // Filtrar solo los registros activos
+                originalDataTable = new System.Data.DataTable();
+                foreach (DataColumn col in allData.Columns)
+                {
+                    originalDataTable.Columns.Add(col.ColumnName, col.DataType);
+                }
 
+                foreach (DataRow row in allData.Rows)
+                {
+                    if (row["Estado"].ToString().Trim().ToUpper() == "ACTIVO")
+                    {
+                        originalDataTable.ImportRow(row);
+                    }
+                }
+
+                ConvertirDataTableAMatriz();
             }
         }
 
@@ -225,6 +234,7 @@ namespace sistema_de_registro_de_docentes
         private void LlenarComboBoxCarreras()
         {
             var carreras = originalDataTable.AsEnumerable()
+                                            .Where(row => row.Field<string>("Estado").Trim().ToUpper() == "ACTIVO")
                                             .Select(row => row.Field<string>("Carrera"))
                                             .Distinct()
                                             .ToList();
@@ -541,35 +551,46 @@ namespace sistema_de_registro_de_docentes
 
         private void carreraBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string carreraSeleccionada = carreraBox.SelectedItem?.ToString();
-            if (string.IsNullOrEmpty(carreraSeleccionada)) return;
-
             // Desactivar temporalmente los eventos
+            carreraBox.SelectedIndexChanged -= carreraBox_SelectedIndexChanged;
             semestreBox.SelectedIndexChanged -= semestreBox_SelectedIndexChanged;
             semPanel.SelectedIndexChanged -= SemPanel_SelectedIndexChanged;
 
-            // Actualizar el ComboBox de semestres
-            ActualizarComboBoxSemestre(carreraSeleccionada);
-
-            // Mostrar los horarios por carrera
-            MostrarHorariosPorCarrera(carreraSeleccionada);
-
-            // Seleccionar el primer semestre si hay alguno
-            if (semestreBox.Items.Count > 0)
+            try
             {
-                semestreBox.SelectedIndex = 0;
-                string semestreParalelo = semestreBox.SelectedItem.ToString();
-                var (semestre, paralelo) = ObtenerSemestreYParalelo(semestreParalelo);
-                LlenarFlowMaterias(carreraSeleccionada, semestre, paralelo);
-            }
-            else
-            {
+                string carreraSeleccionada = carreraBox.SelectedItem?.ToString();
+                if (string.IsNullOrEmpty(carreraSeleccionada)) return;
+
+                // Limpiar controles
+                semestreBox.DataSource = null;
+                semPanel.TabPages.Clear();
                 flowMaterias.Controls.Clear();
-            }
 
-            // Reactivar los eventos
-            semestreBox.SelectedIndexChanged += semestreBox_SelectedIndexChanged;
-            semPanel.SelectedIndexChanged += SemPanel_SelectedIndexChanged;
+                // Actualizar ComboBox de semestres
+                ActualizarComboBoxSemestre(carreraSeleccionada);
+
+                // Mostrar horarios por carrera
+                MostrarHorariosPorCarrera(carreraSeleccionada);
+
+                // Seleccionar el primer semestre si hay alguno
+                if (semestreBox.Items.Count > 0)
+                {
+                    semestreBox.SelectedIndex = 0;
+                    string semestreParalelo = semestreBox.SelectedItem.ToString();
+                    var (semestre, paralelo) = ObtenerSemestreYParalelo(semestreParalelo);
+                    LlenarFlowMaterias(carreraSeleccionada, semestre, paralelo);
+                }
+
+                // Forzar actualización de la interfaz
+                this.Update();
+            }
+            finally
+            {
+                // Reactivar los eventos
+                carreraBox.SelectedIndexChanged += carreraBox_SelectedIndexChanged;
+                semestreBox.SelectedIndexChanged += semestreBox_SelectedIndexChanged;
+                semPanel.SelectedIndexChanged += SemPanel_SelectedIndexChanged;
+            }
         }
         private void ActualizarComboBoxSemestre(string carrera)
         {
@@ -1030,6 +1051,7 @@ namespace sistema_de_registro_de_docentes
                     int horaEntrada2Col = GetColumnIndex(worksheet, "Hora entrada 2");
                     int dia3Col = GetColumnIndex(worksheet, "Dia 3");
                     int horaEntrada3Col = GetColumnIndex(worksheet, "Hora entrada 3");
+                    int estadoCol = GetColumnIndex(worksheet, "Estado");
 
                     foreach (var carrera in horariosPorCarrera.Keys)
                     {
@@ -1040,7 +1062,7 @@ namespace sistema_de_registro_de_docentes
 
                             ActualizarHorarioEnExcel(worksheet, carrera, semestre, paralelo, horarioTableLayoutPanel,
                                 carreraCol, semestreCol, paraleloCol, asignaturaCol, cargaHorariaCol,
-                                diaCol, horaEntradaCol, dia2Col, horaEntrada2Col, dia3Col, horaEntrada3Col);
+                                diaCol, horaEntradaCol, dia2Col, horaEntrada2Col, dia3Col, horaEntrada3Col, estadoCol);
                         }
                     }
 
@@ -1054,13 +1076,9 @@ namespace sistema_de_registro_de_docentes
                 MessageBox.Show($"Error al actualizar los horarios: {ex.Message}");
             }
         }
-
-
-
         private void ActualizarHorarioEnExcel(ExcelWorksheet worksheet, string carrera, string semestre, string paralelo,
-    TableLayoutPanel horarioTableLayoutPanel, int carreraCol, int semestreCol, int paraleloCol, int asignaturaCol,
-    int cargaHorariaCol, int diaCol, int horaEntradaCol, int dia2Col, int horaEntrada2Col, int dia3Col, int horaEntrada3Col,
-    int apellidoPaternoCol, int apellidoMaternoCol, int nombresCol)
+            TableLayoutPanel horarioTableLayoutPanel, int carreraCol, int semestreCol, int paraleloCol, int asignaturaCol,
+            int cargaHorariaCol, int diaCol, int horaEntradaCol, int dia2Col, int horaEntrada2Col, int dia3Col, int horaEntrada3Col, int estadoCol)
         {
             string[] diasSemana = { "Lunes", "Martes", "Miercoles", "Jueves", "Viernes" };
             string[] horas = { "7:45", "8:30", "9:15", "10:15", "11:00", "12:00", "12:45", "13:30", "14:15", "15:00", "15:45" };
@@ -1110,7 +1128,6 @@ namespace sistema_de_registro_de_docentes
                         worksheet.Cells[row, cargaHorariaCol].Value = cargaHoraria;
 
                         int diaIndex = 0;
-                        string docente = "";
                         foreach (var diaHorario in horarios)
                         {
                             if (diaIndex >= 3) break; // Solo guardamos hasta 3 días
@@ -1123,33 +1140,7 @@ namespace sistema_de_registro_de_docentes
                             var horariosAgrupados = AgruparHorarios(diaHorario.Value);
                             worksheet.Cells[row, currentHoraCol].Value = string.Join(", ", horariosAgrupados.Select(h => $"{h.horaInicio}-{h.horaFin}"));
 
-                            if (string.IsNullOrEmpty(docente) && diaHorario.Value.Any())
-                            {
-                                docente = diaHorario.Value.First().docente;
-                            }
-
                             diaIndex++;
-                        }
-
-                        // Actualizar información del docente
-                        if (!string.IsNullOrEmpty(docente))
-                        {
-                            string[] nombreCompleto = docente.Split(' ');
-                            if (nombreCompleto.Length >= 3)
-                            {
-                                worksheet.Cells[row, apellidoPaternoCol].Value = nombreCompleto[0];
-                                worksheet.Cells[row, apellidoMaternoCol].Value = nombreCompleto[1];
-                                worksheet.Cells[row, nombresCol].Value = string.Join(" ", nombreCompleto.Skip(2));
-                            }
-                            else if (nombreCompleto.Length == 2)
-                            {
-                                worksheet.Cells[row, apellidoPaternoCol].Value = nombreCompleto[0];
-                                worksheet.Cells[row, nombresCol].Value = nombreCompleto[1];
-                            }
-                            else if (nombreCompleto.Length == 1)
-                            {
-                                worksheet.Cells[row, nombresCol].Value = nombreCompleto[0];
-                            }
                         }
 
                         // Limpiar los días y horas restantes si es necesario
@@ -1171,9 +1162,6 @@ namespace sistema_de_registro_de_docentes
                         worksheet.Cells[row, horaEntrada2Col].Value = "";
                         worksheet.Cells[row, dia3Col].Value = "";
                         worksheet.Cells[row, horaEntrada3Col].Value = "";
-                        worksheet.Cells[row, apellidoPaternoCol].Value = "";
-                        worksheet.Cells[row, apellidoMaternoCol].Value = "";
-                        worksheet.Cells[row, nombresCol].Value = "";
                     }
                 }
             }
@@ -1198,9 +1186,7 @@ namespace sistema_de_registro_de_docentes
 
                 horariosAgrupados.Add((horarioActual.horaInicio, horaFin.ToString(@"hh\:mm")));
             }
-
             return horariosAgrupados;
         }
-
     }
 }
